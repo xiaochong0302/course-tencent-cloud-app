@@ -1,0 +1,51 @@
+.container {
+	padding: 15rpx;
+	font-size: 14px;
+}
+
+.form-item {
+	display: flex;
+	min-height: 40rpx;
+	margin-bottom: 30rpx;
+}
+
+.form-item .label {
+	padding: 15rpx 0;
+	min-width: 80rpx;
+}
+
+.form-item .input {
+	flex: 1;
+	padding: 15rpx 5rpx;
+	border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+.form-item .group {
+	padding: 15rpx 0;
+}
+
+.form-item uni-label {
+	margin-right: 20rpx;
+}
+
+.form-item .verify {
+	flex: 1;
+}
+
+.form-item .action {
+	flex: 1;
+}
+
+.form-item .link {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+}
+
+.form-item .link uni-text {
+	margin: 0 15rpx;
+}
+
+.hide {
+	display: none;
+}

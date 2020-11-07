@@ -1,0 +1,139 @@
+<template>
+	<view class="container">
+		<view class="filter">
+			<u-dropdown>
+				<u-dropdown-item title="排序" v-model="sort" :options="sorts" @change="switchSort"></u-dropdown-item>
+				<u-dropdown-item title="难度" v-model="level" :options="levels" @change="switchLevel"></u-dropdown-item>
+				<u-dropdown-item title="类型" v-model="model" :options="models" @change="switchModel"></u-dropdown-item>
+			</u-dropdown>
+		</view>
+		<view v-if="items.length > 0">
+			<course-list :courses="items"></course-list>
+		</view>
+	</view>
+</template>
+
+<script>
+	import CourseList from '@/components/kg-course-list/course-list.vue'
+	export default {
+		components: {
+			CourseList
+		},
+		data() {
+			return {
+				items: [],
+				page: 1,
+				sc: 0,
+				hasMore: false,
+				level: 0,
+				model: 0,
+				sort: 'score',
+				models: [{
+					label: '全部',
+					value: 0
+				}, {
+					label: '点播',
+					value: 1
+				}, {
+					label: '直播',
+					value: 2
+				}, {
+					label: '专栏',
+					value: 3
+				}],
+				levels: [{
+					label: '全部',
+					value: 0
+				}, {
+					label: '入门',
+					value: 1
+				}, {
+					label: '初级',
+					value: 2
+				}, {
+					label: '中级',
+					value: 3
+				}, {
+					label: '高级',
+					value: 4
+				}],
+				sorts: [{
+					label: '综合',
+					value: 'score'
+				}, {
+					label: '好评',
+					value: 'rating'
+				}, {
+					label: '最新',
+					value: 'latest'
+				}, {
+					label: '最热',
+					value: 'popular'
+				}, {
+					label: '免费',
+					value: 'free'
+				}],
+			}
+		},
+		onLoad(e) {
+			if (e.sc) {
+				this.sc = parseInt(e.sc)
+			}
+			this.loadCourses()
+		},
+		onReachBottom() {
+			if (this.hasMore) {
+				this.loadCourses()
+			}
+		},
+		methods: {
+			switchLevel(level) {
+				this.level = level
+				this.doFilter()
+			},
+			switchModel(model) {
+				this.model = model
+				this.doFilter()
+			},
+			switchSort(sort) {
+				this.sort = sort
+				this.doFilter()
+			},
+			doFilter() {
+				this.items = []
+				this.page = 1
+				this.hasMore = false
+				this.loadCourses()
+			},
+			loadCourses() {
+				let params = {}
+				if (this.sc > 0) {
+					params.sc = this.sc
+				}
+				if (this.model > 0) {
+					params.model = this.model
+				}
+				if (this.level > 0) {
+					params.level = this.level
+				}
+				if (this.sort !== '') {
+					params.sort = this.sort
+				}
+				if (this.page > 0) {
+					params.page = this.page
+				}
+				this.$api.getCourseList(params).then(res => {
+					this.hasMore = res.pager.total_pages > this.page
+					this.items = this.items.concat(res.pager.items)
+					this.page++
+				}).catch(e => {
+					this.$u.toast('加载课程失败')
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>
