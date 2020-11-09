@@ -1,46 +1,27 @@
 <template>
-	<view class="container profile-form">
-		<form @submit="submit">
-			<view class="form-item">
-				<view class="label">头像</view>
-				<view class="avatar">
-					<image :src="profile.avatar|thumbAvatar" mode="aspectFit" @click="changeAvatar" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="label">昵称</view>
-				<view class="input">
-					<input name="name" :value="profile.name" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="label">性别</view>
-				<view class="group">
-					<radio-group @change="changeGender">
-						<label>
-							<radio name="gender" value="1" :checked="profile.gender===1" />男</label>
-						<label>
-							<radio name="gender" value="2" :checked="profile.gender===2" />女</label>
-						<label>
-							<radio name="gender" value="3" :checked="profile.gender===3" />密</label>
-					</radio-group>
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="label">简介</view>
-				<view class="input">
-					<textarea name="about" :value="profile.about" maxlength="255" auto-height="true" />
-					</view>
-			</view>
-			<view class="form-item">
-				<view class="action">
-					<button type="primary" form-type="submit">提交</button>
-				</view>
-			</view>
+	<view class="container">
+		<u-form :model="profile" ref="profile" :error-type="['toast']">
+			<u-form-item label="头像">
+				<u-image width="90" height="90" border-radius="100%" :src="profile.avatar|thumbAvatar" @click="changeAvatar"></u-image>
+			</u-form-item>
+			<u-form-item label="昵称" prop="name">
+				<u-input v-model="profile.name" maxlength="15" placeholder="请输入昵称"></u-input>
+			</u-form-item>
+			<u-form-item label="性别">
+				<u-radio-group v-model="gender" @change="changeGender">
+					<u-radio v-for="(item,index) in genderOptions" :key="index" :name="item.name">{{item.name}}</u-radio>
+				</u-radio-group>
+			</u-form-item>
+			<u-form-item label="简介" label-position="top" prop="about">
+				<u-input v-model="profile.about" type="textarea" maxlength="15" placeholder="请输入简介"></u-input>
+			</u-form-item>
 			<view class="form-item hide">
-				<input name="avatar" :value="profile.avatar" />
+				<u-input v-model="profile.avatar"></u-input>
 			</view>
-		</form>
+			<view class="form-item">
+				<u-button type="primary" @click="submit">提交</u-button>
+			</view>
+		</u-form>
 	</view>
 </template>
 
@@ -49,27 +30,42 @@
 		data() {
 			return {
 				profile: {},
-				gender: 1
+				gender: '',
+				genderOptions: [{
+					name: '男'
+				}, {
+					name: '女'
+				}, {
+					name: '保密'
+				}],
+				rules: {
+					name: [{
+						required: true,
+						message: '请填写昵称'
+					}, {
+						min: 2,
+						max: 15,
+						message: '昵称2-15个字符'
+					}],
+					about: [{
+						min: 10,
+						max: 255,
+						message: '简介10-255个字符'
+					}],
+				}
 			}
 		},
 		onLoad() {
-			let login = this.$utils.checkLogin('/pages/me/profile')
-			if (login) {
-				this.loadMyProfile()
-			}
+			this.loadMyProfile()
+		},
+		onReady() {
+			this.$refs.profile.setRules(this.rules)
 		},
 		methods: {
-			loadMyProfile() {
-				this.$api.getMyProfile().then(res => {
-					this.profile = res.profile
-				}).catch(e => {
-					this.$u.toast('获取资料失败')
-				})
+			changeGender(name) {
+				this.profile.gender = this.getGenderValueByName(name)
 			},
-			changeGender(e) {
-				this.gender = e.detail.value
-			},
-			changeAvatar(){
+			changeAvatar() {
 				uni.chooseImage({
 					count: 1,
 					success: (res) => {
@@ -85,13 +81,50 @@
 					}
 				})
 			},
-			submit(e) {
-				let data = e.detail.value
-				data.gender = this.gender
-				this.$api.updateMyProfile(data).then(res => {
-					this.$utils.showSuccessMsg('更新资料成功')
+			submit() {
+				this.$api.updateMyProfile({
+					name: this.profile.name,
+					gender: this.profile.gender,
+					avatar: this.profile.avatar,
+					about: this.profile.about
+				}).then(res => {
+					this.$u.toast('更新资料成功')
 				}).catch(e => {
 					this.$u.toast('更新资料失败')
+				})
+			},
+			getGenderValueByName(name) {
+				switch (name) {
+					case '男':
+						return 1
+						break
+					case '女':
+						return 2
+						break
+					default:
+						return 3
+						break
+				}
+			},
+			getGenderNameByValue(value) {
+				switch (value) {
+					case 1:
+						return '男'
+						break
+					case 2:
+						return '女'
+						break
+					default:
+						return '保密'
+						break
+				}
+			},
+			loadMyProfile() {
+				this.$api.getMyProfile().then(res => {
+					this.profile = res.profile
+					this.gender = this.getGenderNameByValue(res.profile.gender)
+				}).catch(e => {
+					this.$u.toast('获取资料失败')
 				})
 			}
 		}
@@ -99,13 +132,5 @@
 </script>
 
 <style>
-	.profile-form {
-		padding-top: 50rpx;
-	}
 	
-	.avatar uni-image {
-		width:90rpx;
-		height:90rpx;
-		border-radius: 100%;
-	}
 </style>

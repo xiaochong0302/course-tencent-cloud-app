@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
-		<view class="cover">
-			<u-image :src="course.cover" width="100%" height="416rpx" mode="aspectFit"></u-image>
+		<view class="cover-box">
+			<u-image :src="course.cover" width="100%" height="416"></u-image>
 		</view>
 		<view class="tab-title">
 			<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
@@ -99,7 +99,31 @@
 				</view>
 			</view>
 			<view class="tab-package" v-if="currentTab === 3">
-
+				<view class="package" v-for="pkg in packages" :key="pkg.id">
+					<view class="top">
+						<view class="title">{{pkg.title}}</view>
+					</view>
+					<view class="body">
+						<view class="course" v-for="course in pkg.courses" :key="course.id">
+							<view class="cover">
+								<u-image width="240" height="140" border-radius="10" :src="course.cover|thumbCover"></u-image>
+							</view>
+							<view class="info">
+								<view class="title">{{course.title}}</view>
+								<view class="meta">{{course.market_price|formatPrice}}</view>
+							</view>
+						</view>
+					</view>
+					<view class="bottom">
+						<view class="left">
+							<text>市场价：{{pkg.market_price|formatPrice}}</text>
+							<text>会员价：{{pkg.vip_price|formatPrice}}</text>
+						</view>
+						<view class="right">
+							<u-button type="primary" size="mini" @click="buyPackage(pkg.id)">购买套餐</u-button>
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -123,6 +147,7 @@
 				},
 				chapters: [],
 				reviews: [],
+				packages: [],
 				rewardOptions: [],
 			}
 		},
@@ -130,6 +155,7 @@
 			this.loadCourse(e.id)
 			this.loadChapters(e.id)
 			this.loadReviews(e.id)
+			this.loadPackages(e.id)
 			this.loadRewardOptions()
 		},
 		methods: {
@@ -147,12 +173,15 @@
 					this.currentTab = index
 				}
 			},
-			buyCourse(id) {
-				this.$utils.redirect(`/pages/order/confirm?item_id=${id}&item_type=1`)
-			},
 			rewardCourse(courseId, rewardId) {
 				let id = `${courseId}-${rewardId}`
 				this.$utils.redirect(`/pages/order/confirm?item_id=${id}&item_type=3`)
+			},
+			buyCourse(id) {
+				this.$utils.redirect(`/pages/order/confirm?item_id=${id}&item_type=1`)
+			},
+			buyPackage(id) {
+				this.$utils.redirect(`/pages/order/confirm?item_id=${id}&item_type=2`)
 			},
 			gotoTeacher(id) {
 				this.$utils.redirect(`/pages/teacher/index?id=${id}`)
@@ -191,6 +220,13 @@
 					this.$u.toast('加载评价失败')
 				})
 			},
+			loadPackages(id) {
+				this.$api.getCoursePackages(id).then(res => {
+					this.packages = res.packages
+				}).catch(e => {
+					this.$u.toast('加载套餐失败')
+				})
+			},
 			loadRewardOptions() {
 				this.$api.getRewardOptions().then(res => {
 					this.rewardOptions = res.options
@@ -225,17 +261,14 @@
 		padding: 0;
 	}
 
-	.cover {
+	.cover-box {
 		width: 100%;
 		height: 416rpx;
+		margin-bottom: 15rpx;
 	}
 
 	.u-section {
 		margin-bottom: 30rpx;
-	}
-
-	.cover {
-		margin-bottom: 15rpx;
 	}
 
 	.tab-title {
@@ -352,5 +385,43 @@
 
 	.review .content {
 		margin-bottom: 15rpx;
+	}
+
+	.package {
+		margin-bottom: 30rpx;
+	}
+
+	.package .top {
+		margin-bottom: 20rpx;
+	}
+
+	.package .body {
+		margin-bottom: 15rpx;
+	}
+
+	.package .top .title {
+		font-weight: 600;
+	}
+
+	.package .course {
+		display: flex;
+		flex-direction: row;
+		margin-bottom: 15rpx;
+	}
+
+	.package .course .cover {
+		width: 240rpx;
+		height: 140rpx;
+		margin-right: 15rpx;
+	}
+
+	.package .course .info {
+		flex: 1;
+	}
+
+	.package .bottom {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 </style>

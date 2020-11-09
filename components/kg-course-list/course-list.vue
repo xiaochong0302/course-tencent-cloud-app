@@ -2,10 +2,14 @@
 	<view class="course-list">
 		<view class="list-item" v-for="course in showCourses" :key="course.id" @click="gotoCourse(course.id)">
 			<view class="cover">
-				<image :src="course.cover|thumbCover" mode="aspectFit"></image>
+				<u-image width="250" height="140" border-radius="10" :src="course.cover|thumbCover"></u-image>
 			</view>
 			<view class="info">
-				<view class="title">{{course.title}}</view>
+				<view class="title u-line-1">{{course.title}}</view>
+				<view class="meta">
+					<text>{{course.level|courseLevel}}</text>
+					<text>{{course.lesson_count}}课时</text>
+				</view>
 				<view class="meta">
 					<view v-if="course.market_price > course.vip_price">
 						<text>{{course.market_price|formatPrice}}</text>
@@ -77,18 +81,18 @@
 		flex: 1;
 	}
 
-	.cover uni-image {
+	.cover {
 		width: 250rpx;
 		height: 140rpx;
 	}
 
 	.info .title {
-		margin: 5rpx 0 10rpx 0;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
+		margin-bottom: 15rpx;
+		width: 470rpx;
+	}
+
+	.meta {
+		margin-bottom: 15rpx;
 	}
 
 	.meta uni-text {

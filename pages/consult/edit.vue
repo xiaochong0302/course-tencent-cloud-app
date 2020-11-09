@@ -2,14 +2,14 @@
 	<view class="container">
 		<view class="title" v-if="consult.course">课程：{{consult.course.title}}</view>
 		<view class="title" v-if="consult.chapter">章节：{{consult.chapter.title}}</view>
-		<u-form :model="consult" ref="uForm" :error-type="errorType">
+		<u-form :model="consult" ref="form" :error-type="['toast']">
 			<u-form-item label="咨询内容" label-position="top" prop="question">
 				<u-input v-model="consult.question" type="textarea" :border="false" placeholder="请填写咨询内容" />
 			</u-form-item>
+			<view class="form-item">
+				<u-button type="primary" @click="submit">提交</u-button>
+			</view>
 		</u-form>
-		<view class="action">
-			<u-button type="primary" @click="submit">提交</u-button>
-		</view>
 	</view>
 </template>
 
@@ -23,7 +23,7 @@
 					question: '',
 				},
 				rules: {
-					content: [{
+					question: [{
 						required: true,
 						message: '请填写咨询内容'
 					}, {
@@ -39,7 +39,7 @@
 			this.loadConsult(e.id)
 		},
 		onReady() {
-			this.$refs.uForm.setRules(this.rules)
+			this.$refs.form.setRules(this.rules)
 		},
 		methods: {
 			loadConsult(id) {
@@ -50,10 +50,10 @@
 				})
 			},
 			submit() {
-				this.$refs.uForm.validate(valid => {
+				this.$refs.form.validate(valid => {
 					if (valid) {
 						this.$api.updateConsult(this.consult.id, {
-							question: this.consult.question,
+							question: this.consult.question
 						}).then(res => {
 							this.$u.toast('更新咨询成功')
 						}).catch(e => {
@@ -72,10 +72,6 @@
 	}
 
 	.title {
-		margin-bottom: 30rpx;
-	}
-
-	.u-form {
 		margin-bottom: 30rpx;
 	}
 </style>

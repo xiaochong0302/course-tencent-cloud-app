@@ -117,6 +117,11 @@
 	.meta text {
 		margin-right: 15rpx;
 	}
+	
+	.course {
+		margin-bottom: 20rpx;
+		border-bottom: 1px solid #e4e7ed;
+	}
 
 	.course .title {
 		margin-bottom: 15rpx;

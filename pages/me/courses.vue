@@ -3,6 +3,9 @@
 		<u-swipe-action v-for="(item,index) in items" :key="item.key" :index="index" :options="swipeOptions" @click="swipeClick"
 		 @content-click="contentClick">
 			<view class="item">
+				<view class="cover">
+					<u-image width="250" height="140" border-radius="10" :src="item.course.cover|thumbCover"></u-image>
+				</view>
 				<view class="info">
 					<view class="title">{{item.course.title}}</view>
 					<view class="meta">
@@ -84,8 +87,11 @@
 <style>
 	.item {
 		display: flex;
-		border-bottom: 1px solid rgba(0, 0, 0, .2);
-		padding: 20rpx 0;
+		padding: 10rpx 0;
+	}
+	
+	.item .cover {
+		margin-right: 15rpx;
 	}
 
 	.item .info {

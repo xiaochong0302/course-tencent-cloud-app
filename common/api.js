@@ -332,7 +332,7 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 		appSecret: ''
 	}
 	let extra = {
-		_timestamp: parseInt(new Date().getTime() / 1000),
+		_timestamp: Utils.getNowTime(),
 		_nonce: Math.random().toString()
 	}
 

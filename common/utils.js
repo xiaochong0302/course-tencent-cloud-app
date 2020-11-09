@@ -1,6 +1,10 @@
 import * as Config from '@/common/config.js'
 import * as Storage from '@/common/storage.js'
 
+export const getNowTime = () => {
+	return Math.ceil(Date.now() / 1000)
+}
+
 export const formatPrice = (number) => {
 	number = parseFloat(number)
 	return '￥' + number.toFixed(2)

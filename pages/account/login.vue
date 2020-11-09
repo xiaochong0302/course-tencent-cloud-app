@@ -1,20 +1,14 @@
 <template>
 	<view class="container">
-		<form v-if="loginType==='password'" @submit="loginByPassword">
+		<u-form v-if="loginType==='password'" :model="pl" ref="pl" :error-type="['toast']">
+			<u-form-item label="账号" prop="account">
+				<u-input v-model="pl.account" type="number" maxlength="11" placeholder="请输入手机号"></u-input>
+			</u-form-item>
+			<u-form-item label="密码" prop="password">
+				<u-input v-model="pl.password" type="password" maxlength="16" placeholder="请输入密码" :password-icon="true"></u-input>
+			</u-form-item>
 			<view class="form-item">
-				<view class="input">
-					<input name="account" maxlength="30" placeholder="请输入手机/邮箱" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="input">
-					<input name="password" password="true" maxlength="16" placeholder="请输入密码" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="action">
-					<button type="primary" form-type="submit">登录</button>
-				</view>
+				<u-button type="primary" @click="loginByPassword">登录</u-button>
 			</view>
 			<view class="form-item">
 				<view class="link">
@@ -23,27 +17,18 @@
 					<text @click="gotoRegister">用户注册</text>
 				</view>
 			</view>
-		</form>
-		<form v-else-if="loginType==='verify'" @submit="loginByVerify">
+		</u-form>
+		<u-form v-else-if="loginType==='verify'" :model="vl" ref="vl" :error-type="['toast']">
+			<u-verification-code seconds="60" ref="verifyCode" @change="verifyCodeChange"></u-verification-code>
+			<u-form-item label="手机号" label-width="150" prop="account">
+				<u-input v-model="vl.account" type="number" maxlength="11" placeholder="请输入手机号"></u-input>
+			</u-form-item>
+			<u-form-item label="验证码" label-width="150" prop="verifyCode">
+				<u-input v-model="vl.verify_code" type="number" maxlength="6" placeholder="请输入验证码"></u-input>
+				<u-button slot="right" type="success" size="mini" @click="getVerifyCode">{{verifyCodeTips}}</u-button>
+			</u-form-item>
 			<view class="form-item">
-				<view class="input">
-					<input v-model="account" name="account" type="number" maxlength="11" placeholder="请输入手机号" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="input">
-					<input v-model="verifyCode" name="verify_code" type="number" maxlength="6" placeholder="请输入验证码" />
-				</view>
-			</view>
-			<view class="form-item" v-if="showVerify">
-				<view class="verify">
-					<button type="default" :disabled="verifyDisabled" @click="getVerifyCode">获取验证码</button>
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="action">
-					<button type="primary" form-type="submit">登录</button>
-				</view>
+				<u-button type="primary" @click="loginByVerify">登录</u-button>
 			</view>
 			<view class="form-item">
 				<view class="link">
@@ -52,12 +37,11 @@
 					<text @click="gotoRegister">用户注册</text>
 				</view>
 			</view>
-		</form>
+		</u-form>
 	</view>
 </template>
 
 <script>
-	import * as Validator from '@/common/validator.js'
 	import {
 		captchaCreater
 	} from '@/common/captcha.js'
@@ -66,24 +50,74 @@
 			return {
 				loginType: 'password',
 				redirectUrl: '/pages/index/index',
-				showVerify: true,
-				verifyCode: '',
-				account: '',
-			}
-		},
-		computed: {
-			verifyDisabled: function() {
-				let phoneOk = Validator.phone(this.account)
-				return !phoneOk
+				verifyCodeTips: '',
+				pl: {
+					account: '',
+					password: ''
+				},
+				vl: {
+					account: '',
+					verify_code: ''
+				},
+				plRules: {
+					account: [{
+						required: true,
+						message: '请填写手机号'
+					}, {
+						validator: (rule, value, callback) => {
+							return this.$u.test.mobile(value)
+						},
+						message: '无效的手机号'
+					}],
+					password: [{
+						required: true,
+						message: '请填写账户密码'
+					}, {
+						min: 6,
+						max: 16,
+						message: '密码6-16个字符'
+					}]
+				},
+				vlRules: {
+					account: [{
+						required: true,
+						message: '请填写手机号'
+					}, {
+						validator: (rule, value, callback) => {
+							return this.$u.test.mobile(value)
+						},
+						message: '无效的手机号'
+					}],
+					verifyCode: [{
+						required: true,
+						message: '请填写验证码'
+					}, {
+						len: 6,
+						message: '无效的验证码'
+					}]
+				}
 			}
 		},
 		onLoad(e) {
 			if (e.redirect) {
-				this.redirectUrl = e.redirect
+				this.redirect = e.redirect
+			}
+		},
+		onReady() {
+			if (this.loginType === 'password') {
+				this.$refs.pl.setRules(this.plRules)
+			} else {
+				this.$refs.vl.setRules(this.vlRules)
 			}
 		},
 		methods: {
+			verifyCodeChange(text) {
+				this.verifyCodeTips = text
+			},
 			getVerifyCode: async function() {
+				if (!this.$refs.verifyCode.canGetCode) {
+					return false	
+				}
 				try {
 					uni.showLoading({
 						mask: true
@@ -91,12 +125,12 @@
 					const captcha = await captchaCreater(res => {
 						if (res.ret === 0) {
 							this.$api.sendSmsVerifyCode({
-								phone: this.account,
+								phone: this.vl.account,
 								ticket: res.ticket,
 								rand: res.randstr
 							})
-							this.showVerify = false
-							this.$utils.showSuccessMsg('已发送验证码')
+							this.$u.toast('已发送验证码')
+							this.$refs.verifyCode.start()
 						}
 					})
 					captcha.show()
@@ -106,38 +140,34 @@
 					uni.hideLoading()
 				}
 			},
-			loginByPassword(e) {
-				let data = e.detail.value
-				if (!Validator.phone(data.account) && !Validator.email(data.account)) {
-					this.$u.toast('无效的手机/邮箱账号')
-					return false
-				}
-				if (!Validator.password(data.password)) {
-					this.$u.toast('无效的账户密码')
-					return false
-				}
-				this.$api.loginByPassword(data).then(res => {
-					this.$utils.setToken(res.token)
-					this.$utils.redirect(this.redirectUrl)
-				}).catch(e => {
-					this.$u.toast(e.msg)
+			loginByPassword() {
+				this.$refs.pl.validate(valid => {
+					if (valid) {
+						this.$api.loginByPassword({
+							account: this.pl.account,
+							password: this.pl.password
+						}).then(res => {
+							this.$utils.setToken(res.token)
+							this.$utils.redirect(this.redirect)
+						}).catch(e => {
+							this.$u.toast(e.msg)
+						})
+					}
 				})
 			},
-			loginByVerify(e) {
-				let data = e.detail.value
-				if (!Validator.phone(data.account)) {
-					this.$u.toast('无效的手机号')
-					return false
-				}
-				if (!Validator.verifyCode(data.verify_code)) {
-					this.$u.toast('无效的验证码')
-					return false
-				}
-				this.$api.loginByVerify(data).then(res => {
-					this.$utils.setToken(res.token)
-					this.$utils.redirect(this.redirectUrl)
-				}).catch(e => {
-					this.$u.toast(e.msg)
+			loginByVerify() {
+				this.$refs.vl.validate(valid => {
+					if (valid) {
+						this.$api.loginByVerify({
+							account: this.vl.account,
+							verify_code: this.vl.verify_code
+						}).then(res => {
+							this.$utils.setToken(res.token)
+							this.$utils.redirect(this.redirect)
+						}).catch(e => {
+							this.$u.toast(e.msg)
+						})
+					}
 				})
 			},
 			gotoForget() {
