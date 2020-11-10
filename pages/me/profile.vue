@@ -9,7 +9,7 @@
 			</u-form-item>
 			<u-form-item label="性别">
 				<u-radio-group v-model="gender" @change="changeGender">
-					<u-radio v-for="(item,index) in genderOptions" :key="index" :name="item.name">{{item.name}}</u-radio>
+					<u-radio v-for="(item,index) in genderOptions" :key="index" :name="item.name">{{ item.name }}</u-radio>
 				</u-radio-group>
 			</u-form-item>
 			<u-form-item label="简介" label-position="top" prop="about">
@@ -51,7 +51,7 @@
 						min: 10,
 						max: 255,
 						message: '简介10-255个字符'
-					}],
+					}]
 				}
 			}
 		},
@@ -72,7 +72,7 @@
 						const filePath = res.tempFilePaths[0]
 						this.$api.uploadAvatar(filePath).then(res => {
 							let myRes = JSON.parse(res.data)
-							if (myRes.code === 0) {
+							if (myRes.code == 0) {
 								this.profile.avatar = myRes.data.src
 							} else {
 								this.$u.toast(myRes.msg)
@@ -82,15 +82,19 @@
 				})
 			},
 			submit() {
-				this.$api.updateMyProfile({
-					name: this.profile.name,
-					gender: this.profile.gender,
-					avatar: this.profile.avatar,
-					about: this.profile.about
-				}).then(res => {
-					this.$u.toast('更新资料成功')
-				}).catch(e => {
-					this.$u.toast('更新资料失败')
+				this.$refs.profile.validate(valid => {
+					if (valid) {
+						this.$api.updateMyProfile({
+							name: this.profile.name,
+							gender: this.profile.gender,
+							avatar: this.profile.avatar,
+							about: this.profile.about
+						}).then(res => {
+							this.$u.toast('更新资料成功')
+						}).catch(e => {
+							this.$u.toast('更新资料失败')
+						})
+					}
 				})
 			},
 			getGenderValueByName(name) {
@@ -132,5 +136,5 @@
 </script>
 
 <style>
-	
+
 </style>

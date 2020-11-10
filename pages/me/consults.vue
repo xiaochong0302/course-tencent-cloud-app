@@ -3,8 +3,8 @@
 		<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
 		 @content-click="contentClick">
 			<view class="item">
-				<view class="question">提问：{{item.question}}</view>
-				<view class="answer">回复：{{item.answer}}</view>
+				<view class="question">提问：{{ item.question }}</view>
+				<view class="answer">回复：{{ item.answer }}</view>
 			</view>
 		</u-swipe-action>
 	</view>
@@ -40,9 +40,9 @@
 		},
 		methods: {
 			swipeClick(index1, index2) {
-				if (index2 === 0) {
+				if (index2 == 0) {
 					this.editConsult(index1)
-				} else if (index2 === 1) {
+				} else if (index2 == 1) {
 					this.deleteConsult(index1)
 				}
 			},
@@ -58,7 +58,7 @@
 				let id = this.getIdByIndex(index)
 				this.$api.deleteConsult(id).then(res => {
 					this.items.splice(index, 1)
-					if (this.items.length === 0) {
+					if (this.items.length == 0) {
 						this.page = 1
 						this.loadConsults()
 					}
@@ -85,7 +85,7 @@
 			},
 			handleConsults(items) {
 				return items.map(item => {
-					if (item.answer === '') {
+					if (item.answer == '') {
 						item.answer = '请耐心等待回复吧'
 					}
 					return item

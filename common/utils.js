@@ -95,7 +95,7 @@ export const redirect = (url) => {
 		})
 	} else if (url.indexOf('://') !== -1) {
 		plus.runtime.openURL(url)
-	} else if (url.indexOf('/pages') === 0) {
+	} else if (url.indexOf('/pages') == 0) {
 		uni.navigateTo({
 			url: url
 		})
@@ -137,10 +137,10 @@ export const setToken = (value) => {
 }
 
 export const checkLogin = (redirect = '') => {
-	if (redirect === '') {
+	if (redirect == '') {
 		redirect = '/pages/index/index'
 	}
-	if (getToken() === '') {
+	if (getToken() == '') {
 		uni.reLaunch({
 			url: '/pages/account/login?redirect=' + encodeURIComponent(redirect)
 		})

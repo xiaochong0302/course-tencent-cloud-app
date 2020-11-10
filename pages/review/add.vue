@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class="title">{{course.title}}</view>
+		<view class="title">{{ course.title }}</view>
 		<u-form :model="form" ref="uForm" :error-type="errorType">
 			<u-form-item label="内容实用" label-position="left" label-width="150">
 				<u-rate v-model="form.rating1" :min-count="1"></u-rate>

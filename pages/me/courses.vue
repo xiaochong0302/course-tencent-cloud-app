@@ -4,13 +4,13 @@
 		 @content-click="contentClick">
 			<view class="item">
 				<view class="cover">
-					<u-image width="250" height="140" border-radius="10" :src="item.course.cover|thumbCover"></u-image>
+					<u-image width="240" height="134" border-radius="10" :src="item.course.cover|thumbCover"></u-image>
 				</view>
 				<view class="info">
-					<view class="title">{{item.course.title}}</view>
+					<view class="title">{{ item.course.title }}</view>
 					<view class="meta">
-						<text class="progress">进度：{{item.progress}}%</text>
-						<text class="duration">用时：{{item.duration|formatDuration}}</text>
+						<text class="progress">进度：{{ item.progress }}%</text>
+						<text class="duration">用时：{{ item.duration|formatDuration }}</text>
 					</view>
 				</view>
 			</view>
@@ -43,7 +43,7 @@
 		},
 		methods: {
 			swipeClick(index1, index2) {
-				if (index2 === 0) {
+				if (index2 == 0) {
 					this.gotoReview(index1)
 				}
 			},
@@ -54,7 +54,7 @@
 			gotoReview(index) {
 				let id = this.items[index].course.id
 				let reviewed = this.items[index].reviewed
-				if (reviewed === 0) {
+				if (reviewed == 0) {
 					this.$utils.redirect(`/pages/review/add?id=${id}`)
 				} else {
 					this.$u.toast('你已经发表过评价啦')
@@ -91,6 +91,8 @@
 	}
 	
 	.item .cover {
+		width: 240rpx;
+		height: 134rpx;
 		margin-right: 15rpx;
 	}
 
@@ -100,7 +102,8 @@
 
 	.info .title {
 		font-weight: 600;
-		margin-bottom: 15rpx;
+		margin-bottom: 10rpx;
+		width: 465rpx;
 	}
 
 	.meta text {

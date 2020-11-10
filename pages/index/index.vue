@@ -11,13 +11,13 @@
 				<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
 			</view>
 			<view class="tab-content">
-				<view v-if="currentTab === 0">
+				<view v-if="currentTab == 0">
 					<course-list :courses="newCourses"></course-list>
 				</view>
-				<view v-if="currentTab === 1">
+				<view v-if="currentTab == 1">
 					<course-list :courses="freeCourses"></course-list>
 				</view>
-				<view v-if="currentTab === 2">
+				<view v-if="currentTab == 2">
 					<course-list :courses="vipCourses"></course-list>
 				</view>
 			</view>
@@ -93,11 +93,11 @@
 			handleSlides(slides) {
 				return slides.map(slide => {
 					slide.image = this.$utils.thumbSlide(slide.cover)
-					if (slide.target === 1) {
+					if (slide.target == 1) {
 						slide.url = `/pages/course/info?id=${slide.content}`
-					} else if (slide.target === 2) {
+					} else if (slide.target == 2) {
 						slide.url = `/pages/page/info?id=${slide.content}`
-					} else if (slide.target === 3) {
+					} else if (slide.target == 3) {
 						slide.url = slide.content
 					}
 					return slide

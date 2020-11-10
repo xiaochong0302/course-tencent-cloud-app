@@ -3,12 +3,12 @@
 		<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
 		 @content-click=contentClick>
 			<view class="item">
-				<view class="title">{{item.course.title}}</view>
-				<view class="content">{{item.content}}</view>
+				<view class="title">{{ item.course.title }}</view>
+				<view class="content">{{ item.content }}</view>
 				<view class="rating">
-					<text>内容实用：{{item.rating1}} 星</text>
-					<text>通俗易懂：{{item.rating2}} 星</text>
-					<text>逻辑清晰：{{item.rating3}} 星</text>
+					<text>内容实用：{{ item.rating1 }} 星</text>
+					<text>通俗易懂：{{ item.rating2 }} 星</text>
+					<text>逻辑清晰：{{ item.rating3 }} 星</text>
 				</view>
 			</view>
 		</u-swipe-action>
@@ -45,9 +45,9 @@
 		},
 		methods: {
 			swipeClick(index1, index2) {
-				if (index2 === 0) {
+				if (index2 == 0) {
 					this.editReview(index1)
-				} else if (index2 === 1) {
+				} else if (index2 == 1) {
 					this.deleteReview(index1)
 				}
 			},
@@ -63,7 +63,7 @@
 				let id = this.getIdByIndex(index)
 				this.$api.deleteReview(id).then(res => {
 					this.items.splice(index, 1)
-					if (this.items.length === 0) {
+					if (this.items.length == 0) {
 						this.page = 1
 						this.loadReviews()
 					}
@@ -80,16 +80,12 @@
 					params.page = this.page
 				}
 				this.$api.getMyReviews(params).then(res => {
-					let items = this.items.concat(res.pager.items)
-					this.items = this.handleReviews(items)
+					this.items = this.handleReviews(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载评价失败')
 				})
-			},
-			handleReviews(items) {
-				return items
 			}
 		}
 	}

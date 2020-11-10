@@ -1,22 +1,23 @@
 <template>
 	<view class="container">
 		<view class="filter">
-			<u-tag v-for="item in statuses" :key="item.id" :text="item.name" :type="item.id===status?'primary':'default'" mode="dark" @click="filterByStatus(item.id)"></u-tag>
+			<u-tag v-for="item in statuses" :key="item.id" :text="item.name" :type="item.id==status?'primary':'default'" mode="dark"
+			 @click="filterByStatus(item.id)"></u-tag>
 		</view>
 		<view class="item-list" v-if="items.length > 0">
 			<view class="item" v-for="item in items" :key="item.id" @click="gotoOrder(item.sn)">
 				<view class="top">
-					<view class="sn">编号：{{item.sn}}</view>
-					<view class="status">{{item.status|orderStatus}}</view>
+					<view class="sn">编号：{{ item.sn }}</view>
+					<view class="status">{{ item.status|orderStatus }}</view>
 				</view>
 				<view class="body">
-					<view class="subject">{{item.subject}}</view>
+					<view class="subject">{{ item.subject }}</view>
 				</view>
 				<view class="bottom">
-					<view class="price">金额：{{item.amount|formatPrice}}</view>
+					<view class="price">金额：{{ item.amount|formatPrice }}</view>
 					<view class="action">
-						<u-button v-if="item.status === 1" size="mini" @click="gotoPay(item.sn)">支付</u-button>
-						<u-button v-if="item.status === 3" size="mini" @click="gotoRefund(item.sn)">退款</u-button>
+						<u-button v-if="item.status == 1" size="mini" @click="gotoPay(item.sn)">支付</u-button>
+						<u-button v-if="[1,2].includes(item.item_type) && item.status == 3" size="mini" @click="gotoRefund(item.sn)">退款</u-button>
 					</view>
 				</view>
 			</view>
@@ -65,7 +66,7 @@
 		},
 		methods: {
 			filterByStatus(status) {
-				this.status = parseInt(status)
+				this.status = status
 				this.page = 1
 				this.items = []
 				this.hasMore = false
@@ -82,23 +83,19 @@
 			},
 			loadOrders() {
 				let params = {}
-				if (this.status !== 0) {
+				if (this.status != 0) {
 					params.status = this.status
 				}
 				if (this.page > 0) {
 					params.page = this.page
 				}
 				this.$api.getMyOrders(params).then(res => {
-					let items = this.handleOrders(res.pager.items)
-					this.items = this.items.concat(items)
+					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载订单失败')
 				})
-			},
-			handleOrders(items) {
-				return items
 			}
 		}
 	}
@@ -108,7 +105,7 @@
 	.container {
 		padding: 20rpx;
 	}
-	
+
 	.filter {
 		display: flex;
 		margin-top: 20rpx;

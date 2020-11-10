@@ -39,11 +39,11 @@
 					options.height = playUrls.sd.height
 				}
 				options.listener = (msg) => {
-					if (msg.type === 'play') {
+					if (msg.type == 'play') {
 						this.onPlay()
-					} else if (msg.type === 'pause') {
+					} else if (msg.type == 'pause') {
 						this.onPause()
-					} else if (msg.type === 'ended') {
+					} else if (msg.type == 'ended') {
 						this.onEnded()
 					}
 				}

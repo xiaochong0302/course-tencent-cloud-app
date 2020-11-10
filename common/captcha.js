@@ -7,7 +7,7 @@ import * as Api from '@/common/api.js'
  */
 function loadScript(url) {
 	return new Promise((resolve, reject) => {
-		if (window.TencentCaptcha === undefined) {
+		if (window.TencentCaptcha == undefined) {
 			let script = document.createElement("script")
 			let head = document.getElementsByTagName("head")[0]
 			script.type = "text/javascript"

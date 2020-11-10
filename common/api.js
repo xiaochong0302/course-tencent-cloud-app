@@ -166,10 +166,20 @@ export const cancelOrder = (sn) => {
 	})
 }
 
+export const getRefundConfirm = (sn) => {
+	return httpGet('/refund/confirm', {
+		sn: sn
+	})
+}
+
 export const getRefundInfo = (sn) => {
 	return httpGet('/refund/info', {
 		sn: sn
 	})
+}
+
+export const createRefund = (params={}) => {
+	return httpPost('/refund/create', params)
 }
 
 export const cancelRefund = (sn) => {
@@ -338,7 +348,7 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 
 	let signature = ''
 
-	if (method === 'POST') {
+	if (method == 'POST') {
 		signature = httpPostSignature(url, params, extra, auth.appSecret)
 	} else {
 		signature = httpGetSignature(url, params, extra, auth.appSecret)
@@ -359,9 +369,9 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 			method: method,
 			header: header,
 			success: function(res) {
-				if (res.statusCode === 200) {
+				if (res.statusCode == 200) {
 					resolve(res.data)
-				} else if (res.statusCode === 401) {
+				} else if (res.statusCode == 401) {
 					uni.reLaunch({
 						url: '/pages/account/login'
 					})

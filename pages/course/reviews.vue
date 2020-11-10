@@ -7,11 +7,11 @@
 				</view>
 				<view class="info">
 					<view class="top">
-						<view class="name">{{item.owner.name}}</view>
-						<view class="rating">{{item.rating}}</view>
+						<view class="name">{{ item.owner.name }}</view>
+						<view class="rating">{{ item.rating }}</view>
 					</view>
-					<view class="content">{{item.content}}</view>
-					<view class="bottom"><text>{{item.create_time}}</text></view>
+					<view class="content">{{ item.content }}</view>
+					<view class="bottom"><text>{{ item.create_time }}</text></view>
 				</view>
 			</view>
 		</view>

@@ -1,21 +1,22 @@
 <template>
 	<view class="container">
 		<view class="filter">
-			<u-tag v-for="item in statuses" :key="item.id" :text="item.name" :type="item.id===status?'primary':'default'" mode="dark" @click="filterByStatus(item.id)"></u-tag>
+			<u-tag v-for="item in statuses" :key="item.id" :text="item.name" :type="item.id==status?'primary':'default'" mode="dark"
+			 @click="filterByStatus(item.id)"></u-tag>
 		</view>
-		<view class="item-list" v-if="items.length>0">
-			<view class="item" v-for="item in items" :key="item.id">
+		<view class="item-list" v-if="items.length > 0">
+			<view class="item" v-for="(item,index) in items" :key="item.id">
 				<view class="top">
-					<view class="sn">编号：{{item.sn}}</view>
-					<view class="status">{{item.status|refundStatus}}</view>
+					<view class="sn">编号：{{ item.sn }}</view>
+					<view class="status">{{ item.status|refundStatus }}</view>
 				</view>
 				<view class="body">
-					<view class="subject">{{item.subject}}</view>
+					<view class="subject">{{ item.subject }}</view>
 				</view>
 				<view class="bottom">
-					<view class="price">金额：{{item.amount|formatPrice}}</view>
+					<view class="price">金额：{{ item.amount|formatPrice }}</view>
 					<view class="action">
-						<u-button v-if="item.status === 2" size="mini" @click="cancelRefund(item.sn)">取消</u-button>
+						<u-button v-if="item.status == 3" size="mini" @click="cancelRefund(item.sn,index)">取消</u-button>
 					</view>
 				</view>
 			</view>
@@ -65,14 +66,15 @@
 		},
 		methods: {
 			filterByStatus(status) {
-				this.status = parseInt(status)
+				this.status = status
 				this.page = 1
 				this.items = []
 				this.hasMore = false
 				this.loadRefunds()
 			},
-			cancelRefund(sn) {
+			cancelRefund(sn, index) {
 				this.$api.cancelRefund(sn).then(res => {
+					this.items[index].status = 2
 					this.$u.toast('取消退款成功')
 				}).catch(e => {
 					this.$u.toast(e.msg)
@@ -80,23 +82,19 @@
 			},
 			loadRefunds() {
 				let params = {}
-				if (this.status !== 0) {
+				if (this.status != 0) {
 					params.status = this.status
 				}
 				if (this.page > 0) {
 					params.page = this.page
 				}
 				this.$api.getMyRefunds(params).then(res => {
-					let items = this.handleRefunds(res.pager.items)
-					this.items = this.items.concat(items)
+					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载退款失败')
 				})
-			},
-			handleRefunds(items) {
-				return items
 			}
 		}
 	}

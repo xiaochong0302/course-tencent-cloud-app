@@ -1,9 +1,9 @@
 <template>
 	<view class="body">
-		<view v-if="chapter.model === 1">
+		<view v-if="chapter.model == 1">
 			<view></view>
 		</view>
-		<view v-if="chapter.model === 1">
+		<view v-if="chapter.model == 1">
 			<view></view>
 		</view>
 	</view>

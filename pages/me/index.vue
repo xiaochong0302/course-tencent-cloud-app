@@ -4,7 +4,7 @@
 			<view class="avatar">
 				<u-avatar size="large" :src="profile.avatar|thumbAvatar" @click="gotoUser(profile.id)"></u-avatar>
 			</view>
-			<view class="name">{{profile.name}}</view>
+			<view class="name">{{ profile.name }}</view>
 		</view>
 		<view class="cell-list">
 			<u-cell-group>

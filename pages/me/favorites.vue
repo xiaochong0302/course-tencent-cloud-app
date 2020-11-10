@@ -3,12 +3,18 @@
 		<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
 		 @content-click="contentClick">
 			<view class="item">
+				<view class="cover">
+					<u-image width="240" height="133" border-radius="10" :src="item.cover|thumbCover"></u-image>
+				</view>
 				<view class="info">
-					<view class="title">{{item.title}}</view>
+					<view class="title u-line-1">{{ item.title }}</view>
 					<view class="meta">
-						<text class="user">学员：{{item.user_count}}</text>
-						<text class="favorite">收藏：{{item.favorite_count}}</text>
-						<text class="rating">评分：{{item.rating}}</text>
+						<text class="user">学员：{{ item.user_count }}</text>
+						<text class="favorite">收藏：{{ item.favorite_count }}</text>
+					</view>
+					<view class="meta">
+						<text class="favorite">课时：{{ item.lesson_count }}</text>
+						<text class="rating">评分：{{ item.rating }}</text>
 					</view>
 				</view>
 			</view>
@@ -41,7 +47,7 @@
 		},
 		methods: {
 			swipeClick(index1, index2) {
-				if (index2 === 0) {
+				if (index2 == 0) {
 					this.unfavorite(index1)
 				}
 			},
@@ -53,7 +59,7 @@
 				let id = this.getIdByIndex(index)
 				this.$api.unfavoriteCourse(id).then(res => {
 					this.items.splice(index, 1)
-					if (this.items.length === 0) {
+					if (this.items.length == 0) {
 						this.page = 1
 						this.loadFavorites()
 					}
@@ -70,18 +76,11 @@
 					params.page = this.page
 				}
 				this.$api.getMyFavorites(params).then(res => {
-					let items = this.handleFavorites(res.pager.items)
-					this.items = this.items.concat(items)
+					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载收藏失败')
-				})
-			},
-			handleFavorites(items) {
-				return items.map(item => {
-					item.cover = this.$utils.thumbCover(item.cover)
-					return item
 				})
 			}
 		}
@@ -91,8 +90,11 @@
 <style>
 	.item {
 		display: flex;
-		padding: 20rpx 0;
-		border-bottom: 1px solid rgba(0, 0, 0, .2);
+		padding: 10rpx 0;
+	}
+
+	.item .cover {
+		margin-right: 15rpx;
 	}
 
 	.item .info {
@@ -101,7 +103,12 @@
 
 	.info .title {
 		font-weight: 600;
-		margin-bottom: 15rpx;
+		margin-bottom: 10rpx;
+		width: 465rpx;
+	}
+
+	.meta {
+		margin-bottom: 10rpx;
 	}
 
 	.meta text {

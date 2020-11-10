@@ -5,12 +5,12 @@
 			<u-form-item label="手机号" label-width="150" prop="account">
 				<u-input v-model="form.account" type="number" maxlength="11" placeholder="请输入手机号"></u-input>
 			</u-form-item>
-			<u-form-item label="新密码" label-width="150" prop="newPassword">
+			<u-form-item label="新密码" label-width="150" prop="new_password">
 				<u-input v-model="form.new_password" type="password" maxlength="16" placeholder="请输入新密码" :password-icon="true"></u-input>
 			</u-form-item>
-			<u-form-item label="验证码" label-width="150" prop="verifyCode">
+			<u-form-item label="验证码" label-width="150" prop="verify_code">
 				<u-input v-model="form.verify_code" type="number" maxlength="6" placeholder="请输入验证码"></u-input>
-				<u-button slot="right" type="success" size="mini" :disabled="verifyDisabled" @click="getVerifyCode">{{verifyCodeTips}}</u-button>
+				<u-button slot="right" type="success" size="mini" :disabled="verifyDisabled" @click="getVerifyCode">{{ verifyCodeTips }}</u-button>
 			</u-form-item>
 			<view class="form-item">
 				<u-button type="primary" @click="submit">重置密码</u-button>
@@ -48,7 +48,7 @@
 						},
 						message: '无效的手机号'
 					}],
-					newPassword: [{
+					new_password: [{
 						required: true,
 						message: '请填写账户密码'
 					}, {
@@ -56,7 +56,7 @@
 						max: 16,
 						message: '密码6-16个字符'
 					}],
-					verifyCode: [{
+					verify_code: [{
 						required: true,
 						message: '请填写验证码'
 					}, {
@@ -87,7 +87,7 @@
 						mask: true
 					})
 					const captcha = await captchaCreater(res => {
-						if (res.ret === 0) {
+						if (res.ret == 0) {
 							this.$api.sendSmsVerifyCode({
 								phone: this.form.account,
 								ticket: res.ticket,

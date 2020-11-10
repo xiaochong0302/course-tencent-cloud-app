@@ -7,29 +7,29 @@
 			<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
 		</view>
 		<view class="tab-content">
-			<view class="tab-summary" v-if="currentTab === 0">
+			<view class="tab-summary" v-if="currentTab == 0">
 				<view class="section">
 					<u-section title="基本信息" :right="false"></u-section>
 					<view class="basic">
-						<view class="title">{{course.title}}</view>
-						<view class="meta" v-if="course.model === 1">课程时长：{{course.attrs.duration|formatDuration}}</view>
+						<view class="title">{{ course.title }}</view>
+						<view class="meta" v-if="course.model == 1">课程时长：{{ course.attrs.duration|formatDuration }}</view>
 						<view class="meta">
-							<text>学习期限：{{course.study_expiry}}个月</text>
-							<text>退款期限：{{course.refund_expiry}}个月</text>
+							<text>学习期限：{{ course.study_expiry }}个月</text>
+							<text>退款期限：{{ course.refund_expiry }}个月</text>
 						</view>
 						<view class="meta">
-							<text>市场价格：{{course.market_price|formatPrice}}</text>
-							<text>会员价格：{{course.vip_price|formatPrice}}</text>
+							<text>市场价格：{{ course.market_price|formatPrice }}</text>
+							<text>会员价格：{{ course.vip_price|formatPrice }}</text>
 						</view>
 						<view class="meta">
-							<text>难度级别：{{course.level|courseLevel}}</text>
-							<text>学习人次：{{course.user_count}}</text>
+							<text>难度级别：{{ course.level|courseLevel }}</text>
+							<text>学习人次：{{ course.user_count }}</text>
 						</view>
 					</view>
 				</view>
 				<view class="section" v-if="course.details">
 					<u-section title="课程介绍" :right="false"></u-section>
-					<view class="details">{{course.details}}</view>
+					<view class="details">{{ course.details }}</view>
 				</view>
 				<view class="section" v-if="course.teachers.length > 0">
 					<u-section title="授课教师" :right="false"></u-section>
@@ -40,36 +40,36 @@
 						</u-cell-item>
 					</u-cell-group>
 				</view>
-				<view class="section" v-if="course.market_price === 0">
+				<view class="section" v-if="course.market_price == 0">
 					<u-section title="赞赏支持" :right="false"></u-section>
 					<view class="reward-list">
-						<u-button v-for="option in rewardOptions" :key="option.id" type="primary" size="mini" @click="rewardCourse(course.id,option.id)">{{option.title}}</u-button>
+						<u-button v-for="option in rewardOptions" :key="option.id" type="primary" size="mini" @click="rewardCourse(course.id,option.id)">{{ option.title }}</u-button>
 					</view>
 				</view>
-				<view class="sticky" v-if="course.me.owned === 0 && course.market_price > 0">
+				<view class="sticky" v-if="course.me.owned == 0 && course.market_price > 0">
 					<u-button type="primary" @click="buyCourse(course.id)">立即购买</u-button>
 				</view>
 			</view>
-			<view class="tab-chapter" v-if="currentTab === 1">
+			<view class="tab-chapter" v-if="currentTab == 1">
 				<u-collapse>
 					<u-collapse-item :title="chapter.title" v-for="(chapter,index) in chapters" :key="index">
-						<view class="lesson u-line-1" v-for="lesson in chapter.children" :key="lesson.id" @click="gotoChapter(lesson.id,lesson.model)">{{lesson.title}}</view>
+						<view class="lesson u-line-1" v-for="lesson in chapter.children" :key="lesson.id" @click="gotoChapter(lesson.id,lesson.model)">{{ lesson.title }}</view>
 					</u-collapse-item>
 				</u-collapse>
 			</view>
-			<view class="tab-review" v-if="currentTab === 2">
+			<view class="tab-review" v-if="currentTab == 2">
 				<view class="rating-summary">
 					<view class="rating">
 						<view class="label">内容实用</view>
-						<view class="score">{{course.ratings.rating1}}</view>
+						<view class="score">{{ course.ratings.rating1 }}</view>
 					</view>
 					<view class="rating">
 						<view class="label">简洁易懂</view>
-						<view class="score">{{course.ratings.rating2}}</view>
+						<view class="score">{{ course.ratings.rating2 }}</view>
 					</view>
 					<view class="rating">
 						<view class="label">逻辑清晰</view>
-						<view class="score">{{course.ratings.rating3}}</view>
+						<view class="score">{{ course.ratings.rating3 }}</view>
 					</view>
 				</view>
 				<view class="review-list">
@@ -79,14 +79,14 @@
 						</view>
 						<view class="info">
 							<view class="top">
-								<view class="name">{{review.owner.name}}</view>
+								<view class="name">{{ review.owner.name }}</view>
 								<view class="rating">
 									<u-rate size="28" :current="review.rating" :disabled="true"></u-rate>
 								</view>
 							</view>
-							<view class="content">{{review.content}}</view>
+							<view class="content">{{ review.content }}</view>
 							<view class="bottom">
-								<view class="time">{{$u.timeFrom(review.create_time,'yyyy-mm-dd')}}</view>
+								<view class="time">{{ $u.timeFrom(review.create_time,'yyyy-mm-dd') }}</view>
 								<view class="like">
 									<u-icon name="thumb-up" :label="review.like_count"></u-icon>
 								</view>
@@ -98,10 +98,10 @@
 					<u-button size="medium" @click="gotoReviewList(course.id)">更多评价</u-button>
 				</view>
 			</view>
-			<view class="tab-package" v-if="currentTab === 3">
+			<view class="tab-package" v-if="currentTab == 3">
 				<view class="package" v-for="pkg in packages" :key="pkg.id">
 					<view class="top">
-						<view class="title">{{pkg.title}}</view>
+						<view class="title">{{ pkg.title }}</view>
 					</view>
 					<view class="body">
 						<view class="course" v-for="course in pkg.courses" :key="course.id">
@@ -109,15 +109,15 @@
 								<u-image width="240" height="140" border-radius="10" :src="course.cover|thumbCover"></u-image>
 							</view>
 							<view class="info">
-								<view class="title">{{course.title}}</view>
-								<view class="meta">{{course.market_price|formatPrice}}</view>
+								<view class="title">{{ course.title }}</view>
+								<view class="meta">{{ course.market_price|formatPrice }}</view>
 							</view>
 						</view>
 					</view>
 					<view class="bottom">
 						<view class="left">
-							<text>市场价：{{pkg.market_price|formatPrice}}</text>
-							<text>会员价：{{pkg.vip_price|formatPrice}}</text>
+							<text>市场价：{{ pkg.market_price|formatPrice }}</text>
+							<text>会员价：{{ pkg.vip_price|formatPrice }}</text>
 						</view>
 						<view class="right">
 							<u-button type="primary" size="mini" @click="buyPackage(pkg.id)">购买套餐</u-button>

@@ -2,9 +2,9 @@
 	<view class="container">
 		<uni-section title="订单信息" type="line"></uni-section>
 		<view class="order">
-			<view class="subject">{{order.subject}}</view>
-			<view class="sn">订单编号：{{order.sn}}</view>
-			<view class="price">支付金额：{{order.amount|formatPrice}}</view>
+			<view class="subject">{{ order.subject }}</view>
+			<view class="sn">订单编号：{{ order.sn }}</view>
+			<view class="price">支付金额：{{ order.amount|formatPrice }}</view>
 		</view>
 		<uni-section title="支付方式" type="line"></uni-section>
 		<view class="channel-list">
@@ -49,7 +49,7 @@
 			queryPayStatus(sn) {
 				let interval = setInterval(sn => {
 					this.$api.getTradeInfo(sn).then(res => {
-						if (res.trade.status === 2) {
+						if (res.trade.status == 2) {
 							clearInterval(interval)
 							this.$utils.redirect('/pages/me/orders')
 						}

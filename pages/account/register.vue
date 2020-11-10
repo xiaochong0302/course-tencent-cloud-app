@@ -8,9 +8,9 @@
 			<u-form-item label="密码" prop="password">
 				<u-input v-model="form.password" type="password" maxlength="16" placeholder="请输入密码" :password-icon="true"></u-input>
 			</u-form-item>
-			<u-form-item label="验证码" label-width="150" prop="verifyCode">
+			<u-form-item label="验证码" label-width="150" prop="verify_code">
 				<u-input v-model="form.verify_code" type="number" maxlength="6" placeholder="请输入验证码"></u-input>
-				<u-button slot="right" type="success" size="mini" :disabled="verifyDisabled" @click="getVerifyCode">{{verifyCodeTips}}</u-button>
+				<u-button slot="right" type="success" size="mini" :disabled="verifyDisabled" @click="getVerifyCode">{{ verifyCodeTips }}</u-button>
 			</u-form-item>
 			<view class="form-item">
 				<u-button type="primary" @click="submit">注册</u-button>
@@ -51,7 +51,7 @@
 						max: 16,
 						message: '密码6-16个字符'
 					}],
-					verifyCode: [{
+					verify_code: [{
 						required: true,
 						message: '请填写验证码'
 					}, {
@@ -87,7 +87,7 @@
 						mask: true
 					})
 					const captcha = await captchaCreater(res => {
-						if (res.ret === 0) {
+						if (res.ret == 0) {
 							this.$api.sendSmsVerifyCode({
 								phone: this.form.account,
 								ticket: res.ticket,
@@ -110,7 +110,7 @@
 						this.$api.registerAccount({
 							account: this.form.account,
 							password: this.form.password,
-							verify_code: this.form.verify_code
+							verify_code: this.form.verify_code,
 						}).then(res => {
 							this.$utils.setToken(res.token)
 							this.$utils.redirect(this.redirect)

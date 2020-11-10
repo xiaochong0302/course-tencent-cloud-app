@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class="section" v-if="profile.vip === 1">
+		<view class="section" v-if="profile.vip == 1">
 			<u-section title="我的会员" :right="false"></u-section>
 			<view class="count-down">
 				<u-count-down :timestamp="vipExpiryTime" separator="zh"></u-count-down>
@@ -16,8 +16,8 @@
 			<u-section title="会员类型" :right="false"></u-section>
 			<view class="option-list">
 				<view class="option" v-for="option in vipOptions" :key="option.id">
-					<view class="title">{{option.title}}</view>
-					<view class="price">{{option.price|formatPrice}}</view>
+					<view class="title">{{ option.title }}</view>
+					<view class="price">{{ option.price|formatPrice }}</view>
 					<view class="action">
 						<u-button type="primary" size="mini" @click="buyVip(option.id)">立即开通</u-button>
 					</view>

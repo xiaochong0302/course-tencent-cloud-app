@@ -3,11 +3,11 @@
 		<view class="search-box">
 			<uni-search-bar @confirm="confirm" maxlength="30" :placeholder="query" />
 		</view>
-		<view v-if="type==='course'">
+		<view v-if="type=='course'">
 			<course-list :courses="items"></course-list>
 		</view>
-		<view v-else-if="type==='group'"></view>
-		<view v-else-if="type==='user'"></view>
+		<view v-else-if="type=='group'"></view>
+		<view v-else-if="type=='user'"></view>
 	</view>
 </template>
 
