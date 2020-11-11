@@ -7,7 +7,11 @@
 					<u-image width="240" height="134" border-radius="10" :src="item.course.cover|thumbCover"></u-image>
 				</view>
 				<view class="info">
-					<view class="title">{{ item.course.title }}</view>
+					<view class="title u-line-1">{{ item.course.title }}</view>
+					<view class="meta">
+						<text class="duration">课时：{{ item.course.lesson_count }}</text>
+						<text class="progress">评分：{{ item.course.rating }}</text>
+					</view>
 					<view class="meta">
 						<text class="progress">进度：{{ item.progress }}%</text>
 						<text class="duration">用时：{{ item.duration|formatDuration }}</text>
@@ -104,6 +108,10 @@
 		font-weight: 600;
 		margin-bottom: 10rpx;
 		width: 465rpx;
+	}
+	
+	.meta {
+		margin-bottom: 10rpx;
 	}
 
 	.meta text {

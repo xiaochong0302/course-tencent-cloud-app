@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view>
 		<view class="cover-box">
 			<u-image :src="course.cover" width="100%" height="416"></u-image>
 		</view>
@@ -7,7 +7,7 @@
 			<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
 		</view>
 		<view class="tab-content">
-			<view class="tab-summary" v-if="currentTab == 0">
+			<view class="tab-item tab-summary" v-if="currentTab == 0">
 				<view class="section">
 					<u-section title="基本信息" :right="false"></u-section>
 					<view class="basic">
@@ -36,7 +36,7 @@
 					<u-cell-group>
 						<u-cell-item v-for="teacher in course.teachers" :key="teacher.id" :title="teacher.name" :label="teacher.title"
 						 :index="teacher.id" :arrow="true" :title-style="{'padding-left':'15rpx'}" @click="gotoTeacher">
-							<u-icon slot="icon" :name="teacher.avatar" size="60"></u-icon>
+							<u-icon slot="icon" :name="teacher.avatar|thumbAvatar" size="60"></u-icon>
 						</u-cell-item>
 					</u-cell-group>
 				</view>
@@ -50,14 +50,14 @@
 					<u-button type="primary" @click="buyCourse(course.id)">立即购买</u-button>
 				</view>
 			</view>
-			<view class="tab-chapter" v-if="currentTab == 1">
+			<view class="tab-item tab-chapter" v-if="currentTab == 1">
 				<u-collapse>
 					<u-collapse-item :title="chapter.title" v-for="(chapter,index) in chapters" :key="index">
 						<view class="lesson u-line-1" v-for="lesson in chapter.children" :key="lesson.id" @click="gotoChapter(lesson.id,lesson.model)">{{ lesson.title }}</view>
 					</u-collapse-item>
 				</u-collapse>
 			</view>
-			<view class="tab-review" v-if="currentTab == 2">
+			<view class="tab-item tab-review" v-if="currentTab == 2">
 				<view class="rating-summary">
 					<view class="rating">
 						<view class="label">内容实用</view>
@@ -98,24 +98,29 @@
 					<u-button size="medium" @click="gotoReviewList(course.id)">更多评价</u-button>
 				</view>
 			</view>
-			<view class="tab-package" v-if="currentTab == 3">
+			<view class="tab-item tab-consult" v-if="currentTab == 3"></view>
+			<view class="tab-item tab-package" v-if="currentTab == 4">
 				<view class="package" v-for="pkg in packages" :key="pkg.id">
 					<view class="top">
 						<view class="title">{{ pkg.title }}</view>
 					</view>
 					<view class="body">
-						<view class="course" v-for="course in pkg.courses" :key="course.id">
+						<view class="course" v-for="course in pkg.courses" :key="course.id" @click="gotoCourse(course.id)">
 							<view class="cover">
-								<u-image width="240" height="140" border-radius="10" :src="course.cover|thumbCover"></u-image>
+								<u-image width="240" height="134" border-radius="10" :src="course.cover|thumbCover"></u-image>
 							</view>
 							<view class="info">
-								<view class="title">{{ course.title }}</view>
+								<view class="title u-line-1">{{ course.title }}</view>
+								<view class="meta">
+									<text>{{ course.level|courseLevel }}</text>
+									<text>{{ course.lesson_count }}课时</text>
+								</view>
 								<view class="meta">{{ course.market_price|formatPrice }}</view>
 							</view>
 						</view>
 					</view>
 					<view class="bottom">
-						<view class="left">
+						<view class="left meta">
 							<text>市场价：{{ pkg.market_price|formatPrice }}</text>
 							<text>会员价：{{ pkg.vip_price|formatPrice }}</text>
 						</view>
@@ -139,6 +144,8 @@
 					name: '目录'
 				}, {
 					name: '评价'
+				},{
+					name: '咨询'
 				}],
 				currentTab: 0,
 				course: {
@@ -147,6 +154,7 @@
 				},
 				chapters: [],
 				reviews: [],
+				consults: [],
 				packages: [],
 				rewardOptions: [],
 			}
@@ -155,12 +163,14 @@
 			this.loadCourse(e.id)
 			this.loadChapters(e.id)
 			this.loadReviews(e.id)
+			this.loadConsults(e.id)
 			this.loadPackages(e.id)
 			this.loadRewardOptions()
 		},
 		methods: {
 			initTab() {
 				this.tabs[2].count = this.course.review_count
+				this.tabs[3].count = this.course.consult_count
 				if (this.course.package_count > 0) {
 					this.tabs.push({
 						name: '套餐',
@@ -169,7 +179,7 @@
 				}
 			},
 			changeTab(index) {
-				if (this.currentTab !== index) {
+				if (this.currentTab != index) {
 					this.currentTab = index
 				}
 			},
@@ -182,6 +192,9 @@
 			},
 			buyPackage(id) {
 				this.$utils.redirect(`/pages/order/confirm?item_id=${id}&item_type=2`)
+			},
+			gotoCourse(id) {
+				this.$utils.redirect(`/pages/course/info?id=${id}`)
 			},
 			gotoTeacher(id) {
 				this.$utils.redirect(`/pages/teacher/index?id=${id}`)
@@ -200,7 +213,7 @@
 			},
 			loadCourse(id) {
 				this.$api.getCourseInfo(id).then(res => {
-					this.course = this.handleCourse(res.course)
+					this.course = res.course
 					this.initTab()
 				}).catch(e => {
 					this.$u.toast('加载课程失败')
@@ -208,7 +221,7 @@
 			},
 			loadChapters(id) {
 				this.$api.getCourseChapters(id).then(res => {
-					this.chapters = this.handleChapters(res.chapters)
+					this.chapters = res.chapters
 				}).catch(e => {
 					this.$u.toast('加载目录失败')
 				})
@@ -218,6 +231,13 @@
 					this.reviews = res.pager.items
 				}).catch(e => {
 					this.$u.toast('加载评价失败')
+				})
+			},
+			loadConsults(id) {
+				this.$api.getCourseConsults(id).then(res => {
+					this.consults = res.pager.items
+				}).catch(e => {
+					this.$u.toast('加载咨询失败')
 				})
 			},
 			loadPackages(id) {
@@ -233,34 +253,12 @@
 				}).catch(e => {
 					this.$u.toast('加载赞赏失败')
 				})
-			},
-			handleCourse(course) {
-				if (course.teachers.length > 0) {
-					course.teachers = course.teachers.map(teacher => {
-						teacher.avatar = this.$utils.thumbAvatar(teacher.avatar)
-						return teacher
-					})
-				}
-				return course
-			},
-			handleChapters(chapters) {
-				return chapters.map(chapter => {
-					chapter.children = chapter.children.map(lesson => {
-						lesson.url = `/pages/chapter/info?id=${chapter.id}`
-						return lesson
-					})
-					return chapter
-				})
 			}
 		}
 	}
 </script>
 
 <style>
-	.container {
-		padding: 0;
-	}
-
 	.cover-box {
 		width: 100%;
 		height: 416rpx;
@@ -326,8 +324,7 @@
 	}
 
 	.lesson {
-		margin-left: 15rpx;
-		margin-bottom: 15rpx;
+		padding: 15rpx;
 	}
 
 	.rating-summary {
@@ -411,12 +408,25 @@
 
 	.package .course .cover {
 		width: 240rpx;
-		height: 140rpx;
+		height: 134rpx;
 		margin-right: 15rpx;
 	}
 
 	.package .course .info {
 		flex: 1;
+	}
+
+	.package .info .title {
+		margin-bottom: 10rpx;
+		width: 465rpx;
+	}
+
+	.package .info .meta {
+		margin-bottom: 10rpx;
+	}
+
+	.meta text {
+		margin-right: 15rpx;
 	}
 
 	.package .bottom {

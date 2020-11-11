@@ -118,6 +118,11 @@
 			"navigationBarTitleText": "单页详情"
 		}
 	}, {
+		"path": "pages/user/index",
+		"style": {
+			"navigationBarTitleText": "用户主页"
+		}
+	}, {
 		"path": "pages/me/index",
 		"style": {
 			"navigationBarTitleText": "我的主页"

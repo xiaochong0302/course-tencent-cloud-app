@@ -45,7 +45,7 @@
 				}, {
 					name: '会员课程'
 				}],
-				currentTab: 1,
+				currentTab: 0,
 			}
 		},
 		methods: {

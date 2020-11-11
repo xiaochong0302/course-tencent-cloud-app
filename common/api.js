@@ -206,6 +206,18 @@ export const createAppTrade = (params) => {
 	return httpPost('/trade/app/create', params)
 }
 
+export const getTeacherList = (params) => {
+	return httpGet('/teacher/list', params)
+}
+
+export const getTeacherInfo = (id) => {
+	return httpGet(`/teacher/${id}/info`)
+}
+
+export const getTeacherCourses = (id, params) => {
+	return httpGet(`/teacher/${id}/courses`, params)
+}
+
 export const getUserInfo = (id) => {
 	return httpGet(`/user/${id}/info`)
 }

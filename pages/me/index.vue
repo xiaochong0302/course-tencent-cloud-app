@@ -33,7 +33,7 @@
 		},
 		methods: {
 			gotoUser(id) {
-				this.$utils.redirect(`/pages/user/${id}/index`)
+				this.$utils.redirect(`/pages/user/index?id=${id}`)
 			},
 			gotoPage(index) {
 				switch (index) {
