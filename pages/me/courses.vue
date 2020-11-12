@@ -19,6 +19,7 @@
 				</view>
 			</view>
 		</u-swipe-action>
+		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
@@ -29,6 +30,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				scrollTop: 0,
 				swipeOptions: [{
 					text: '评价',
 					style: {
@@ -44,6 +46,9 @@
 			if (this.hasMore) {
 				this.loadCourses()
 			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop
 		},
 		methods: {
 			swipeClick(index1, index2) {
@@ -93,7 +98,7 @@
 		display: flex;
 		padding: 10rpx 0;
 	}
-	
+
 	.item .cover {
 		width: 240rpx;
 		height: 134rpx;
@@ -109,7 +114,7 @@
 		margin-bottom: 10rpx;
 		width: 465rpx;
 	}
-	
+
 	.meta {
 		margin-bottom: 10rpx;
 	}

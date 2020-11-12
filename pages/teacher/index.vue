@@ -22,7 +22,7 @@
 </template>
 
 <script>
-	import CourseList from '@/components/kg-course-list/course-list.vue'
+	import CourseList from '@/components/course-list.vue'
 	export default {
 		components: {
 			CourseList

@@ -7,6 +7,7 @@
 				<view class="answer">回复：{{ item.answer }}</view>
 			</view>
 		</u-swipe-action>
+		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
@@ -17,6 +18,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				scrollTop: 0,
 				swipeOptions: [{
 					text: '修改',
 					style: {
@@ -37,6 +39,9 @@
 			if (this.hasMore) {
 				this.loadConsults()
 			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop
 		},
 		methods: {
 			swipeClick(index1, index2) {

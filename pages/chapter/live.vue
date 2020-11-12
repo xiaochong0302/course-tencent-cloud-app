@@ -73,21 +73,22 @@
 				this.player = new TcPlayer('player', options)
 			},
 			onStart() {
-				this.clearLearningInterval()
 				this.setLearningInterval()
 			},
 			onStop() {
 				this.clearLearningInterval()
 			},
 			setLearningInterval() {
+				this.clearLearningInterval()
 				this.learning.interval = setInterval(this.learningChapter, this.learning.interval_time)
 			},
 			clearLearningInterval() {
-				clearInterval(this.learning.interval)
-				this.learning.interval = null
+				if(this.learning.interval != null) {
+					clearInterval(this.learning.interval)
+					this.learning.interval = null
+				}
 			},
 			learningChapter() {
-				this.learning.position = this.player.currentTime()
 				this.$api.learningChapter(this.chapter.id, {
 					plan_id: this.learning.plan_id,
 					request_id: this.learning.request_id,

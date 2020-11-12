@@ -1,15 +1,19 @@
 <template>
 	<view class="container">
-		<uni-section title="订单信息" type="line"></uni-section>
-		<view class="order">
-			<view class="subject">{{ order.subject }}</view>
-			<view class="sn">订单编号：{{ order.sn }}</view>
-			<view class="price">支付金额：{{ order.amount|formatPrice }}</view>
+		<view class="section">
+			<u-section title="订单信息" :right="false"></u-section>
+			<view class="order">
+				<view class="subject">{{ order.subject }}</view>
+				<view class="sn">订单编号：{{ order.sn }}</view>
+				<view class="price">支付金额：{{ order.amount|formatPrice }}</view>
+			</view>
 		</view>
-		<uni-section title="支付方式" type="line"></uni-section>
-		<view class="channel-list">
-			<button type="primary" @click="h5Pay(1)">支付宝</button>
-			<button type="primary" @click="h5Pay(2)">微信</button>
+		<view class="section">
+			<u-section title="支付方式" :right="false"></u-section>
+			<view class="channel-list">
+				<u-button type="primary" @click="h5Pay(1)">支付宝</u-button>
+				<u-button type="primary" @click="h5Pay(2)">微信</u-button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -21,13 +25,13 @@
 				order: {}
 			}
 		},
-		onLoad(option) {
-			this.loadOrder(option.sn)
+		onLoad(e) {
+			this.loadOrder(e.sn)
 		},
 		methods: {
 			loadOrder(sn) {
 				this.$api.getOrderInfo(sn).then(res => {
-					if(res.order.status !== 1) {
+					if (res.order.status !== 1) {
 						this.$utils.redirect('/pages/me/orders')
 					}
 					this.order = res.order
@@ -61,7 +65,15 @@
 </script>
 
 <style>
-	.uni-section {
+	.container {
+		padding: 50rpx 30rpx;
+	}
+
+	.section {
+		margin-bottom: 50rpx;
+	}
+
+	.section .u-section {
 		margin-bottom: 30rpx;
 	}
 
@@ -73,7 +85,7 @@
 		margin-bottom: 15rpx;
 	}
 
-	.channel-list uni-button {
-		margin-bottom: 20rpx;
+	.channel-list .u-btn {
+		margin-bottom: 30rpx;
 	}
 </style>

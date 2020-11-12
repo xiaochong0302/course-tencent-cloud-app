@@ -4,7 +4,9 @@
 			<u-image :src="course.cover" width="100%" height="416"></u-image>
 		</view>
 		<view class="tab-title">
-			<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
+			<u-sticky :enable="enableSticky">
+				<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
+			</u-sticky>
 		</view>
 		<view class="tab-content">
 			<view class="tab-item tab-summary" v-if="currentTab == 0">
@@ -73,32 +75,20 @@
 					</view>
 				</view>
 				<view class="review-list">
-					<view class="review" v-for="review in reviews" :key="review.id">
-						<view class="avatar">
-							<u-image :src="review.owner.avatar|thumbAvatar" width="60rpx" height="60rpx" shape="circle" mode="aspectFit"></u-image>
-						</view>
-						<view class="info">
-							<view class="top">
-								<view class="name">{{ review.owner.name }}</view>
-								<view class="rating">
-									<u-rate size="28" :current="review.rating" :disabled="true"></u-rate>
-								</view>
-							</view>
-							<view class="content">{{ review.content }}</view>
-							<view class="bottom">
-								<view class="time">{{ $u.timeFrom(review.create_time,'yyyy-mm-dd') }}</view>
-								<view class="like">
-									<u-icon name="thumb-up" :label="review.like_count"></u-icon>
-								</view>
-							</view>
-						</view>
-					</view>
+					<review-list :reviews="reviews"></review-list>
 				</view>
 				<view class="review-more" v-if="course.review_count > 12">
 					<u-button size="medium" @click="gotoReviewList(course.id)">更多评价</u-button>
 				</view>
 			</view>
-			<view class="tab-item tab-consult" v-if="currentTab == 3"></view>
+			<view class="tab-item tab-consult" v-if="currentTab == 3">
+				<view class="consult-list">
+					<consult-list :consults="consults"></consult-list>
+				</view>
+				<view class="consult-more" v-if="course.consult_count > 12">
+					<u-button size="medium" @click="gotoConsultList(course.id)">更多咨询</u-button>
+				</view>
+			</view>
 			<view class="tab-item tab-package" v-if="currentTab == 4">
 				<view class="package" v-for="pkg in packages" :key="pkg.id">
 					<view class="top">
@@ -135,16 +125,23 @@
 </template>
 
 <script>
+	import ReviewList from '@/components/review-list.vue'
+	import ConsultList from '@/components/consult-list.vue'
 	export default {
+		components: {
+			ReviewList,
+			ConsultList,
+		},
 		data() {
 			return {
+				enableSticky: true,
 				tabs: [{
 					name: '介绍'
 				}, {
 					name: '目录'
 				}, {
 					name: '评价'
-				},{
+				}, {
 					name: '咨询'
 				}],
 				currentTab: 0,
@@ -166,6 +163,12 @@
 			this.loadConsults(e.id)
 			this.loadPackages(e.id)
 			this.loadRewardOptions()
+		},
+		onShow() {
+			this.enableSticky = true
+		},
+		onHide() {
+			this.enableSticky = false
 		},
 		methods: {
 			initTab() {
@@ -210,6 +213,9 @@
 			},
 			gotoReviewList(id) {
 				this.$utils.redirect(`/pages/course/reviews?id=${id}`)
+			},
+			gotoConsultList(id) {
+				this.$utils.redirect(`/pages/course/consults?id=${id}`)
 			},
 			loadCourse(id) {
 				this.$api.getCourseInfo(id).then(res => {
@@ -260,7 +266,7 @@
 
 <style>
 	.cover-box {
-		width: 100%;
+		width: 750rpx;
 		height: 416rpx;
 		margin-bottom: 15rpx;
 	}
@@ -341,46 +347,15 @@
 		margin-bottom: 10rpx;
 	}
 
-	.review-list {
+	.review-list,
+	.consult-list {
 		margin-bottom: 20rpx;
 	}
 
-	.review-more {
+	.review-more,
+	.consult-more {
 		display: flex;
 		justify-content: center;
-		margin-bottom: 15rpx;
-	}
-
-	.review {
-		display: flex;
-		margin-bottom: 30rpx;
-	}
-
-	.review .avatar {
-		width: 60rpx;
-		height: 60rpx;
-	}
-
-	.review .info {
-		flex: 1;
-	}
-
-	.review .avatar {
-		margin-right: 15rpx;
-	}
-
-	.review .top {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 15rpx;
-	}
-
-	.review .bottom {
-		display: flex;
-		justify-content: space-between;
-	}
-
-	.review .content {
 		margin-bottom: 15rpx;
 	}
 

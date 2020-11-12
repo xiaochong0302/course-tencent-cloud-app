@@ -10,11 +10,12 @@
 		<view v-if="items.length > 0">
 			<course-list :courses="items"></course-list>
 		</view>
+		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
-	import CourseList from '@/components/kg-course-list/course-list.vue'
+	import CourseList from '@/components/course-list.vue'
 	export default {
 		components: {
 			CourseList
@@ -23,8 +24,9 @@
 			return {
 				items: [],
 				page: 1,
-				sc: 0,
 				hasMore: false,
+				scrollTop: 0,
+				sc: 0,
 				level: 0,
 				model: 0,
 				sort: 'score',
@@ -85,6 +87,9 @@
 			if (this.hasMore) {
 				this.loadCourses()
 			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop
 		},
 		methods: {
 			switchLevel(level) {

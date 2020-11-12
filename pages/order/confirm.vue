@@ -82,18 +82,12 @@
 			},
 			createOrder() {
 				this.disabled = true
-				uni.showLoading({
-					title: '提交中...',
-					mask: true
-				})
 				this.$api.createOrder({
 					item_id: this.confirm.item_id,
 					item_type: this.confirm.item_type,
 				}).then(res => {
-					uni.hideLoading()
 					this.$utils.redirect(`/pages/order/pay?sn=${res.order.sn}`)
 				}).catch(e => {
-					uni.hideLoading()
 					this.disabled = false
 					this.$u.toast('提交订单失败')
 				})

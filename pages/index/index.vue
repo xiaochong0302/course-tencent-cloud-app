@@ -11,13 +11,13 @@
 				<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
 			</view>
 			<view class="tab-content">
-				<view v-if="currentTab == 0">
+				<view class="course-list" v-if="currentTab == 0">
 					<course-list :courses="newCourses"></course-list>
 				</view>
-				<view v-if="currentTab == 1">
+				<view class="course-list" v-if="currentTab == 1">
 					<course-list :courses="freeCourses"></course-list>
 				</view>
-				<view v-if="currentTab == 2">
+				<view class="course-list" v-if="currentTab == 2">
 					<course-list :courses="vipCourses"></course-list>
 				</view>
 			</view>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-	import CourseList from '@/components/kg-course-list/course-list.vue'
+	import CourseList from '@/components/course-list.vue'
 	export default {
 		components: {
 			CourseList
@@ -38,14 +38,14 @@
 				newCourses: [],
 				freeCourses: [],
 				vipCourses: [],
+				currentTab: 0,
 				tabs: [{
 					name: '新上课程'
 				}, {
 					'name': '免费课程'
 				}, {
 					name: '会员课程'
-				}],
-				currentTab: 0,
+				}]
 			}
 		},
 		methods: {
@@ -119,8 +119,7 @@
 	}
 	
 	.module-search {
-		margin-top: 5px;
-		margin-bottom: 20rpx;
+		margin-bottom: 15rpx;
 	}
 	
 	.module-slide {

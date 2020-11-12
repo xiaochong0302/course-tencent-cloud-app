@@ -21,6 +21,7 @@
 				</view>
 			</view>
 		</view>
+		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
@@ -32,6 +33,7 @@
 				page: 1,
 				status: 0,
 				hasMore: false,
+				scrollTop: 0,
 				statuses: [{
 						id: 0,
 						name: '全部'
@@ -53,7 +55,6 @@
 						name: '已完成'
 					}
 				],
-				pager: {}
 			}
 		},
 		onLoad() {
@@ -63,6 +64,9 @@
 			if (this.hasMore) {
 				this.loadOrders()
 			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop
 		},
 		methods: {
 			filterByStatus(status) {
