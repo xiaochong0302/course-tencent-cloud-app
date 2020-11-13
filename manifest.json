@@ -72,7 +72,23 @@
     "mp-toutiao" : {
         "usingComponents" : true
     },
-    "uniStatistics": {  
-        "enable": false
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "h5" : {
+        "title" : "酷瓜云课堂",
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        },
+        "router" : {
+            "base" : "/h5/",
+            "mode" : "hash"
+        },
+        "sdkConfigs" : {
+            "maps" : {}
+        },
+        "domain" : "http://ctc.local"
     }
 }

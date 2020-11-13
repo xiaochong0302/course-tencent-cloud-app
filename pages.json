@@ -13,6 +13,11 @@
 			"navigationBarTitleText": "内容搜索"
 		}
 	}, {
+		"path": "pages/discovery/index",
+		"style": {
+			"navigationBarTitleText": "精彩发现"
+		}
+	}, {
 		"path": "pages/course/category",
 		"style": {
 			"navigationBarTitleText": "课程分类"
@@ -238,8 +243,8 @@
 				"text": "分类"
 			},
 			{
-				"pagePath": "pages/teacher/list",
-				"text": "名师"
+				"pagePath": "pages/discovery/index",
+				"text": "发现"
 			},
 			{
 				"pagePath": "pages/me/index",

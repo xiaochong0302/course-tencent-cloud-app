@@ -178,7 +178,7 @@ export const getRefundInfo = (sn) => {
 	})
 }
 
-export const createRefund = (params={}) => {
+export const createRefund = (params) => {
 	return httpPost('/refund/create', params)
 }
 
@@ -206,7 +206,11 @@ export const createAppTrade = (params) => {
 	return httpPost('/trade/app/create', params)
 }
 
-export const getTeacherList = (params) => {
+export const getImGroupList = (params = {}) => {
+	return httpGet('/im/group/list', params)
+}
+
+export const getTeacherList = (params = {}) => {
 	return httpGet('/teacher/list', params)
 }
 
@@ -214,7 +218,7 @@ export const getTeacherInfo = (id) => {
 	return httpGet(`/teacher/${id}/info`)
 }
 
-export const getTeacherCourses = (id, params) => {
+export const getTeacherCourses = (id, params = {}) => {
 	return httpGet(`/teacher/${id}/courses`, params)
 }
 
