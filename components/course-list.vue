@@ -1,6 +1,6 @@
 <template>
-	<view class="course-list">
-		<view class="course" v-for="course in showCourses" :key="course.id" @click="gotoCourse(course.id)">
+	<view class="item-list">
+		<view class="item" v-for="course in showCourses" :key="course.id" @click="gotoCourse(course.id)">
 			<view class="cover">
 				<u-image width="240" height="134" border-radius="10" :src="course.cover|thumbCover"></u-image>
 			</view>
@@ -40,16 +40,16 @@
 			}
 		},
 		props: {
-			courses: {
+			items: {
 				type: Array
 			}
 		},
 		created() {
-			this.showCourses = this.courses
+			this.showCourses = this.items
 		},
 		watch: {
-			courses: function() {
-				this.showCourses = this.courses
+			items: function() {
+				this.showCourses = this.items
 			}
 		},
 		methods: {
@@ -61,23 +61,23 @@
 </script>
 
 <style>
-	.course {
+	.item {
 		margin-bottom: 15rpx;
 		display: flex;
 		flex-flow: row;
 	}
 
-	.course .cover {
+	.item .cover {
 		width: 240rpx;
 		height: 134rpx;
 		margin-right: 15rpx;
 	}
 
-	.course .info {
+	.item .info {
 		flex: 1;
 	}
 
-	.course .cover {
+	.item .cover {
 		width: 240rpx;
 		height: 134rpx;
 	}

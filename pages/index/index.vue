@@ -3,7 +3,7 @@
 		<view class="module module-search">
 			<u-search v-model="keyword" :show-action="false" @search="search" maxlength="30" placeholder="请输入搜索内容"></u-search>
 		</view>
-		<view class="module module-slide" v-if="slides.length > 0">
+		<view class="module module-slide">
 			<u-swiper :list="slides" @click="clickSlide"></u-swiper>
 		</view>
 		<view class="module module-course">
@@ -12,13 +12,13 @@
 			</view>
 			<view class="tab-content">
 				<view class="course-list" v-if="currentTab == 0">
-					<course-list :courses="newCourses"></course-list>
+					<course-list :items="newCourses"></course-list>
 				</view>
 				<view class="course-list" v-if="currentTab == 1">
-					<course-list :courses="freeCourses"></course-list>
+					<course-list :items="freeCourses"></course-list>
 				</view>
 				<view class="course-list" v-if="currentTab == 2">
-					<course-list :courses="vipCourses"></course-list>
+					<course-list :items="vipCourses"></course-list>
 				</view>
 			</view>
 		</view>

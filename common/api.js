@@ -7,6 +7,10 @@ export const search = (params) => {
 	return httpGet('/search', params)
 }
 
+export const getSocketInfo = () => {
+	return httpGet('/socket/info')
+}
+
 export const getSiteInfo = () => {
 	return httpGet('/site/info')
 }
@@ -93,6 +97,22 @@ export const unlikeChapter = (id) => {
 
 export const learningChapter = (id, params) => {
 	return httpPost(`/chapter/${id}/learning`, params)
+}
+
+export const getLiveList = () => {
+	return httpGet('/live/list')
+}
+
+export const getLiveChats = (id) => {
+	return httpGet(`/live/${id}/chats`)
+}
+
+export const bindLiveUser = (id, params) => {
+	return httpPost(`/live/${id}/user/bind`, params)
+}
+
+export const sendLiveMessage = (id, params) => {
+	return httpPost(`/live/${id}/msg/send`, params)
 }
 
 export const createConsult = (params) => {
@@ -351,31 +371,12 @@ const httpPost = (path, params = {}, header = {}) => {
 }
 
 const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
+
 	let url = Config.apiBaseUrl + path
-	let platform = Utils.getPlatform()
-	let auth = Config.security[platform] ? Config.security[platform] : {
-		appKey: '',
-		appSecret: ''
-	}
-	let extra = {
-		_timestamp: Utils.getNowTime(),
-		_nonce: Math.random().toString()
-	}
 
-	let signature = ''
-
-	if (method == 'POST') {
-		signature = httpPostSignature(url, params, extra, auth.appSecret)
-	} else {
-		signature = httpGetSignature(url, params, extra, auth.appSecret)
-	}
-
-	header['X-App-Key'] = auth.appKey
-	header['X-App-Version'] = Config.appInfo.version
-	header['X-Platform'] = platform
-	header['X-Signature'] = signature
-	header['X-Timestamp'] = extra._timestamp
-	header['X-Nonce'] = extra._nonce
+	header['X-Version'] = Config.appInfo.version
+	header['X-Platform'] = Utils.getPlatform()
+	header['X-Timestamp'] = Utils.getNowTime()
 	header['X-Token'] = Storage.get(Config.cacheKey.token)
 
 	return new Promise(function(resolve, reject) {
@@ -388,7 +389,7 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 				if (res.statusCode == 200) {
 					resolve(res.data)
 				} else if (res.statusCode == 401) {
-					uni.reLaunch({
+					uni.redirectTo({
 						url: '/pages/account/login'
 					})
 				} else {
@@ -400,26 +401,4 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 			}
 		})
 	})
-}
-
-const httpGetSignature = (url, params, extra, appSecret) => {
-	let query = httpBuildQuery({
-		...params,
-		...extra
-	})
-	return md5.hex_md5(url + query + appSecret)
-}
-
-const httpPostSignature = (url, params, extra, appSecret) => {
-	let query = httpBuildQuery(extra)
-	let body = JSON.stringify(params)
-	return md5.hex_md5(url + query + body + appSecret)
-}
-
-const httpBuildQuery = (params) => {
-	let arr = []
-	for (let key in params) {
-		arr.push(`${key}=${params[key]}`)
-	}
-	return arr.sort().join('&')
 }

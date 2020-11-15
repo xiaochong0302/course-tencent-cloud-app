@@ -1,6 +1,6 @@
 <template>
-	<view class="teacher-list">
-		<view class="teacher" v-for="teacher in showTeachers" :key="teacher.id" @click="gotoTeacher(teacher.id)">
+	<view class="item-list">
+		<view class="item" v-for="teacher in showTeachers" :key="teacher.id" @click="gotoTeacher(teacher.id)">
 			<view class="avatar">
 				<u-image width="120" height="120" shape="circle" :src="teacher.avatar|thumbAvatar"></u-image>
 			</view>
@@ -19,16 +19,16 @@
 			}
 		},
 		props: {
-			teachers: {
+			items: {
 				type: Array
 			}
 		},
 		created() {
-			this.showTeachers = this.handleTeachers(this.teachers)
+			this.showTeachers = this.handleTeachers(this.items)
 		},
 		watch: {
-			teachers: function() {
-				this.showTeachers = this.handleTeachers(this.teachers)
+			items: function() {
+				this.showTeachers = this.handleTeachers(this.items)
 			}
 		},
 		methods: {
@@ -48,13 +48,13 @@
 </script>
 
 <style>
-	.teacher-list {
+	.item-list {
 		display: flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
 	}
 
-	.teacher {
+	.item {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -64,11 +64,11 @@
 		overflow: hidden;
 	}
 
-	.teacher .avatar {
+	.item .avatar {
 		margin-bottom: 15rpx;
 	}
 
-	.teacher .name {
+	.item .name {
 		margin-bottom: 15rpx;
 	}
 </style>

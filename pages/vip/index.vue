@@ -9,7 +9,9 @@
 		<view class="section">
 			<u-section title="会员权益" :right="false"></u-section>
 			<view class="right-list">
-				<u-tag v-for="(value,key) in vipRights" :key="key" :text="value" type="primary" mode="dark"></u-tag>
+				<view class="right" v-for="(value,key) in vipRights" :key="key">
+					<u-tag :text="value" type="primary" mode="dark"></u-tag>
+				</view>
 			</view>
 		</view>
 		<view class="section">
@@ -84,7 +86,7 @@
 		margin: 0 50rpx;
 	}
 
-	.right-list .u-tag {
+	.right-list .right {
 		min-width: 160rpx;
 		margin-bottom: 30rpx;
 	}

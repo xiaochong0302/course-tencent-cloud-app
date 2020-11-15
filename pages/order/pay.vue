@@ -10,9 +10,9 @@
 		</view>
 		<view class="section">
 			<u-section title="支付方式" :right="false"></u-section>
-			<view class="channel-list">
-				<u-button type="primary" @click="h5Pay(1)">支付宝</u-button>
-				<u-button type="primary" @click="h5Pay(2)">微信</u-button>
+			<view class="channel">
+				<u-button type="primary" @click="h5Pay(1)">支付宝支付</u-button>
+				<u-button type="success" @click="h5Pay(2)">微信支付</u-button>
 			</view>
 		</view>
 	</view>
@@ -31,7 +31,7 @@
 		methods: {
 			loadOrder(sn) {
 				this.$api.getOrderInfo(sn).then(res => {
-					if (res.order.status !== 1) {
+					if (res.order.status != 1) {
 						this.$utils.redirect('/pages/me/orders')
 					}
 					this.order = res.order
@@ -85,7 +85,7 @@
 		margin-bottom: 15rpx;
 	}
 
-	.channel-list .u-btn {
+	.channel .u-btn {
 		margin-bottom: 30rpx;
 	}
 </style>

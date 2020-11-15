@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="review-list">
-			<review-list :reviews="items"></review-list>
+			<review-list :items="items"></review-list>
 		</view>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>

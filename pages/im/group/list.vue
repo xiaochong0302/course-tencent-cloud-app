@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="group-list">
-			<group-list :groups="items"></group-list>
+			<group-list :items="items"></group-list>
 		</view>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>

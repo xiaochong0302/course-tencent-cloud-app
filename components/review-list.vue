@@ -1,6 +1,6 @@
 <template>
-	<view class="review-list">
-		<view class="review" v-for="review in showReviews" :key="review.id">
+	<view class="item-list">
+		<view class="item" v-for="review in showReviews" :key="review.id">
 			<view class="avatar">
 				<u-image :src="review.owner.avatar|thumbAvatar" width="60" height="60" shape="circle"></u-image>
 			</view>
@@ -32,16 +32,16 @@
 			}
 		},
 		props: {
-			reviews: {
+			items: {
 				type: Array
 			}
 		},
 		created() {
-			this.showReviews = this.reviews
+			this.showReviews = this.items
 		},
 		watch: {
-			reviews: function() {
-				this.showReviews = this.reviews
+			items: function() {
+				this.showReviews = this.items
 			}
 		},
 		methods: {
@@ -53,36 +53,36 @@
 </script>
 
 <style>
-	.review {
+	.item {
 		display: flex;
 		margin-bottom: 30rpx;
 	}
 	
-	.review .avatar {
+	.item .avatar {
 		width: 60rpx;
 		height: 60rpx;
 	}
 	
-	.review .info {
+	.item .info {
 		flex: 1;
 	}
 	
-	.review .avatar {
+	.item .avatar {
 		margin-right: 15rpx;
 	}
 	
-	.review .top {
+	.item .top {
 		display: flex;
 		justify-content: space-between;
 		margin-bottom: 15rpx;
 	}
 	
-	.review .bottom {
+	.item .bottom {
 		display: flex;
 		justify-content: space-between;
 	}
 	
-	.review .content {
+	.item .content {
 		margin-bottom: 15rpx;
 	}
 </style>

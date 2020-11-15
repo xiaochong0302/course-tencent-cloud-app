@@ -1,51 +1,51 @@
 <template>
 	<view class="container">
-		<view class="review-list">
-			<consult-list :items="items"></consult-list>
+		<view class="live-list">
+			<live-list :items="items"></live-list>
 		</view>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
-	import ConsultList from '@/components/consult-list.vue'
+	import LiveList from '@/components/live-list.vue'
 	export default {
 		components: {
-			ConsultList
+			LiveList
 		},
 		data() {
 			return {
 				items: [],
 				page: 1,
+				limit: 15,
 				hasMore: false,
-				courseId: 0,
 				scrollTop: 0,
 			}
 		},
-		onLoad(e) {
-			this.courseId = e.id
-			this.loadConsults()
-		},
-		onReachBottom() {
-			if (this.hasMore) {
-				this.loadConsults()
-			}
-		},
-		onPageScroll(e) {
-			this.scrollTop = e.scrollTop
-		},
 		methods: {
-			loadConsults() {
+			onLoad() {
+				this.loadLives()
+			},
+			onReachBottom() {
+				if (this.hasMore) {
+					this.loadLives()
+				}
+			},
+			onPageScroll(e) {
+				this.scrollTop = e.scrollTop
+			},
+			loadLives() {
 				let params = {}
 				if (this.page > 0) {
 					params.page = this.page
 				}
-				this.$api.getCourseConsults(this.courseId, params).then(res => {
+				params.limit = this.limit
+				this.$api.getLiveList(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
 					this.page++
 				}).catch(e => {
-					this.$u.toast('加载评价失败')
+					this.$u.toast('加载列表失败')
 				})
 			}
 		}
@@ -53,5 +53,7 @@
 </script>
 
 <style>
-
+	.container {
+		padding-top: 30px;
+	}
 </style>

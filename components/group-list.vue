@@ -1,10 +1,10 @@
 <template>
-	<view class="group-list">
-		<view class="group" v-for="group in showGroups" :key="group.id" @click="gotoGroup(group.id)">
+	<view class="item-list">
+		<view class="item" v-for="group in showGroups" :key="group.id" @click="gotoGroup(group.id)">
 			<view class="avatar">
 				<u-image width="120" height="120" shape="circle" :src="group.avatar|thumbAvatar"></u-image>
 			</view>
-			<view class="name">{{ group.name }}</view>
+			<view class="name u-line-2">{{ group.name }}</view>
 			<view class="meta">
 				<text>成员：{{ group.user_count }}</text>
 				<text>讨论：{{ group.msg_count }}</text>
@@ -22,16 +22,16 @@
 			}
 		},
 		props: {
-			groups: {
+			items: {
 				type: Array
 			}
 		},
 		created() {
-			this.showGroups = this.handleGroups(this.groups)
+			this.showGroups = this.handleGroups(this.items)
 		},
 		watch: {
-			groups: function() {
-				this.showGroups = this.handleGroups(this.groups)
+			items: function() {
+				this.showGroups = this.handleGroups(this.items)
 			}
 		},
 		methods: {
@@ -46,13 +46,13 @@
 </script>
 
 <style>
-	.group-list {
+	.item-list {
 		display: flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
 	}
 
-	.group {
+	.item {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -62,11 +62,11 @@
 		overflow: hidden;
 	}
 
-	.group .avatar {
+	.item .avatar {
 		margin-bottom: 15rpx;
 	}
 
-	.group .name {
+	.item .name {
 		margin-bottom: 15rpx;
 	}
 	

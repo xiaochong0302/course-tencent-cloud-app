@@ -108,6 +108,11 @@
 			"navigationBarTitleText": "修改咨询"
 		}
 	}, {
+		"path": "pages/live/list",
+		"style": {
+			"navigationBarTitleText": "直播列表"
+		}
+	}, {
 		"path": "pages/help/list",
 		"style": {
 			"navigationBarTitleText": "帮助列表"

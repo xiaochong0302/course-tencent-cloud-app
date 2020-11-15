@@ -5,40 +5,36 @@
 		</view>
 		<view class="tab-content">
 			<view class="tab-live" v-if="currentTab == 0">
-				<view class="teacher-list">
-					<teacher-list :teachers="teachers"></teacher-list>
+				<view class="live-list">
+					<live-list :items="lives"></live-list>
 				</view>
-				<view class="load-more">
-					<u-button size="medium" @click="gotoTeacherList">加载更多</u-button>
-				</view>
+				<view class="load-more" @click="gotoLiveList">加载更多</view>
 			</view>
 			<view class="tab-teacher" v-if="currentTab == 1">
 				<view class="teacher-list">
-					<teacher-list :teachers="teachers"></teacher-list>
+					<teacher-list :items="teachers"></teacher-list>
 				</view>
-				<view class="load-more">
-					<u-button size="medium" @click="gotoTeacherList">加载更多</u-button>
-				</view>
+				<view class="load-more" @click="gotoTeacherList">加载更多</view>
 			</view>
 			<view class="tab-group" v-if="currentTab == 2">
 				<view class="group-list">
-					<group-list :groups="groups"></group-list>
+					<group-list :items="groups"></group-list>
 				</view>
-				<view class="load-more">
-					<u-button size="medium" @click="gotoImGroupList">加载更多</u-button>
-				</view>
+				<view class="load-more" @click="gotoGroupList">加载更多</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import LiveList from '@/components/live-list.vue'
 	import TeacherList from '@/components/teacher-list.vue'
 	import GroupList from '@/components/group-list.vue'
 	export default {
 		components: {
+			LiveList,
 			TeacherList,
-			GroupList
+			GroupList,
 		},
 		data() {
 			return {
@@ -50,13 +46,15 @@
 				}, {
 					name: '群组'
 				}],
+				lives: [],
 				teachers: [],
 				groups: [],
 			}
 		},
 		onLoad() {
+			this.loadLives()
 			this.loadTeachers()
-			this.loadImGroups()
+			this.loadGroups()
 		},
 		methods: {
 			changeTab(index) {
@@ -64,11 +62,21 @@
 					this.currentTab = index
 				}
 			},
+			gotoLiveList() {
+				this.$utils.redirect('/pages/live/list')
+			},
 			gotoTeacherList() {
 				this.$utils.redirect('/pages/teacher/list')
 			},
-			gotoImGroupList() {
+			gotoGroupList() {
 				this.$utils.redirect('/pages/im/group/list')
+			},
+			loadLives() {
+				this.$api.getLiveList().then(res => {
+					this.lives = res.pager.items
+				}).catch(e => {
+					this.$u.toast('加载直播失败')
+				})
 			},
 			loadTeachers() {
 				this.$api.getTeacherList().then(res => {
@@ -77,7 +85,7 @@
 					this.$u.toast('加载教师失败')
 				})
 			},
-			loadImGroups() {
+			loadGroups() {
 				this.$api.getImGroupList().then(res => {
 					this.groups = res.pager.items
 				}).catch(e => {

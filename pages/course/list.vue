@@ -8,7 +8,7 @@
 			</u-dropdown>
 		</view>
 		<view v-if="items.length > 0">
-			<course-list :courses="items"></course-list>
+			<course-list :items="items"></course-list>
 		</view>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>

@@ -1,6 +1,6 @@
 <template>
-	<view class="consult-list">
-		<view class="consult" v-for="consult in showConsults" :key="consult.id">
+	<view class="item-list">
+		<view class="item" v-for="consult in showConsults" :key="consult.id">
 			<view class="avatar">
 				<u-image :src="consult.owner.avatar|thumbAvatar" width="60" height="60" shape="circle"></u-image>
 			</view>
@@ -27,16 +27,16 @@
 			}
 		},
 		props: {
-			consults: {
+			items: {
 				type: Array
 			}
 		},
 		created() {
-			this.showConsults = this.consults
+			this.showConsults = this.items
 		},
 		watch: {
-			consults: function() {
-				this.showConsults = this.consults
+			items: function() {
+				this.showConsults = this.items
 			}
 		},
 		methods: {
@@ -48,33 +48,33 @@
 </script>
 
 <style>
-	.consult {
+	.item {
 		display: flex;
 		margin-bottom: 30rpx;
 	}
 	
-	.consult .avatar {
+	.item .avatar {
 		width: 60rpx;
 		height: 60rpx;
 	}
 	
-	.consult .info {
+	.item .info {
 		flex: 1;
 	}
 	
-	.consult .avatar {
+	.item .avatar {
 		margin-right: 15rpx;
 	}
 	
-	.consult .question {
+	.item .question {
 		margin-bottom: 15rpx;
 	}
 	
-	.consult .answer {
+	.item .answer {
 		margin-bottom: 15rpx;
 	}
 	
-	.consult .bottom {
+	.item .bottom {
 		display: flex;
 		justify-content: space-between;
 	}

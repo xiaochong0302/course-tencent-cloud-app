@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="title">{{ review.course.title }}</view>
-		<u-form :model="review" ref="uForm" :error-type="errorType">
+		<u-form :model="review" ref="form" :error-type="['toast']">
 			<u-form-item label="内容实用" label-position="left" label-width="150">
 				<u-rate v-model="review.rating1" :min-count="1"></u-rate>
 			</u-form-item>
@@ -41,15 +41,14 @@
 						max: 255,
 						message: '评价内容10-255字之间'
 					}]
-				},
-				errorType: ['message'],
+				}
 			}
 		},
 		onLoad(e) {
 			this.loadReview(e.id)
 		},
 		onReady() {
-			this.$refs.uForm.setRules(this.rules)
+			this.$refs.form.setRules(this.rules)
 		},
 		methods: {
 			loadReview(id) {
@@ -60,7 +59,7 @@
 				})
 			},
 			submit() {
-				this.$refs.uForm.validate(valid => {
+				this.$refs.form.validate(valid => {
 					if (valid) {
 						this.$api.updateReview(this.review.id, {
 							content: this.review.content,

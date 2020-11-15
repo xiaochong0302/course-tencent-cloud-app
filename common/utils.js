@@ -81,14 +81,17 @@ export const courseLevel = (level) => {
 	return mapping[level] ? mapping[level] : '未知'
 }
 
-export const redirect = (url) => {
+export const redirect = (url, params = {}) => {
 	const tabUrls = [
 		'/pages/index/index',
 		'/pages/course/category',
-		'/pages/teacher/index',
+		'/pages/discovery/index',
 		'/pages/me/index',
 		'/pages/im/index',
 	]
+	if (Object.keys(params).length > 0) {
+		url += '?' + httpBuildQuery(params)
+	}
 	if (tabUrls.indexOf(url) !== -1) {
 		uni.switchTab({
 			url: url
@@ -124,6 +127,26 @@ export const getPlatform = () => {
 	platform = uni.getSystemInfoSync().platform
 	// #endif
 	return platform.toLowerCase()
+}
+
+const httpBuildQuery = (params) => {
+	let result = ''
+	if (Object.keys(params).length > 0) {
+		let arr = []
+		for (let key in params) {
+			arr.push(`${key}=${params[key]}`)
+		}
+		result = arr.sort().join('&')
+	}
+	return result
+}
+
+export const getApiBaseUrl = () => {
+	return Config.apiBaseUrl
+}
+
+export const getSocketUrl = () => {
+	return Config.socketUrl
 }
 
 export const getToken = () => {

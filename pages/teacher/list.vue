@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="teacher-list">
-			<teacher-list :teachers="items"></teacher-list>
+			<teacher-list :items="items"></teacher-list>
 		</view>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>

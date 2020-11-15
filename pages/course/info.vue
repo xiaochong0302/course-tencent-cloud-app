@@ -75,18 +75,18 @@
 					</view>
 				</view>
 				<view class="review-list">
-					<review-list :reviews="reviews"></review-list>
+					<review-list :items="reviews"></review-list>
 				</view>
 				<view class="review-more" v-if="course.review_count > 12">
-					<u-button size="medium" @click="gotoReviewList(course.id)">更多评价</u-button>
+					<text @click="gotoReviewList(course.id)">更多评价</text>
 				</view>
 			</view>
 			<view class="tab-item tab-consult" v-if="currentTab == 3">
 				<view class="consult-list">
-					<consult-list :consults="consults"></consult-list>
+					<consult-list :items="consults"></consult-list>
 				</view>
 				<view class="consult-more" v-if="course.consult_count > 12">
-					<u-button size="medium" @click="gotoConsultList(course.id)">更多咨询</u-button>
+					<text @click="gotoConsultList(course.id)">更多咨询</text>
 				</view>
 			</view>
 			<view class="tab-item tab-package" v-if="currentTab == 4">

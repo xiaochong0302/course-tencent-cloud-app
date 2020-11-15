@@ -16,8 +16,8 @@
 		},
 		methods: {
 			getTargetUrl(sn) {
-				const baseUrl = this.$config.apiBaseUrl
-				return `${baseUrl}/trade/h5/pay?sn=${sn}`
+				let apiBaseUrl = this.$utils.getApiBaseUrl()
+				return `${apiBaseUrl}/trade/h5/pay?sn=${sn}`
 			}
 		}
 	}

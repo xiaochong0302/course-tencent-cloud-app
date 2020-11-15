@@ -76,7 +76,6 @@
 				this.$api.getOrderInfo(sn).then(res => {
 					this.order = res.order
 					this.itemInfo = res.order.item_info
-					console.log(this.order)
 				}).catch(e => {
 					this.$u.toast('加载订单失败')
 				})
