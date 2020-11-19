@@ -21,6 +21,7 @@
 				</view>
 			</view>
 		</view>
+		<u-empty margin-top="100" :show="showEmpty"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -33,6 +34,7 @@
 				page: 1,
 				status: 0,
 				hasMore: false,
+				showEmpty:false,
 				scrollTop: 0,
 				statuses: [{
 						id: 0,
@@ -95,6 +97,7 @@
 				this.$api.getMyRefunds(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载退款失败')

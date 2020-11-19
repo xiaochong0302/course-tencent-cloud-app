@@ -1,12 +1,15 @@
 <template>
 	<view class="container">
-		<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
-		 @content-click="contentClick">
-			<view class="item">
-				<view class="question">提问：{{ item.question }}</view>
-				<view class="answer">回复：{{ item.answer }}</view>
-			</view>
-		</u-swipe-action>
+		<view class="item-list" v-if="items.length > 0">
+			<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
+			 @content-click="contentClick">
+				<view class="item">
+					<view class="question">提问：{{ item.question }}</view>
+					<view class="answer">回复：{{ item.answer }}</view>
+				</view>
+			</u-swipe-action>
+		</view>
+		<u-empty margin-top="100" :show="showEmpty"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -18,6 +21,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				showEmpty: false,
 				scrollTop: 0,
 				swipeOptions: [{
 					text: '修改',
@@ -83,6 +87,7 @@
 					let items = this.items.concat(res.pager.items)
 					this.items = this.handleConsults(items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载咨询失败')

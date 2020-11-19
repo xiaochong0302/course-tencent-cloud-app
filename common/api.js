@@ -63,11 +63,11 @@ export const getCoursePackages = (id) => {
 	return httpGet(`/course/${id}/packages`)
 }
 
-export const getCourseReviews = (id, params) => {
+export const getCourseReviews = (id, params = {}) => {
 	return httpGet(`/course/${id}/reviews`, params)
 }
 
-export const getCourseConsults = (id, params) => {
+export const getCourseConsults = (id, params = {}) => {
 	return httpGet(`/course/${id}/consults`, params)
 }
 
@@ -83,8 +83,12 @@ export const getChapterInfo = (id) => {
 	return httpGet(`/chapter/${id}/info`)
 }
 
+export const getChapterConsults = (id, params = {}) => {
+	return httpGet(`/chapter/${id}/consults`, params)
+}
+
 export const getChapterResources = (id) => {
-	return httpGet(`/course/${id}/resources`)
+	return httpGet(`/chapter/${id}/resources`)
 }
 
 export const likeChapter = (id) => {

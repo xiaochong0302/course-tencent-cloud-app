@@ -1,17 +1,20 @@
 <template>
 	<view class="container">
-		<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
-		 @content-click=contentClick>
-			<view class="item">
-				<view class="title">{{ item.course.title }}</view>
-				<view class="content">{{ item.content }}</view>
-				<view class="rating">
-					<text>内容实用：{{ item.rating1 }} 星</text>
-					<text>通俗易懂：{{ item.rating2 }} 星</text>
-					<text>逻辑清晰：{{ item.rating3 }} 星</text>
+		<view class="item-list" v-if="items.length > 0">
+			<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
+			 @content-click=contentClick>
+				<view class="item">
+					<view class="title">{{ item.course.title }}</view>
+					<view class="content">{{ item.content }}</view>
+					<view class="rating">
+						<text>内容实用：{{ item.rating1 }} 星</text>
+						<text>通俗易懂：{{ item.rating2 }} 星</text>
+						<text>逻辑清晰：{{ item.rating3 }} 星</text>
+					</view>
 				</view>
-			</view>
-		</u-swipe-action>
+			</u-swipe-action>
+		</view>
+		<u-empty margin-top="100" :show="showEmpty"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -23,6 +26,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				showEmpty: false,
 				scrollTop: 0,
 				swipeOptions: [{
 					text: '修改',
@@ -87,6 +91,7 @@
 				this.$api.getMyReviews(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载评价失败')

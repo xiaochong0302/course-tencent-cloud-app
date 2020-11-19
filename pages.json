@@ -33,6 +33,11 @@
 			"navigationBarTitleText": "课程详情"
 		}
 	}, {
+		"path": "pages/course/reward",
+		"style": {
+			"navigationBarTitleText": "赞赏课程"
+		}
+	}, {
 		"path": "pages/course/consults",
 		"style": {
 			"navigationBarTitleText": "课程咨询"

@@ -1,24 +1,27 @@
 <template>
 	<view class="container">
-		<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
-		 @content-click="contentClick">
-			<view class="item">
-				<view class="cover">
-					<u-image width="240" height="133" border-radius="10" :src="item.cover|thumbCover"></u-image>
-				</view>
-				<view class="info">
-					<view class="title u-line-1">{{ item.title }}</view>
-					<view class="meta">
-						<text class="user">学员：{{ item.user_count }}</text>
-						<text class="favorite">收藏：{{ item.favorite_count }}</text>
+		<view class="favorite-list" v-if="items.length > 0">
+			<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
+			 @content-click="contentClick">
+				<view class="item">
+					<view class="cover">
+						<u-image width="240" height="133" border-radius="10" :src="item.cover|thumbCover"></u-image>
 					</view>
-					<view class="meta">
-						<text class="favorite">课时：{{ item.lesson_count }}</text>
-						<text class="rating">评分：{{ item.rating }}</text>
+					<view class="info">
+						<view class="title u-line-1">{{ item.title }}</view>
+						<view class="meta">
+							<text class="user">学员：{{ item.user_count }}</text>
+							<text class="favorite">收藏：{{ item.favorite_count }}</text>
+						</view>
+						<view class="meta">
+							<text class="favorite">课时：{{ item.lesson_count }}</text>
+							<text class="rating">评分：{{ item.rating }}</text>
+						</view>
 					</view>
 				</view>
-			</view>
-		</u-swipe-action>
+			</u-swipe-action>
+		</view>
+		<u-empty margin-top="100" :show="showEmpty"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -30,6 +33,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				showEmpty: false,
 				scrollTop: 0,
 				swipeOptions: [{
 					text: '删除',
@@ -83,6 +87,7 @@
 				this.$api.getMyFavorites(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载收藏失败')

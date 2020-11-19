@@ -1,40 +1,42 @@
 <template>
-	<view class="active" v-if="chapter.status == 1">
-		<view class="player" id="player"></view>
-		<view class="u-p-15">
-			<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse"></u-section>
-		</view>
-		<view class="chat-list u-p-15">
-			<view class="chat" v-for="chat in chats" :key="chat.id">
-				<u-icon name="level" color="orange" v-if="chat.user.vip == 1"></u-icon>
-				<text class="name">{{ chat.user.name }}</text>
-				<text class="content">{{ chat.content }}</text>
+	<view v-if="chapter.id > 0">
+		<view class="active" v-if="chapter.status == 1">
+			<view class="player" id="player"></view>
+			<view class="u-p-15">
+				<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse"></u-section>
+			</view>
+			<view class="chat-list u-p-15">
+				<view class="chat" v-for="chat in chats" :key="chat.id">
+					<u-icon name="level" color="orange" v-if="chat.user.vip == 1"></u-icon>
+					<text class="name">{{ chat.user.name }}</text>
+					<text class="content">{{ chat.content }}</text>
+				</view>
+			</view>
+			<view class="chat-form">
+				<u-form :model="form" ref="form" :error-type="['toast']">
+					<u-form-item prop="content">
+						<u-input v-model="form.content" maxlength="50" placeholder="立即参与讨论"></u-input>
+						<u-button slot="right" type="success" size="mini" @click="sendMessage">发送</u-button>
+					</u-form-item>
+				</u-form>
 			</view>
 		</view>
-		<view class="chat-form">
-			<u-form :model="form" ref="form" :error-type="['toast']">
-				<u-form-item prop="content">
-					<u-input v-model="form.content" maxlength="50" placeholder="立即参与讨论"></u-input>
-					<u-button slot="right" type="success" size="mini" @click="sendMessage">发送</u-button>
-				</u-form-item>
-			</u-form>
-		</view>
-	</view>
-	<view class="inactive" v-else-if="chapter.status == 2">
-		<view class="preview" v-if="countdownTime > 0">
-			<view class="icon">
-				<u-icon name="clock" size="90"></u-icon>
+		<view class="inactive" v-else-if="chapter.status == 2">
+			<view class="preview" v-if="countdownTime > 0">
+				<view class="icon">
+					<u-icon name="clock" size="90"></u-icon>
+				</view>
+				<view class="timer">
+					<u-count-down :timestamp="countdownTime" separator="zh"></u-count-down>
+				</view>
+				<view class="tips">直播倒计时开始啦，敬请关注！</view>
 			</view>
-			<view class="timer">
-				<u-count-down :timestamp="countdownTime" separator="zh"></u-count-down>
+			<view class="preview" v-else>
+				<view class="icon">
+					<u-icon name="warning" size="90"></u-icon>
+				</view>
+				<view class="tips">直播已结束，谢谢关注！</view>
 			</view>
-			<view class="tips">直播倒计时开始啦，敬请关注！</view>
-		</view>
-		<view class="preview" v-else>
-			<view class="icon">
-				<u-icon name="warning" size="90"></u-icon>
-			</view>
-			<view class="tips">直播已结束，谢谢关注！</view>
 		</view>
 	</view>
 </template>

@@ -1,80 +1,188 @@
 <template>
 	<view class="container">
-		<view class="search-box">
-			<uni-search-bar @confirm="confirm" maxlength="30" :placeholder="query" />
+		<view class="search">
+			<u-search v-model="query" :show-action="false" maxlength="30" placeholder="请输入搜索内容" @search="search"></u-search>
 		</view>
-		<view v-if="type=='course'">
-			<course-list :courses="items"></course-list>
+		<u-sticky :enable="enableSticky">
+			<view class="tab-title">
+				<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
+			</view>
+		</u-sticky>
+		<view class="tab-content">
+			<view v-if="currentTab == 0">
+				<view class="course-list" v-if="courseObj.items.length > 0">
+					<course-list :items="courseObj.items"></course-list>
+				</view>
+				<u-empty margin-top="100" :show="courseObj.showEmpty"></u-empty>
+			</view>
+			<view v-if="currentTab == 1">
+				<view class="group-list" v-if="groupObj.items.length > 0">
+					<group-list :items="groupObj.items"></group-list>
+				</view>
+				<u-empty margin-top="100" :show="groupObj.showEmpty"></u-empty>
+			</view>
+			<view v-if="currentTab == 2">
+				<view class="user-list" v-if="userObj.items.length > 0">
+					<user-list :items="userObj.items"></user-list>
+				</view>
+				<u-empty margin-top="100" :show="userObj.showEmpty"></u-empty>
+			</view>
 		</view>
-		<view v-else-if="type=='group'"></view>
-		<view v-else-if="type=='user'"></view>
+		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
 	import CourseList from '@/components/course-list.vue'
+	import GroupList from '@/components/group-list.vue'
+	import UserList from '@/components/user-list.vue'
 	export default {
 		components: {
-			CourseList
+			CourseList,
+			GroupList,
+			UserList,
 		},
 		data() {
 			return {
-				items: [],
+				enableSticky: false,
+				currentTab: 0,
+				tabs: [{
+					name: '课程'
+				}, {
+					name: '群组'
+				}, {
+					name: '用户'
+				}],
 				query: '',
-				type: 'course',
-				page: 1,
-				hasMore: false
+				scrollTop: 0,
+				courseObj: {
+					items: [],
+					page: 1,
+					hasMore: false,
+					showEmpty: false,
+				},
+				groupObj: {
+					items: [],
+					page: 1,
+					hasMore: false,
+					showEmpty: false,
+				},
+				userObj: {
+					items: [],
+					page: 1,
+					hasMore: false,
+					showEmpty: false,
+				},
 			}
 		},
 		onLoad(e) {
-			if (e.query) {
+			if (e.query.length > 1) {
 				this.query = e.query
+				this.loadCourseResult()
+				this.loadGroupResult()
+				this.loadUserResult()
 			}
-			this.search()
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop
 		},
 		onReachBottom() {
-			if (this.hasMore) {
-				this.search()
+			if (this.currentTab == 0) {
+				if (this.courseObj.hasMore) {
+					this.loadCourseResult()
+				}
+			} else if (this.currentTab == 1) {
+				if (this.groupObj.hasMore) {
+					this.loadGroupResult()
+				}
+			} else if (this.currentTab == 2) {
+				if (this.userObj.hasMore) {
+					this.loadUserResult()
+				}
 			}
 		},
+		onShow() {
+			this.enableSticky = true
+		},
+		onHide() {
+			this.enableSticky = false
+		},
 		methods: {
-			confirm(res) {
-				if (res.value.length > 1) {
-					this.page = 1
-					this.query = res.value
-					this.hasMore = false
-					this.items = []
-					this.search()
+			changeTab(index) {
+				if (this.currentTab != index) {
+					this.currentTab = index
 				}
 			},
 			search() {
-				let params = {}
-				if (this.query !== '') {
-					params.query = this.query
+				if (this.query.length > 1) {
+					this.courseObj.hasMore = false
+					this.courseObj.items = []
+					this.courseObj.page = 1
+					this.loadCourseResult()
+
+					this.groupObj.hasMore = false
+					this.groupObj.items = []
+					this.groupObj.page = 1
+					this.loadGroupResult()
+
+					this.userObj.hasMore = false
+					this.userObj.items = []
+					this.userObj.page = 1
+					this.loadUserResult()
 				}
-				if (this.type !== '') {
-					params.type = this.type
+			},
+			loadCourseResult() {
+				let params = {
+					query: this.query,
+					type: 'course',
 				}
-				if (this.page > 0) {
-					params.page = this.page
+				if (this.courseObj.page > 0) {
+					params.page = this.courseObj.page
 				}
 				this.$api.search(params).then(res => {
-					this.hasMore = res.pager.total_pages > this.page
-					this.items = this.items.concat(res.pager.items)
-					switch (this.type) {
-						case 'course':
-							this.items = this.handleCourses(this.items)
-							break;
-						case 'group':
-							this.items = this.handleGroups(this.items)
-							break;
-						case 'user':
-							this.items = this.handleUsers(this.items)
-							break;
-					}
-					this.page++
+					let items = this.handleCourses(res.pager.items)
+					this.courseObj.items = this.courseObj.items.concat(items)
+					this.courseObj.hasMore = res.pager.total_pages > this.courseObj.page
+					this.courseObj.showEmpty = this.courseObj.page == 1 && res.pager.total_pages == 0
+					this.courseObj.page++
 				}).catch(e => {
-					this.$u.toast('加载内容失败')
+					this.$u.toast('加载课程失败')
+				})
+			},
+			loadGroupResult() {
+				let params = {
+					query: this.query,
+					type: 'group',
+				}
+				if (this.groupObj.page > 0) {
+					params.page = this.groupObj.page
+				}
+				this.$api.search(params).then(res => {
+					let items = this.handleGroups(res.pager.items)
+					this.groupObj.items = this.groupObj.items.concat(items)
+					this.groupObj.hasMore = res.pager.total_pages > this.groupObj.page
+					this.groupObj.showEmpty = this.groupObj.page == 1 && res.pager.total_pages == 0
+					this.groupObj.page++
+				}).catch(e => {
+					this.$u.toast('加载群组失败')
+				})
+			},
+			loadUserResult() {
+				let params = {
+					query: this.query,
+					type: 'user',
+				}
+				if (this.userObj.page > 0) {
+					params.page = this.userObj.page
+				}
+				this.$api.search(params).then(res => {
+					let items = this.handleUsers(res.pager.items)
+					this.userObj.items = this.userObj.items.concat(items)
+					this.userObj.hasMore = res.pager.total_pages > this.userObj.page
+					this.userObj.showEmpty = this.userObj.page == 1 && res.pager.total_pages == 0
+					this.userObj.page++
+				}).catch(e => {
+					this.$u.toast('加载用户失败')
 				})
 			},
 			handleCourses(courses) {
@@ -84,15 +192,27 @@
 				})
 			},
 			handleGroups(groups) {
-				return groups
+				return groups.map(group => {
+					group.name = group.name.replace(/<\/?.+?>/g, '')
+					return group
+				})
 			},
 			handleUsers(users) {
-				return users
+				return users.map(user => {
+					user.name = user.name.replace(/<\/?.+?>/g, '')
+					return user
+				})
 			}
 		}
 	}
 </script>
 
 <style>
+	.search {
+		margin-bottom: 15rpx;
+	}
 
+	.tab-title {
+		margin-bottom: 30rpx;
+	}
 </style>

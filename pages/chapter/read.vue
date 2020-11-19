@@ -1,20 +1,49 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="chapter.id > 0">
 		<view class="title">{{ chapter.title }}</view>
 		<view class="content">{{ chapter.content }}</view>
+		<view class="action">
+			<u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count" @click="likeChapter(chapter.id)"></u-icon>
+			<u-icon name="account" size="36" :label="chapter.user_count"></u-icon>
+			<u-icon name="chat" size="36" :label="chapter.consult_count"></u-icon>
+		</view>
+		<view class="consult-list">
+			<consult-list :items="consults"></consult-list>
+		</view>
+		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
+	import ConsultList from '@/components/consult-list.vue'
 	export default {
+		components: {
+			ConsultList
+		},
 		data() {
 			return {
-				chapter: {},
+				chapter: {
+					course: {},
+					me: {},
+				},
 				learning: {
 					interval: null,
 					interval_time: 15000,
 					request_id: this.$u.guid(16),
 					plan_id: 0,
+				},
+				consults: [],
+				page: 1,
+				hasMore: false,
+				scrollTop: 0,
+			}
+		},
+		computed: {
+			likeIcon: function() {
+				let liked = this.chapter.me.liked == 1
+				return {
+					name: liked ? 'thumb-up-fill' : 'thumb-up',
+					color: liked ? 'red' : '',
 				}
 			}
 		},
@@ -24,6 +53,14 @@
 		},
 		onUnload() {
 			this.clearLearningInterval()
+		},
+		onReachBottom() {
+			if (this.hasMore) {
+				this.loadConsults(this.chapter.id)
+			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop
 		},
 		methods: {
 			setLearningInterval() {
@@ -45,12 +82,38 @@
 					console.log(e.msg)
 				})
 			},
+			likeChapter(id) {
+				this.$api.likeChapter(id).then(res => {
+					if (this.chapter.me.liked == 1) {
+						this.chapter.me.liked = 0
+						this.chapter.like_count--
+					} else {
+						this.chapter.me.liked = 1
+						this.chapter.like_count++
+					}
+				}).catch(e => {
+					this.$u.toast('喜欢课时失败')
+				})
+			},
 			loadChapter(id) {
 				this.$api.getChapterInfo(id).then(res => {
 					this.chapter = res.chapter
 					this.learning.plan_id = res.chapter.me.plan_id
 				}).catch(e => {
 					this.$u.toast('加载课时失败')
+				})
+			},
+			loadConsults(id) {
+				let params = {}
+				if (this.page > 0) {
+					params.page = this.page
+				}
+				this.$api.getChapterConsults(id, params).then(res => {
+					this.consults = this.consults.concat(res.pager.items)
+					this.hasMore = res.pager.total_pages > this.page
+					this.page++
+				}).catch(e => {
+					this.$u.toast('加载咨询失败')
 				})
 			}
 		}
@@ -64,5 +127,16 @@
 		text-align: center;
 	}
 
-	.content {}
+	.content {
+		margin-bottom: 30rpx;
+	}
+
+	.action {
+		display: flex;
+		justify-content: center;
+	}
+
+	.action .u-icon {
+		margin-left: 30rpx;
+	}
 </style>

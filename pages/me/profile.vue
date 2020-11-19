@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<u-form :model="profile" ref="profile" :error-type="['toast']">
+		<u-form :model="profile" ref="profile" :error-type="['message']">
 			<u-form-item label="头像">
 				<u-image width="90" height="90" border-radius="100%" :src="profile.avatar|thumbAvatar" @click="changeAvatar"></u-image>
 			</u-form-item>
@@ -8,8 +8,8 @@
 				<u-input v-model="profile.name" maxlength="15" placeholder="请输入昵称"></u-input>
 			</u-form-item>
 			<u-form-item label="性别">
-				<u-radio-group v-model="gender" @change="changeGender">
-					<u-radio v-for="(item,index) in genderOptions" :key="index" :name="item.name">{{ item.name }}</u-radio>
+				<u-radio-group v-model="gender.name" @change="changeGender">
+					<u-radio v-for="(item,index) in gender.options" :key="index" :name="item.name">{{ item.name }}</u-radio>
 				</u-radio-group>
 			</u-form-item>
 			<u-form-item label="简介" label-position="top" prop="about">
@@ -30,14 +30,17 @@
 		data() {
 			return {
 				profile: {},
-				gender: '',
-				genderOptions: [{
-					name: '男'
-				}, {
-					name: '女'
-				}, {
-					name: '保密'
-				}],
+				gender: {
+					name: '男',
+					value: 1,
+					options: [{
+						name: '男'
+					}, {
+						name: '女'
+					}, {
+						name: '保密'
+					}]
+				},
 				rules: {
 					name: [{
 						required: true,
@@ -63,7 +66,7 @@
 		},
 		methods: {
 			changeGender(name) {
-				this.profile.gender = this.getGenderValueByName(name)
+				this.gender.value = this.getGenderValueByName(name)
 			},
 			changeAvatar() {
 				uni.chooseImage({
@@ -86,7 +89,7 @@
 					if (valid) {
 						this.$api.updateMyProfile({
 							name: this.profile.name,
-							gender: this.profile.gender,
+							gender: this.gender.value,
 							avatar: this.profile.avatar,
 							about: this.profile.about
 						}).then(res => {
@@ -126,7 +129,7 @@
 			loadMyProfile() {
 				this.$api.getMyProfile().then(res => {
 					this.profile = res.profile
-					this.gender = this.getGenderNameByValue(res.profile.gender)
+					this.gender.name = this.getGenderNameByValue(res.profile.gender)
 				}).catch(e => {
 					this.$u.toast('获取资料失败')
 				})

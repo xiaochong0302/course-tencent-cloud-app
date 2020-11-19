@@ -1,6 +1,6 @@
 <template>
 	<view class="item-list">
-		<view class="item" v-for="course in showCourses" :key="course.id" @click="gotoCourse(course.id)">
+		<view class="item" v-for="course in courses" :key="course.id" @click="gotoCourse(course.id)">
 			<view class="cover">
 				<u-image width="240" height="134" border-radius="10" :src="course.cover|thumbCover"></u-image>
 			</view>
@@ -34,22 +34,22 @@
 <script>
 	export default {
 		name: 'CourseList',
-		data() {
-			return {
-				showCourses: []
-			}
-		},
 		props: {
 			items: {
 				type: Array
 			}
 		},
+		data() {
+			return {
+				courses: []
+			}
+		},
 		created() {
-			this.showCourses = this.items
+			this.courses = this.items
 		},
 		watch: {
 			items: function() {
-				this.showCourses = this.items
+				this.courses = this.items
 			}
 		},
 		methods: {
@@ -62,9 +62,8 @@
 
 <style>
 	.item {
-		margin-bottom: 15rpx;
 		display: flex;
-		flex-flow: row;
+		margin-bottom: 15rpx;
 	}
 
 	.item .cover {

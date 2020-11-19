@@ -7,9 +7,10 @@
 				<u-dropdown-item title="类型" v-model="model" :options="models" @change="switchModel"></u-dropdown-item>
 			</u-dropdown>
 		</view>
-		<view v-if="items.length > 0">
+		<view class="course-list" v-if="items.length > 0">
 			<course-list :items="items"></course-list>
 		</view>
+		<u-empty :show="showEmpty" margin-top="100"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -25,6 +26,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				showEmpty: false,
 				scrollTop: 0,
 				sc: 0,
 				level: 0,
@@ -128,8 +130,9 @@
 					params.page = this.page
 				}
 				this.$api.getCourseList(params).then(res => {
-					this.hasMore = res.pager.total_pages > this.page
 					this.items = this.items.concat(res.pager.items)
+					this.hasMore = res.pager.total_pages > this.page
+					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载课程失败')

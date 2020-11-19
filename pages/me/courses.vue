@@ -1,24 +1,27 @@
 <template>
 	<view class="container">
-		<u-swipe-action v-for="(item,index) in items" :key="item.key" :index="index" :options="swipeOptions" @click="swipeClick"
-		 @content-click="contentClick">
-			<view class="item">
-				<view class="cover">
-					<u-image width="240" height="134" border-radius="10" :src="item.course.cover|thumbCover"></u-image>
-				</view>
-				<view class="info">
-					<view class="title u-line-1">{{ item.course.title }}</view>
-					<view class="meta">
-						<text class="duration">课时：{{ item.course.lesson_count }}</text>
-						<text class="progress">评分：{{ item.course.rating }}</text>
+		<view class="item-list" v-if="items.length > 0">
+			<u-swipe-action v-for="(item,index) in items" :key="item.key" :index="index" :options="swipeOptions" @click="swipeClick"
+			 @content-click="contentClick">
+				<view class="item">
+					<view class="cover">
+						<u-image width="240" height="134" border-radius="10" :src="item.course.cover|thumbCover"></u-image>
 					</view>
-					<view class="meta">
-						<text class="progress">进度：{{ item.progress }}%</text>
-						<text class="duration">用时：{{ item.duration|formatDuration }}</text>
+					<view class="info">
+						<view class="title u-line-1">{{ item.course.title }}</view>
+						<view class="meta">
+							<text class="duration">课时：{{ item.course.lesson_count }}</text>
+							<text class="progress">评分：{{ item.course.rating }}</text>
+						</view>
+						<view class="meta">
+							<text class="progress">进度：{{ item.progress }}%</text>
+							<text class="duration">用时：{{ item.duration|formatDuration }}</text>
+						</view>
 					</view>
 				</view>
-			</view>
-		</u-swipe-action>
+			</u-swipe-action>
+		</view>
+		<u-empty :show="showEmpty"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -30,6 +33,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				showEmpty: false,
 				scrollTop: 0,
 				swipeOptions: [{
 					text: '评价',
@@ -78,6 +82,7 @@
 					let items = this.handleCourses(res.pager.items)
 					this.items = this.items.concat(items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载课程失败')
