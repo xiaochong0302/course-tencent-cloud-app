@@ -102,8 +102,7 @@
 	}
 
 	.load-more {
-		display: flex;
-		justify-content: center;
+		text-align: center;
 		margin-bottom: 30rpx;
 	}
 </style>

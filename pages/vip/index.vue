@@ -45,7 +45,10 @@
 		},
 		methods: {
 			buyVip(itemId) {
-				this.$utils.redirect(`/pages/order/confirm?item_id=${itemId}&item_type=4`)
+				this.$utils.redirect('/pages/order/confirm', {
+					item_id: itemId,
+					item_type: 4,
+				})
 			},
 			loadVipOptions() {
 				this.$api.getVipOptions().then(res => {

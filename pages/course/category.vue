@@ -29,8 +29,10 @@
 					this.$u.toast('加载分类失败')
 				})
 			},
-			gotoCourseList(id) {
-				this.$utils.redirect(`/pages/course/list?sc=${id}`)
+			gotoCourseList(sc) {
+				this.$utils.redirect('/pages/course/list', {
+					sc: sc
+				})
 			}
 		}
 	}
@@ -41,7 +43,7 @@
 		margin-top: 30rpx;
 		margin-bottom: 30rpx;
 	}
-	
+
 	.sub-list {
 		display: flex;
 		flex-wrap: wrap;

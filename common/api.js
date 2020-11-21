@@ -27,6 +27,18 @@ export const getVipOptions = () => {
 	return httpGet('/vip/options')
 }
 
+export const getHelpList = () => {
+	return httpGet('/help/list')
+}
+
+export const getHelpInfo = (id) => {
+	return httpGet(`/help/${id}/info`)
+}
+
+export const getPageInfo = (id) => {
+	return httpGet(`/page/${id}/info`)
+}
+
 export const getIndexSlides = () => {
 	return httpGet('/index/slides')
 }
@@ -75,10 +87,6 @@ export const favoriteCourse = (id) => {
 	return httpPost(`/course/${id}/favorite`)
 }
 
-export const unfavoriteCourse = (id) => {
-	return httpPost(`/course/${id}/unfavorite`)
-}
-
 export const getChapterInfo = (id) => {
 	return httpGet(`/chapter/${id}/info`)
 }
@@ -93,10 +101,6 @@ export const getChapterResources = (id) => {
 
 export const likeChapter = (id) => {
 	return httpPost(`/chapter/${id}/like`)
-}
-
-export const unlikeChapter = (id) => {
-	return httpPost(`/chapter/${id}/unlike`)
 }
 
 export const learningChapter = (id, params) => {
@@ -137,10 +141,6 @@ export const deleteConsult = (id) => {
 
 export const likeConsult = (id) => {
 	return httpPost(`/consult/${id}/like`)
-}
-
-export const unlikeConsult = (id) => {
-	return httpPost(`/consult/${id}/unlike`)
 }
 
 export const createReview = (params) => {
@@ -234,6 +234,14 @@ export const getImGroupList = (params = {}) => {
 	return httpGet('/im/group/list', params)
 }
 
+export const getImGroupInfo = (id) => {
+	return httpGet(`/im/group/${id}/info`)
+}
+
+export const getImGroupUsers = (id, params = {}) => {
+	return httpGet(`/im/group/${id}/users`, params)
+}
+
 export const getTeacherList = (params = {}) => {
 	return httpGet('/teacher/list', params)
 }
@@ -262,7 +270,7 @@ export const getUserFriends = (id, params = {}) => {
 	return httpGet(`/user/${id}/friends`, params)
 }
 
-export const getUserGroups = (id, prams = {}) => {
+export const getUserGroups = (id, params = {}) => {
 	return httpGet(`/user/${id}/groups`, params)
 }
 

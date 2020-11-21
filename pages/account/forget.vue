@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<u-form :model="form" ref="form" :error-type="['toast']">
+		<u-form :model="form" ref="form">
 			<u-verification-code seconds="60" ref="verifyCode" @change="verifyCodeChange"></u-verification-code>
 			<u-form-item label="手机号" label-width="150" prop="account">
 				<u-input v-model="form.account" type="number" maxlength="11" placeholder="请输入手机号"></u-input>

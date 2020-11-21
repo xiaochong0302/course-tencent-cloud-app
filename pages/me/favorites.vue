@@ -61,8 +61,9 @@
 				}
 			},
 			contentClick(index) {
-				let id = this.getIdByIndex(index)
-				this.$utils.redirect(`/pages/course/info?id=${id}`)
+				this.$utils.redirect('/pages/course/info', {
+					id: this.getIdByIndex(index)
+				})
 			},
 			unfavorite(index) {
 				let id = this.getIdByIndex(index)

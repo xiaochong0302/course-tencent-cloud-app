@@ -45,7 +45,9 @@
 					channel: channel,
 				}).then(res => {
 					this.queryPayStatus(res.trade.sn)
-					this.$utils.redirect(`/pages/trade/h5pay?sn=${res.trade.sn}`)
+					this.$utils.redirect('/pages/trade/h5pay', {
+						sn: res.trade.sn
+					})
 				}).catch(e => {
 					this.$u.toast('创建交易失败')
 				})

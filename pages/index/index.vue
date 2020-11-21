@@ -65,7 +65,9 @@
 		methods: {
 			search() {
 				if (this.query.length > 1) {
-					this.$utils.redirect(`/pages/search/index?query=${this.query}`)
+					this.$utils.redirect('/pages/search/index', {
+						query: this.query
+					})
 				}
 			},
 			clickSlide(index) {

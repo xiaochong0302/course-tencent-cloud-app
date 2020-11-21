@@ -12,10 +12,15 @@
 		</view>
 		<view class="tab-content">
 			<view class="tab-item" v-if="currentTab == 0">
-				{{ teacher.about }}
+				<view class="profile">
+					<view class="about">{{ teacher.about }}</view>
+				</view>
 			</view>
 			<view class="tab-item" v-if="currentTab == 1">
-				<course-list :courses="courses"></course-list>
+				<view class="course-list" v-if="courses.length > 0">
+					<course-list :items="courses"></course-list>
+				</view>
+				<view class="load-more" @click="gotoCourseList(user.id)" v-if="courses.length > 10">加载更多</view>
 			</view>
 		</view>
 	</view>
@@ -49,6 +54,11 @@
 					this.currentTab = index
 				}
 			},
+			gotoCourseList(id) {
+				this.$utils.redirect('/pages/teacher/courses', {
+					id: id
+				})
+			},
 			loadTeacherInfo(id) {
 				this.$api.getTeacherInfo(id).then(res => {
 					this.teacher = res.teacher
@@ -75,7 +85,7 @@
 		margin-top: 15rpx;
 		margin-bottom: 15rpx;
 	}
-	
+
 	.top .avatar {
 		margin-bottom: 15rpx;
 	}
@@ -83,8 +93,14 @@
 	.top .name {
 		margin-bottom: 15rpx;
 	}
-	
+
 	.tab-title {
+		margin-bottom: 15rpx;
+	}
+
+	.load-more {
+		margin-top: 30rpx;
 		margin-bottom: 30rpx;
+		text-align: center;
 	}
 </style>

@@ -16,6 +16,7 @@
 				<u-cell-item title="我的评价" index="review" :arrow="true" @click="gotoPage"></u-cell-item>
 				<u-cell-item title="我的资料" index="profile" :arrow="true" @click="gotoPage"></u-cell-item>
 				<u-cell-item title="我的会员" index="vip" :arrow="true" @click="gotoPage"></u-cell-item>
+				<u-cell-item title="帮助中心" index="help" :arrow="true" @click="gotoPage"></u-cell-item>
 			</u-cell-group>
 		</view>
 	</view>
@@ -60,6 +61,9 @@
 						break;
 					case 'vip':
 						this.$utils.redirect('/pages/vip/index')
+						break;
+					case 'help':
+						this.$utils.redirect('/pages/help/index')
 						break;
 				}
 			},

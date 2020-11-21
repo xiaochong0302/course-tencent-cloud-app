@@ -5,7 +5,7 @@
 		<view class="action">
 			<u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count" @click="likeChapter(chapter.id)"></u-icon>
 			<u-icon name="account" size="36" :label="chapter.user_count"></u-icon>
-			<u-icon name="chat" size="36" :label="chapter.consult_count"></u-icon>
+			<u-icon name="chat" size="36" :label="chapter.consult_count" @click="addConsult(chapter.id)"></u-icon>
 		</view>
 		<view class="consult-list">
 			<consult-list :items="consults"></consult-list>
@@ -82,6 +82,11 @@
 					console.log(e.msg)
 				})
 			},
+			addConsult(id) {
+				this.$utils.redirect('/pages/consult/add', {
+					chapter_id: id
+				})
+			},
 			likeChapter(id) {
 				this.$api.likeChapter(id).then(res => {
 					if (this.chapter.me.liked == 1) {
@@ -121,10 +126,13 @@
 </script>
 
 <style>
+	.container {
+		padding-top: 30rpx;
+	}
+
 	.title {
 		margin-bottom: 30rpx;
 		font-weight: 600;
-		text-align: center;
 	}
 
 	.content {

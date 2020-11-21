@@ -1,8 +1,8 @@
 <template>
 	<view class="container">
-		<u-form :model="profile" ref="profile" :error-type="['message']">
+		<u-form :model="profile" ref="profile">
 			<u-form-item label="头像">
-				<u-image width="90" height="90" border-radius="100%" :src="profile.avatar|thumbAvatar" @click="changeAvatar"></u-image>
+				<u-image :src="profile.avatar|thumbAvatar" width="100" height="100" shape="circle" @click="changeAvatar"></u-image>
 			</u-form-item>
 			<u-form-item label="昵称" prop="name">
 				<u-input v-model="profile.name" maxlength="15" placeholder="请输入昵称"></u-input>

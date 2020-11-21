@@ -2,7 +2,7 @@
 	<view class="item-list">
 		<view class="item" v-for="course in courses" :key="course.id" @click="gotoCourse(course.id)">
 			<view class="cover">
-				<u-image width="240" height="134" border-radius="10" :src="course.cover|thumbCover"></u-image>
+				<u-image :src="course.cover|thumbCover" width="240" height="134" border-radius="10"></u-image>
 			</view>
 			<view class="info">
 				<view class="title u-line-1">{{ course.title }}</view>
@@ -54,7 +54,9 @@
 		},
 		methods: {
 			gotoCourse(id) {
-				this.$utils.redirect(`/pages/course/info?id=${id}`)
+				this.$utils.redirect('/pages/course/info', {
+					id: id
+				})
 			}
 		}
 	}

@@ -24,7 +24,7 @@
 					<u-icon name="chat" size="36" :label="chapter.consult_count" @click="popupConsultForm"></u-icon>
 				</view>
 				<view class="u-p-15">
-					<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse"></u-section>
+					<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse(chapter.course.id)"></u-section>
 				</view>
 			</view>
 		</u-sticky>
@@ -206,10 +206,9 @@
 				this.$refs.consultForm.validate(valid => {
 					if (valid) {
 						this.$api.createConsult({
+							chapter_id: this.chapter.id,
 							question: this.consultForm.question,
 							private: this.private.value,
-							course_id: this.chapter.course.id,
-							chapter_id: this.chapter.id,
 						}).then(res => {
 							this.consultForm.question = ''
 							this.showConsultForm = false
@@ -220,8 +219,10 @@
 					}
 				})
 			},
-			gotoCourse() {
-				this.$utils.redirect(`/pages/course/info?id=${this.chapter.course.id}`)
+			gotoCourse(id) {
+				this.$utils.redirect('/pages/course/info', {
+					id: id
+				})
 			},
 			loadChapter(id) {
 				this.$api.getChapterInfo(id).then(res => {

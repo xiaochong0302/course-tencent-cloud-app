@@ -35,7 +35,9 @@
 		},
 		methods: {
 			gotoLive(id) {
-				this.$utils.redirect(`/pages/chapter/live?id=${id}`)
+				this.$utils.redirect('/pages/chapter/live', {
+					id: id
+				})
 			}
 		}
 	}
@@ -46,20 +48,20 @@
 		display: flex;
 		margin-bottom: 15rpx;
 	}
-	
+
 	.item .cover {
 		width: 240rpx;
 		height: 134rpx;
 	}
-	
+
 	.item .info {
 		flex: 1;
 	}
-	
+
 	.item .cover {
 		margin-right: 15rpx;
 	}
-	
+
 	.item .title {
 		margin-bottom: 15rpx;
 	}

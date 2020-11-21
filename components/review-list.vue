@@ -8,10 +8,10 @@
 				<view class="top">
 					<view class="name">{{ review.owner.name }}</view>
 					<view class="rating">
-						<u-rate size="28" :current="review.rating" :disabled="true"></u-rate>
+						<u-rate :current="review.rating" size="28" :disabled="true"></u-rate>
 					</view>
 				</view>
-				<view class="content">{{ review.content }}</view>
+				<view class="content" @click="gotoReview(review.id)">{{ review.content }}</view>
 				<view class="bottom">
 					<view class="time">{{ review.create_time|timeFrom('yyyy-mm-dd') }}</view>
 					<view class="like">
@@ -69,7 +69,9 @@
 				})
 			},
 			gotoReview(id) {
-				this.$utils.redirect(`/pages/review/info?id=${id}`)
+				this.$utils.redirect('/pages/review/info', {
+					id: id
+				})
 			},
 			initReviews(reviews) {
 				let result = []

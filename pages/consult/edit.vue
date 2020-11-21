@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="title" v-if="consult.course">课程：{{ consult.course.title }}</view>
 		<view class="title" v-if="consult.chapter">章节：{{ consult.chapter.title }}</view>
-		<u-form :model="consult" ref="form" :error-type="['toast']">
+		<u-form :model="consult" ref="form">
 			<u-form-item label="咨询内容" label-position="top" prop="question">
 				<u-input v-model="consult.question" type="textarea" :border="false" placeholder="请填写咨询内容" />
 			</u-form-item>
@@ -32,7 +32,6 @@
 						message: '咨询内容10-255字之间'
 					}]
 				},
-				errorType: ['message'],
 			}
 		},
 		onLoad(e) {

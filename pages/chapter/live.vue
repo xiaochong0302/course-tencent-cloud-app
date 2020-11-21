@@ -3,7 +3,7 @@
 		<view class="active" v-if="chapter.status == 1">
 			<view class="player" id="player"></view>
 			<view class="u-p-15">
-				<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse"></u-section>
+				<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse(chapter.course.id)"></u-section>
 			</view>
 			<view class="chat-list u-p-15">
 				<view class="chat" v-for="chat in chats" :key="chat.id">
@@ -13,7 +13,7 @@
 				</view>
 			</view>
 			<view class="chat-form">
-				<u-form :model="form" ref="form" :error-type="['toast']">
+				<u-form :model="form" ref="form">
 					<u-form-item prop="content">
 						<u-input v-model="form.content" maxlength="50" placeholder="立即参与讨论"></u-input>
 						<u-button slot="right" type="success" size="mini" @click="sendMessage">发送</u-button>
@@ -214,8 +214,10 @@
 					}
 				})
 			},
-			gotoCourse() {
-				this.$utils.redirect(`/pages/course/info?id=${this.chapter.course.id}`)
+			gotoCourse(id) {
+				this.$utils.redirect('/pages/course/info', {
+					id: id
+				})
 			},
 			loadChapter(id) {
 				this.$api.getChapterInfo(id).then(res => {

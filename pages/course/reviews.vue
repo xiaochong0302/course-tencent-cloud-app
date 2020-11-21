@@ -15,32 +15,32 @@
 		},
 		data() {
 			return {
+				course:{},
 				items: [],
 				page: 1,
 				hasMore: false,
-				courseId: 0,
 				scrollTop:0,
 			}
 		},
 		onLoad(e) {
-			this.courseId = e.id
-			this.loadReviews()
+			this.course.id = e.id
+			this.loadReviews(e.id)
 		},
 		onReachBottom() {
 			if (this.hasMore) {
-				this.loadReviews()
+				this.loadReviews(this.course.id)
 			}
 		},
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop
 		},
 		methods: {
-			loadReviews() {
+			loadReviews(id) {
 				let params = {}
 				if (this.page > 0) {
 					params.page = this.page
 				}
-				this.$api.getCourseReviews(this.courseId, params).then(res => {
+				this.$api.getCourseReviews(id, params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
 					this.page++

@@ -1,12 +1,15 @@
 <template>
-	<view class="item-list">
-		<view class="item" v-for="teacher in teachers" :key="teacher.id" @click="gotoTeacher(teacher.id)">
-			<view class="avatar">
-				<u-image :src="teacher.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
-			</view>
-			<view class="info">
-				<view class="name">{{ teacher.name }}</view>
-				<view class="title">{{ teacher.title }}</view>
+	<view>
+		<u-section title="授课教师" :right="false"></u-section>
+		<view class="item-list">
+			<view class="item" v-for="teacher in teachers" :key="teacher.id" @click="gotoTeacher(teacher.id)">
+				<view class="avatar">
+					<u-image width="90" height="90" shape="circle" :src="teacher.avatar|thumbAvatar"></u-image>
+				</view>
+				<view class="info">
+					<view class="name">{{ teacher.name }}</view>
+					<view class="title">{{ teacher.title }}</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -14,7 +17,7 @@
 
 <script>
 	export default {
-		name: 'TeacherList',
+		name: 'CourseTeacherList',
 		props: {
 			items: {
 				type: Array
@@ -27,11 +30,6 @@
 		},
 		created() {
 			this.teachers = this.handleTeachers(this.items)
-		},
-		watch: {
-			items: function() {
-				this.teachers = this.handleTeachers(this.items)
-			}
 		},
 		methods: {
 			gotoTeacher(id) {
@@ -52,27 +50,27 @@
 </script>
 
 <style>
+	.u-section {
+		margin-bottom: 15rpx;
+	}
+
 	.item-list {
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-around;
+		flex-direction: column;
 	}
 
 	.item {
 		display: flex;
-		width: 320rpx;
-		margin-bottom: 50rpx;
+		padding: 15rpx 0;
 	}
 
 	.item .avatar {
+		width: 90rpx;
+		height: 90rpx;
 		margin-right: 15rpx;
 	}
 
-	.item .info {
-		flex: 1;
-	}
-
-	.item .name {
-		margin-bottom: 15rpx;
+	.item .info .name {
+		margin-bottom: 10rpx;
 	}
 </style>

@@ -5,8 +5,10 @@
 				<u-image :src="consult.owner.avatar|thumbAvatar" width="60" height="60" shape="circle"></u-image>
 			</view>
 			<view class="info">
-				<view class="question">{{ consult.question }}</view>
-				<view class="answer">{{ consult.answer }}</view>
+				<view class="content" @click="gotoConsult(consult.id)">
+					<view class="question">{{ consult.question }}</view>
+					<view class="answer">{{ consult.answer }}</view>
+				</view>
 				<view class="bottom">
 					<view class="time">{{ consult.create_time|timeFrom('yyyy-mm-dd') }}</view>
 					<view class="like">
@@ -16,6 +18,7 @@
 				</view>
 			</view>
 		</view>
+	</view>
 	</view>
 </template>
 
@@ -62,9 +65,15 @@
 				}).catch(e => {
 					this.$u.toast(e.msg)
 				})
+				return false
+			},
+			stopEvent() {
+				console.log('stop')
 			},
 			gotoConsult(id) {
-				this.$utils.redirect(`/pages/consult/info?id=${id}`)
+				this.$utils.redirect('/pages/consult/info', {
+					id: id
+				})
 			},
 			initConsults(consults) {
 				let result = []

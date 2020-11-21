@@ -3,13 +3,11 @@
 		<view class="item-list" v-if="items.length > 0">
 			<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
 			 @content-click=contentClick>
-				<view class="item">
+				<view class="item u-border-bottom">
 					<view class="title">{{ item.course.title }}</view>
 					<view class="content">{{ item.content }}</view>
 					<view class="rating">
-						<text>内容实用：{{ item.rating1 }} 星</text>
-						<text>通俗易懂：{{ item.rating2 }} 星</text>
-						<text>逻辑清晰：{{ item.rating3 }} 星</text>
+						<u-rate :current="item.rating" :disabled="true"></u-rate>
 					</view>
 				</view>
 			</u-swipe-action>
@@ -61,12 +59,14 @@
 				}
 			},
 			contentClick(index) {
-				let id = this.getIdByIndex(index)
-				this.$utils.redirect(`/pages/review/info?id=${id}`)
+				this.$utils.redirect('/pages/review/info', {
+					id: this.getIdByIndex(index)
+				})
 			},
 			editReview(index) {
-				let id = this.getIdByIndex(index)
-				this.$utils.redirect(`/pages/review/edit?id=${id}`)
+				this.$utils.redirect('/pages/review/edit', {
+					id: this.getIdByIndex(index)
+				})
 			},
 			deleteReview(index) {
 				let id = this.getIdByIndex(index)
@@ -105,7 +105,6 @@
 	.item {
 		display: flex;
 		flex-direction: column;
-		border-bottom: 1px solid rgba(0, 0, 0, .2);
 		padding: 20rpx 0;
 	}
 
@@ -115,15 +114,10 @@
 	}
 
 	.item .content {
-		display: -webkit-box;
 		margin-bottom: 15rpx;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		-webkit-line-clamp: 5;
-		-webkit-box-orient: vertical;
 	}
 
-	.rating text {
+	.rating uni-text {
 		margin-right: 15rpx;
 	}
 </style>

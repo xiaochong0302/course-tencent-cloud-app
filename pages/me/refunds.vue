@@ -1,9 +1,11 @@
 <template>
 	<view class="container">
-		<view class="filter">
-			<u-tag v-for="item in statuses" :key="item.id" :text="item.name" :type="item.id==status?'primary':'default'" mode="dark"
-			 @click="filterByStatus(item.id)"></u-tag>
-		</view>
+		<u-sticky :enable="enableSticky">
+			<view class="filter u-border-bottom">
+				<u-tag v-for="item in statuses" :key="item.id" :text="item.name" :type="item.id==status?'primary':'default'" mode="dark"
+				 @click="filterByStatus(item.id)"></u-tag>
+			</view>
+		</u-sticky>
 		<view class="item-list" v-if="items.length > 0">
 			<view class="item" v-for="(item,index) in items" :key="item.id">
 				<view class="top">
@@ -34,7 +36,8 @@
 				page: 1,
 				status: 0,
 				hasMore: false,
-				showEmpty:false,
+				showEmpty: false,
+				enableSticky: true,
 				scrollTop: 0,
 				statuses: [{
 						id: 0,
@@ -64,11 +67,17 @@
 		},
 		onReachBottom() {
 			if (this.hasMore) {
-				this.loadOrders()
+				this.loadRefunds()
 			}
 		},
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop
+		},
+		onShow() {
+			this.enableSticky = true
+		},
+		onHide() {
+			this.enableSticky = false
 		},
 		methods: {
 			filterByStatus(status) {
@@ -88,7 +97,7 @@
 			},
 			loadRefunds() {
 				let params = {}
-				if (this.status != 0) {
+				if (this.status > 0) {
 					params.status = this.status
 				}
 				if (this.page > 0) {
@@ -107,26 +116,31 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.container {
-		padding: 20rpx;
+		padding: 0;
 	}
 
 	.filter {
 		display: flex;
-		margin-top: 20rpx;
-		margin-bottom: 30rpx;
+		padding: 20rpx;
+		background-color: #FFFFFF;
 	}
 
 	.filter .u-tag {
 		margin-right: 20rpx;
 	}
 
+	.item-list {
+		background-color: $u-bg-color;
+	}
+
 	.item {
 		display: flex;
 		flex-direction: column;
-		padding: 30rpx 0;
-		border-top: 1px solid rgba(0, 0, 0, .2);
+		padding: 20rpx;
+		margin-bottom: 15rpx;
+		background-color: #FFFFFF;
 	}
 
 	.item .top {

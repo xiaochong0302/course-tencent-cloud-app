@@ -1,12 +1,12 @@
 <template>
 	<view class="item-list">
-		<view class="item" v-for="teacher in teachers" :key="teacher.id" @click="gotoTeacher(teacher.id)">
+		<view class="item" v-for="user in users" :key="user.id" @click="gotoUser(user.id)">
 			<view class="avatar">
-				<u-image :src="teacher.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
+				<u-image :src="user.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
 			</view>
 			<view class="info">
-				<view class="name">{{ teacher.name }}</view>
-				<view class="title">{{ teacher.title }}</view>
+				<view class="name">{{ user.name }}</view>
+				<view class="title">{{ user.title }}</view>
 			</view>
 		</view>
 	</view>
@@ -14,7 +14,7 @@
 
 <script>
 	export default {
-		name: 'TeacherList',
+		name: 'UserFriendList',
 		props: {
 			items: {
 				type: Array
@@ -22,29 +22,29 @@
 		},
 		data() {
 			return {
-				teachers: []
+				users: []
 			}
 		},
 		created() {
-			this.teachers = this.handleTeachers(this.items)
+			this.users = this.handleUsers(this.items)
 		},
 		watch: {
 			items: function() {
-				this.teachers = this.handleTeachers(this.items)
+				this.users = this.handleUsers(this.items)
 			}
 		},
 		methods: {
-			gotoTeacher(id) {
-				this.$utils.redirect('/pages/teacher/index', {
+			gotoUser(id) {
+				this.$utils.redirect('/pages/im/user/index', {
 					id: id
 				})
 			},
-			handleTeachers(teachers) {
-				return teachers.map(teacher => {
-					if (teacher.title == '') {
-						teacher.title = '小小书匠'
+			handleUsers(users) {
+				return users.map(user => {
+					if (user.title == '') {
+						user.title = '小小书童'
 					}
-					return teacher
+					return user
 				})
 			}
 		}

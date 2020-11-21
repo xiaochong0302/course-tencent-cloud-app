@@ -1,51 +1,53 @@
 <template>
 	<view class="container">
-		<view class="review-list">
-			<consult-list :items="items"></consult-list>
+		<view class="friend-list" v-if="items.length > 0">
+			<user-friend-list :items="items"></user-friend-list>
 		</view>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
-	import ConsultList from '@/components/consult-list.vue'
+	import UserFriendList from '@/components/user-friend-list.vue'
 	export default {
 		components: {
-			ConsultList
+			UserFriendList
 		},
 		data() {
 			return {
-				course: {},
 				items: [],
 				page: 1,
+				limit: 20,
 				hasMore: false,
 				scrollTop: 0,
+				user: {},
 			}
 		},
 		onLoad(e) {
-			this.course.id = e.id
-			this.loadConsults(e.id)
+			this.user.id = e.id
+			this.loadFriends()
 		},
 		onReachBottom() {
 			if (this.hasMore) {
-				this.loadConsults(this.course.id)
+				this.loadFriends()
 			}
 		},
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop
 		},
 		methods: {
-			loadConsults(id) {
+			loadFriends() {
 				let params = {}
 				if (this.page > 0) {
 					params.page = this.page
 				}
-				this.$api.getCourseConsults(id, params).then(res => {
+				params.limit = this.limit
+				this.$api.getUserFriends(this.user.id, params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
 					this.page++
 				}).catch(e => {
-					this.$u.toast('加载评价失败')
+					this.$u.toast('加载好友失败')
 				})
 			}
 		}
@@ -53,5 +55,7 @@
 </script>
 
 <style>
-
+.container {
+	padding-top: 50rpx;
+}
 </style>

@@ -73,6 +73,11 @@
 			"navigationBarTitleText": "教师主页"
 		}
 	}, {
+		"path": "pages/teacher/courses",
+		"style": {
+			"navigationBarTitleText": "课程列表"
+		}
+	}, {
 		"path": "pages/im/group/list",
 		"style": {
 			"navigationBarTitleText": "群组列表"
@@ -105,7 +110,7 @@
 	}, {
 		"path": "pages/consult/add",
 		"style": {
-			"navigationBarTitleText": "发布咨询"
+			"navigationBarTitleText": "提交咨询"
 		}
 	}, {
 		"path": "pages/consult/edit",
@@ -118,9 +123,9 @@
 			"navigationBarTitleText": "直播列表"
 		}
 	}, {
-		"path": "pages/help/list",
+		"path": "pages/help/index",
 		"style": {
-			"navigationBarTitleText": "帮助列表"
+			"navigationBarTitleText": "帮助中心"
 		}
 	}, {
 		"path": "pages/help/info",
@@ -136,6 +141,21 @@
 		"path": "pages/user/index",
 		"style": {
 			"navigationBarTitleText": "用户主页"
+		}
+	}, {
+		"path": "pages/user/courses",
+		"style": {
+			"navigationBarTitleText": "TA的课程"
+		}
+	}, {
+		"path": "pages/user/friends",
+		"style": {
+			"navigationBarTitleText": "TA的好友"
+		}
+	}, {
+		"path": "pages/user/groups",
+		"style": {
+			"navigationBarTitleText": "TA的群组"
 		}
 	}, {
 		"path": "pages/me/index",

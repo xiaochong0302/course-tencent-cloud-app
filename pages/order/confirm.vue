@@ -49,7 +49,7 @@
 			</view>
 		</view>
 		<view class="section">
-			<u-button type="primary" :disabled="disabled" @click="createOrder">提交订单</u-button>
+			<u-button type="primary" @click="createOrder">提交订单</u-button>
 		</view>
 	</view>
 </template>
@@ -81,14 +81,14 @@
 				})
 			},
 			createOrder() {
-				this.disabled = true
 				this.$api.createOrder({
 					item_id: this.confirm.item_id,
 					item_type: this.confirm.item_type,
 				}).then(res => {
-					this.$utils.redirect(`/pages/order/pay?sn=${res.order.sn}`)
+					this.$utils.redirect('/pages/order/pay', {
+						sn: res.order.sn
+					})
 				}).catch(e => {
-					this.disabled = false
 					this.$u.toast('提交订单失败')
 				})
 			}
@@ -112,7 +112,7 @@
 	.meta text {
 		margin-right: 15rpx;
 	}
-	
+
 	.course {
 		margin-bottom: 20rpx;
 		border-bottom: 1px solid #e4e7ed;

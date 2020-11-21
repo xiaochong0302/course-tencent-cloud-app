@@ -3,7 +3,7 @@
 		<view class="item-list" v-if="items.length > 0">
 			<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
 			 @content-click="contentClick">
-				<view class="item">
+				<view class="item u-border-bottom">
 					<view class="question">提问：{{ item.question }}</view>
 					<view class="answer">回复：{{ item.answer }}</view>
 				</view>
@@ -56,12 +56,14 @@
 				}
 			},
 			contentClick(index) {
-				let id = this.getIdByIndex(index)
-				this.$utils.redirect(`/pages/consult/info?id=${id}`)
+				this.$utils.redirect('/pages/consult/info', {
+					id: this.getIdByIndex(index)
+				})
 			},
 			editConsult(index) {
-				let id = this.getIdByIndex(index)
-				this.$utils.redirect(`/pages/consult/edit?id=${id}`)
+				this.$utils.redirect('/pages/consult/edit', {
+					id: this.getIdByIndex(index)
+				})
 			},
 			deleteConsult(index) {
 				let id = this.getIdByIndex(index)
@@ -109,8 +111,7 @@
 	.item {
 		display: flex;
 		flex-direction: column;
-		border-bottom: 1px solid rgba(0, 0, 0, .2);
-		padding: 20rpx;
+		padding: 20rpx 0;
 	}
 
 	.item .question {

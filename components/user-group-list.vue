@@ -7,8 +7,8 @@
 			<view class="info">
 				<view class="name u-line-2">{{ group.name }}</view>
 				<view class="meta">
-					<text>成员：{{ group.user_count }}</text>
-					<text>讨论：{{ group.msg_count }}</text>
+					<u-icon name="account" :label="group.user_count"></u-icon>
+					<u-icon name="chat" :label="group.msg_count"></u-icon>
 				</view>
 			</view>
 		</view>
@@ -17,7 +17,7 @@
 
 <script>
 	export default {
-		name: 'GroupList',
+		name: 'UserGroupList',
 		props: {
 			items: {
 				type: Array
@@ -64,7 +64,7 @@
 		margin-bottom: 15rpx;
 	}
 
-	.meta uni-text {
+	.meta .u-icon {
 		margin-right: 15rpx;
 	}
 </style>

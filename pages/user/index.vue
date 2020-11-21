@@ -7,31 +7,33 @@
 			<view class="name">{{ user.name }}</view>
 			<view class="title">{{ user.title }}</view>
 		</view>
-		<view class="tab-title">
-			<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
-		</view>
+		<u-sticky :enable="enableSticky">
+			<view class="tab-title">
+				<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
+			</view>
+		</u-sticky>
 		<view class="tab-content">
 			<view class="tab-item" v-if="currentTab == 0">
-				{{ user.about }}
+				<view class="course-list" v-if="courses.length > 0">
+					<user-course-list :items="courses"></user-course-list>
+				</view>
+				<view class="load-more" @click="gotoCourseList(user.id)" v-if="courses.length > 10">加载更多</view>
 			</view>
 			<view class="tab-item" v-if="currentTab == 1">
-				<view class="course-list">
-					<view class="course" v-for="(item,index) in courses" :key="item.key">
-						<view class="cover">
-							<u-image width="240" height="134" border-radius="10" :src="item.course.cover|thumbCover"></u-image>
-						</view>
-						<view class="info">
-							<view class="title u-line-1">{{ item.course.title }}</view>
-							<view class="meta">
-								<text class="lesson">课时：{{ item.course.lesson_count }}</text>
-								<text class="rating">评分：{{ item.course.rating }}</text>
-							</view>
-							<view class="meta">
-								<text class="progress">进度：{{ item.progress }}%</text>
-								<text class="duration">用时：{{ item.duration|formatDuration }}</text>
-							</view>
-						</view>
-					</view>
+				<view class="friend-list" v-if="friends.length > 0">
+					<user-friend-list :items="friends"></user-friend-list>
+				</view>
+				<view class="load-more" @click="gotoFriendList(user.id)" v-if="friends.length > 10">加载更多</view>
+			</view>
+			<view class="tab-item" v-if="currentTab == 2">
+				<view class="group-list" v-if="groups.length > 0">
+					<user-group-list :items="groups"></user-group-list>
+				</view>
+				<view class="load-more" @click="gotoGroupList(user.id)" v-if="groups.length > 10">加载更多</view>
+			</view>
+			<view class="tab-item" v-if="currentTab == 3">
+				<view class="profile">
+					<view class="about">{{ user.about }}</view>
 				</view>
 			</view>
 		</view>
@@ -39,32 +41,66 @@
 </template>
 
 <script>
-	import CourseList from '@/components/course-list.vue'
+	import UserCourseList from '@/components/user-course-list.vue'
+	import UserFriendList from '@/components/user-friend-list.vue'
+	import UserGroupList from '@/components/user-group-list.vue'
 	export default {
 		components: {
-			CourseList
+			UserCourseList,
+			UserFriendList,
+			UserGroupList,
 		},
 		data() {
 			return {
-				user: {},
-				courses: [],
+				enableSticky: false,
+				currentTab: 0,
 				tabs: [{
-					name: '介绍'
-				}, {
 					name: '课程'
+				}, {
+					name: '好友'
+				}, {
+					name: '群组'
+				}, {
+					name: '介绍'
 				}],
-				currentTab: 0
+				courses: [],
+				friends: [],
+				groups: [],
+				user: {},
 			}
+		},
+		onShow() {
+			this.enableSticky = true
+		},
+		onHide() {
+			this.enableSticky = false
 		},
 		onLoad(e) {
 			this.loadUserInfo(e.id)
 			this.loadUserCourses(e.id)
+			this.loadUserFriends(e.id)
+			this.loadUserGroups(e.id)
 		},
 		methods: {
 			changeTab(index) {
 				if (this.currentTab != index) {
 					this.currentTab = index
 				}
+			},
+			gotoCourseList(id) {
+				this.$utils.redirect('/pages/user/courses', {
+					id: id
+				})
+			},
+			gotoFriendList(id) {
+				this.$utils.redirect('/pages/user/friends', {
+					id: id
+				})
+			},
+			gotoGroupList(id) {
+				this.$utils.redirect('/pages/user/groups', {
+					id: id
+				})
 			},
 			loadUserInfo(id) {
 				this.$api.getUserInfo(id).then(res => {
@@ -79,6 +115,20 @@
 				}).catch(e => {
 					this.$u.toast('加载课程失败')
 				})
+			},
+			loadUserFriends(id) {
+				this.$api.getUserFriends(id).then(res => {
+					this.friends = res.pager.items
+				}).catch(e => {
+					this.$u.toast('加载好友失败')
+				})
+			},
+			loadUserGroups(id) {
+				this.$api.getUserGroups(id).then(res => {
+					this.groups = res.pager.items
+				}).catch(e => {
+					this.$u.toast('加载群组失败')
+				})
 			}
 		}
 	}
@@ -92,7 +142,7 @@
 		margin-top: 15rpx;
 		margin-bottom: 15rpx;
 	}
-	
+
 	.top .avatar {
 		margin-bottom: 15rpx;
 	}
@@ -100,37 +150,25 @@
 	.top .name {
 		margin-bottom: 15rpx;
 	}
-	
+
 	.tab-title {
+		margin-bottom: 15rpx;
+	}
+
+	.course-list {
 		margin-bottom: 30rpx;
 	}
-	
-	.course {
-		display: flex;
-		padding: 10rpx 0;
+
+	.friend-list {
+		padding-top: 15rpx;
 	}
-	
-	.course .cover {
-		width: 240rpx;
-		height: 134rpx;
-		margin-right: 15rpx;
+
+	.group-list {
+		padding-top: 15rpx;
 	}
-	
-	.course .info {
-		flex: 1;
-	}
-	
-	.course .info .title {
-		font-weight: 600;
-		margin-bottom: 10rpx;
-		width: 465rpx;
-	}
-	
-	.course .meta {
-		margin-bottom: 10rpx;
-	}
-	
-	.course .meta text {
-		margin-right: 15rpx;
+
+	.load-more {
+		text-align: center;
+		margin-bottom: 30rpx;
 	}
 </style>

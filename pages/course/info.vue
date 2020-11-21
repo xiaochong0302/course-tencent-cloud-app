@@ -33,19 +33,19 @@
 					<view class="details">{{ course.details }}</view>
 				</view>
 				<view class="section" v-if="course.teachers.length > 0">
-					<course-teacher :items="course.teachers"></course-teacher>
+					<course-teacher-list :items="course.teachers"></course-teacher-list>
 				</view>
 				<view class="section">
 					<view class="social">
 						<u-icon name="share" size="36" label="分享"></u-icon>
-						<u-icon name="chat" size="36" label="咨询"></u-icon>
+						<u-icon name="chat" size="36" label="咨询" @click="addConsult(course.id)"></u-icon>
 						<u-icon :name="starIcon.name" :color="starIcon.color" size="36" label="收藏" @click="favoriteCourse(course.id)"></u-icon>
 					</view>
 				</view>
 			</view>
 			<view class="tab-item tab-chapter" v-if="currentTab == 1">
 				<view class="chapter-list" v-if="chapters.length > 0">
-					<course-chapter :items="chapters"></course-chapter>
+					<course-chapter-list :items="chapters"></course-chapter-list>
 				</view>
 			</view>
 			<view class="tab-item tab-review" v-if="currentTab == 2">
@@ -82,7 +82,7 @@
 			</view>
 			<view class="tab-item tab-package" v-if="currentTab == 4">
 				<view class="package-list" v-if="packages.length > 0">
-					<course-package :items="packages"></course-package>
+					<course-package-list :items="packages"></course-package-list>
 				</view>
 			</view>
 		</view>
@@ -96,16 +96,16 @@
 <script>
 	import ReviewList from '@/components/review-list.vue'
 	import ConsultList from '@/components/consult-list.vue'
-	import CourseChapter from '@/components/course-chapter.vue'
-	import CourseTeacher from '@/components/course-teacher.vue'
-	import CoursePackage from '@/components/course-package.vue'
+	import CourseChapterList from '@/components/course-chapter-list.vue'
+	import CourseTeacherList from '@/components/course-teacher-list.vue'
+	import CoursePackageList from '@/components/course-package-list.vue'
 	export default {
 		components: {
 			ReviewList,
 			ConsultList,
-			CourseChapter,
-			CourseTeacher,
-			CoursePackage,
+			CourseChapterList,
+			CourseTeacherList,
+			CoursePackageList,
 		},
 		data() {
 			return {
@@ -185,17 +185,31 @@
 					this.$u.toast('收藏课程失败')
 				})
 			},
+			addConsult(id) {
+				this.$utils.redirect('/pages/consult/add', {
+					course_id: id
+				})
+			},
 			buyCourse(id) {
-				this.$utils.redirect(`/pages/order/confirm?item_id=${id}&item_type=1`)
+				this.$utils.redirect('/pages/order/confirm', {
+					item_id: id,
+					item_type: 1
+				})
 			},
 			rewardCourse(id) {
-				this.$utils.redirect(`/pages/course/reward?id=${id}`)
+				this.$utils.redirect('/pages/course/reward', {
+					id: id
+				})
 			},
 			gotoReviewList(id) {
-				this.$utils.redirect(`/pages/course/reviews?id=${id}`)
+				this.$utils.redirect('/pages/course/reviews', {
+					id: id
+				})
 			},
 			gotoConsultList(id) {
-				this.$utils.redirect(`/pages/course/consults?id=${id}`)
+				this.$utils.redirect('/pages/course/consults', {
+					id: id
+				})
 			},
 			loadCourse(id) {
 				this.$api.getCourseInfo(id).then(res => {

@@ -123,7 +123,7 @@
 				if (this.level > 0) {
 					params.level = this.level
 				}
-				if (this.sort !== '') {
+				if (this.sort != '') {
 					params.sort = this.sort
 				}
 				if (this.page > 0) {

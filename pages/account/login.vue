@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<u-form v-if="loginType=='password'" :model="pl" ref="pl" :error-type="['toast']">
+		<u-form v-if="loginType=='password'" :model="pl" ref="pl">
 			<u-form-item label="账号" prop="account">
 				<u-input v-model="pl.account" type="number" maxlength="11" placeholder="请输入手机号"></u-input>
 			</u-form-item>
@@ -18,7 +18,7 @@
 				</view>
 			</view>
 		</u-form>
-		<u-form v-else-if="loginType=='verify'" :model="vl" ref="vl" :error-type="['toast']">
+		<u-form v-else-if="loginType=='verify'" :model="vl" ref="vl">
 			<u-verification-code seconds="60" ref="verifyCode" @change="verifyCodeChange"></u-verification-code>
 			<u-form-item label="手机号" label-width="150" prop="account">
 				<u-input v-model="vl.account" type="number" maxlength="11" placeholder="请输入手机号"></u-input>
@@ -88,7 +88,7 @@
 						},
 						message: '无效的手机号'
 					}],
-					verifyCode: [{
+					verify_code: [{
 						required: true,
 						message: '请填写验证码'
 					}, {

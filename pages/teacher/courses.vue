@@ -1,17 +1,17 @@
 <template>
 	<view class="container">
-		<view class="live-list">
-			<live-list :items="items"></live-list>
+		<view class="course-list" v-if="items.length > 0">
+			<course-list :items="items"></course-list>
 		</view>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
-	import LiveList from '@/components/live-list.vue'
+	import CourseList from '@/components/course-list.vue'
 	export default {
 		components: {
-			LiveList
+			CourseList
 		},
 		data() {
 			return {
@@ -19,31 +19,33 @@
 				page: 1,
 				hasMore: false,
 				scrollTop: 0,
+				teacher: {},
 			}
 		},
+		onLoad(e) {
+			this.teacher.id = e.id
+			this.loadCourses()
+		},
+		onReachBottom() {
+			if (this.hasMore) {
+				this.loadCourses()
+			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop
+		},
 		methods: {
-			onLoad() {
-				this.loadLives()
-			},
-			onReachBottom() {
-				if (this.hasMore) {
-					this.loadLives()
-				}
-			},
-			onPageScroll(e) {
-				this.scrollTop = e.scrollTop
-			},
-			loadLives() {
+			loadCourses() {
 				let params = {}
 				if (this.page > 0) {
 					params.page = this.page
 				}
-				this.$api.getLiveList(params).then(res => {
+				this.$api.getTeacherCourses(this.teacher.id, params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
 					this.page++
 				}).catch(e => {
-					this.$u.toast('加载列表失败')
+					this.$u.toast('加载课程失败')
 				})
 			}
 		}
@@ -51,7 +53,5 @@
 </script>
 
 <style>
-	.container {
-		padding-top: 30rpx;
-	}
+
 </style>

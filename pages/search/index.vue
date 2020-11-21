@@ -45,6 +45,7 @@
 		data() {
 			return {
 				enableSticky: false,
+				scrollTop: 0,
 				currentTab: 0,
 				tabs: [{
 					name: '课程'
@@ -53,8 +54,6 @@
 				}, {
 					name: '用户'
 				}],
-				query: '',
-				scrollTop: 0,
 				courseObj: {
 					items: [],
 					page: 1,
@@ -70,10 +69,18 @@
 				userObj: {
 					items: [],
 					page: 1,
+					limit: 16,
 					hasMore: false,
 					showEmpty: false,
 				},
+				query: '',
 			}
+		},
+		onShow() {
+			this.enableSticky = true
+		},
+		onHide() {
+			this.enableSticky = false
 		},
 		onLoad(e) {
 			if (e.query.length > 1) {
@@ -100,12 +107,6 @@
 					this.loadUserResult()
 				}
 			}
-		},
-		onShow() {
-			this.enableSticky = true
-		},
-		onHide() {
-			this.enableSticky = false
 		},
 		methods: {
 			changeTab(index) {
@@ -175,6 +176,7 @@
 				if (this.userObj.page > 0) {
 					params.page = this.userObj.page
 				}
+				params.limit = this.userObj.limit
 				this.$api.search(params).then(res => {
 					let items = this.handleUsers(res.pager.items)
 					this.userObj.items = this.userObj.items.concat(items)
