@@ -44,9 +44,9 @@
 				<view class="meta">退款金额：{{ confirm.refund_amount|formatPrice }}</view>
 			</view>
 		</view>
-		<u-form :model="form" ref="form" :error-type="['toast']">
-			<u-form-item label="退款理由" label-position="top" prop="apply_note">
-				<u-input v-model="form.apply_note" type="textarea" maxlength="255"></u-input>
+		<u-form :model="form" ref="form">
+			<u-form-item label-position="top" prop="apply_note">
+				<u-input v-model="form.apply_note" type="textarea" maxlength="255" placeholder="请填写退款原因"></u-input>
 			</u-form-item>
 			<view class="form-item">
 				<u-button type="primary" @click="createRefund">提交申请</u-button>
@@ -71,11 +71,11 @@
 				rules: {
 					apply_note: [{
 						required: true,
-						message: '请填写退款理由'
+						message: '请填写退款原因'
 					}, {
 						min: 10,
 						max: 255,
-						message: '退款理由10-255个字符'
+						message: '退款原因10-255个字符'
 					}]
 				},
 				disabled: false

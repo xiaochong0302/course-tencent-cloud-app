@@ -2,7 +2,7 @@
 	<view class="container" v-if="helps.length > 0">
 		<view class="item" v-for="(item,index) in helps" :key="index">
 			<u-section :title="item.category.name" :right="false"></u-section>
-			<view class="help" v-for="help in item.helps" :key="help.id" @click="gotoHelp(help.id)">{{ help.title }}</view>
+			<view class="title" v-for="help in item.helps" :key="help.id" @click="gotoHelp(help.id)">{{ help.title }}</view>
 		</view>
 	</view>
 </template>
@@ -34,7 +34,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.container {
 		padding: 30rpx 15rpx;
 	}
@@ -43,12 +43,13 @@
 		margin-bottom: 30rpx;
 	}
 
-	.u-section {
+	.item .u-section {
 		margin-bottom: 30rpx;
 	}
 
-	.help {
+	.item .title {
 		padding-left: 15rpx;
 		margin-bottom: 30rpx;
+		color: $u-main-color;
 	}
 </style>

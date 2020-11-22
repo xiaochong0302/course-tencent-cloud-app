@@ -4,7 +4,7 @@
 			<view v-for="top in categories" :key="top.id">
 				<u-section :title="top.name" :right="false"></u-section>
 				<view class="sub-list">
-					<u-tag v-for="sub in top.children" :key="sub.id" :text="sub.name" type="info" shape="circle" mode="light" @click="gotoCourseList(sub.id)"></u-tag>
+					<u-tag v-for="sub in top.children" :key="sub.id" :text="sub.name" type="info" mode="plain" shape="circle" @click="gotoCourseList(sub.id)"></u-tag>
 				</view>
 			</view>
 		</view>

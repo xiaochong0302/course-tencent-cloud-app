@@ -15,14 +15,16 @@
 							<text>{{ course.level|courseLevel }}</text>
 							<text>{{ course.lesson_count }}课时</text>
 						</view>
-						<view class="meta">{{ course.market_price|formatPrice }}</view>
+						<view class="meta">
+							<text class="price">{{ course.market_price|formatPrice }}</text>
+						</view>
 					</view>
 				</view>
 			</view>
 			<view class="bottom">
 				<view class="left meta">
-					<text>市场价：{{ pkg.market_price|formatPrice }}</text>
-					<text>会员价：{{ pkg.vip_price|formatPrice }}</text>
+					市场价：<text class="price">{{ pkg.market_price|formatPrice }}</text>
+					会员价：<text class="price">{{ pkg.vip_price|formatPrice }}</text>
 				</view>
 				<view class="right">
 					<u-button type="primary" size="mini" @click="buyPackage(pkg.id)">购买套餐</u-button>
@@ -64,7 +66,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.package {
 		margin-bottom: 30rpx;
 	}
@@ -77,8 +79,14 @@
 		margin-bottom: 15rpx;
 	}
 
-	.package .top .title {
-		font-weight: 600;
+	.package .bottom {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.top .title {
+		color: $u-main-color;
 	}
 
 	.package .course {
@@ -87,32 +95,35 @@
 		margin-bottom: 15rpx;
 	}
 
-	.package .course .cover {
+	.course .cover {
 		width: 240rpx;
 		height: 134rpx;
 		margin-right: 15rpx;
 	}
 
-	.package .course .info {
+	.course .info {
 		flex: 1;
 	}
 
-	.package .info .title {
-		margin-bottom: 10rpx;
+	.info .title {
 		width: 465rpx;
+		color: $u-main-color;
+		margin-bottom: 10rpx;
 	}
 
-	.package .info .meta {
+	.info .meta {
 		margin-bottom: 10rpx;
+	}
+	
+	.price {
+		color: red;
+	}
+
+	.meta {
+		color: $u-tips-color;
 	}
 
 	.meta uni-text {
 		margin-right: 15rpx;
-	}
-
-	.package .bottom {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 	}
 </style>

@@ -49,7 +49,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.u-section {
 		margin-bottom: 15rpx;
 	}
@@ -71,6 +71,11 @@
 	}
 
 	.item .info .name {
+		color: $u-main-color;
 		margin-bottom: 10rpx;
+	}
+	
+	.item .info .title {
+		color: $u-tips-color;
 	}
 </style>

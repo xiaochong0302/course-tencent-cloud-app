@@ -1,7 +1,7 @@
 <template>
 	<view v-if="course.id > 0">
 		<view class="cover-box">
-			<u-image :src="course.cover|thumbCover" width="100%" height="416"></u-image>
+			<u-image :src="course.cover|thumbCover" width="750" height="416"></u-image>
 		</view>
 		<u-sticky :enable="enableSticky">
 			<view class="tab-title">
@@ -19,8 +19,8 @@
 							<text>退款期限：{{ course.refund_expiry }}个月</text>
 						</view>
 						<view class="meta">
-							<text>市场价格：{{ course.market_price|formatPrice }}</text>
-							<text>会员价格：{{ course.vip_price|formatPrice }}</text>
+							市场价格：<text class="price">{{ course.market_price|formatPrice }}</text>
+							会员价格：<text class="price">{{ course.vip_price|formatPrice }}</text>
 						</view>
 						<view class="meta">
 							<text>难度级别：{{ course.level|courseLevel }}</text>
@@ -66,7 +66,7 @@
 				<view class="review-list" v-if="reviews.length > 0">
 					<review-list :items="reviews"></review-list>
 				</view>
-				<view class="review-more" v-if="course.review_count > 12">
+				<view class="load-more" v-if="course.review_count > 12">
 					<text @click="gotoReviewList(course.id)">更多评价</text>
 				</view>
 				<u-empty margin-top="100" :show="reviews.length == 0"></u-empty>
@@ -75,7 +75,7 @@
 				<view class="consult-list" v-if="consults.length > 0">
 					<consult-list :items="consults"></consult-list>
 				</view>
-				<view class="consult-more" v-if="course.consult_count > 12">
+				<view class="load-more" v-if="course.consult_count > 12">
 					<text @click="gotoConsultList(course.id)">更多咨询</text>
 				</view>
 				<u-empty margin-top="100" :show="consults.length == 0"></u-empty>
@@ -251,14 +251,14 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.sticky-box {
-		background-color: #FFFFFF;
-		padding: 15rpx;
 		position: fixed;
 		left: 0;
 		right: 0;
 		bottom: 0;
+		background-color: #FFFFFF;
+		padding: 15rpx;
 	}
 
 	.cover-box {
@@ -295,16 +295,25 @@
 	}
 
 	.basic .title {
-		font-weight: 600;
+		color: $u-main-color;
 		margin-bottom: 15rpx;
 	}
-
+	
 	.basic .meta {
+		color: $u-tips-color;
 		margin-bottom: 15rpx;
 	}
 
 	.basic .meta uni-text {
 		margin-right: 15rpx;
+	}
+	
+	.price {
+		color: red;
+	}
+	
+	.details {
+		color: $u-content-color;
 	}
 
 	.rating-summary {
@@ -321,15 +330,11 @@
 		margin-bottom: 10rpx;
 	}
 
-	.review-list,
-	.consult-list {
-		margin-bottom: 20rpx;
-	}
-
-	.review-more,
-	.consult-more {
+	.load-more {
 		display: flex;
 		justify-content: center;
+		color: $u-tips-color;
+		margin-top: 15rpx;
 		margin-bottom: 15rpx;
 	}
 </style>

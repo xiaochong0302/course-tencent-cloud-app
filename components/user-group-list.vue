@@ -5,10 +5,10 @@
 				<u-image :src="group.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
 			</view>
 			<view class="info">
-				<view class="name u-line-2">{{ group.name }}</view>
+				<view class="title u-line-2">{{ group.name }}</view>
 				<view class="meta">
-					<u-icon name="account" :label="group.user_count"></u-icon>
-					<u-icon name="chat" :label="group.msg_count"></u-icon>
+					<text>成员：{{ group.user_count }}</text>
+					<text>讨论：{{ group.msg_count }}</text>
 				</view>
 			</view>
 		</view>
@@ -46,7 +46,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		margin-bottom: 30rpx;
@@ -60,11 +60,13 @@
 		flex: 1;
 	}
 
-	.item .name {
+	.info .title {
+		color: $u-main-color;
 		margin-bottom: 15rpx;
 	}
 
-	.meta .u-icon {
+	.info .meta {
+		color: $u-tips-color;
 		margin-right: 15rpx;
 	}
 </style>

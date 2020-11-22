@@ -13,10 +13,12 @@
 					<view class="status">{{ item.status|orderStatus }}</view>
 				</view>
 				<view class="body">
-					<view class="subject">{{ item.subject }}</view>
+					<view class="title">{{ item.subject }}</view>
 				</view>
 				<view class="bottom">
-					<view class="price">金额：{{ item.amount|formatPrice }}</view>
+					<view class="meta">
+						金额：<text class="price">{{ item.amount|formatPrice }}</text>
+					</view>
 					<view class="action">
 						<u-button v-if="item.status == 1" size="mini" @click="gotoPay(item.sn)">支付</u-button>
 						<u-button v-if="[1,2].includes(item.item_type) && item.status == 3" size="mini" @click="gotoRefund(item.sn)">退款</u-button>
@@ -145,24 +147,38 @@
 	.item {
 		display: flex;
 		flex-direction: column;
-		padding: 20rpx;
-		margin-bottom: 15rpx;
 		background-color: #FFFFFF;
+		margin-bottom: 15rpx;
+		padding: 30rpx 20rpx;
 	}
 
 	.item .top {
 		display: flex;
 		justify-content: space-between;
+		color: $u-tips-color;
 		margin-bottom: 15rpx;
+	}
+
+	.item .status {
+		color: red;
+	}
+	
+	.item .price {
+		color: red;
 	}
 
 	.item .body {
 		margin-bottom: 15rpx;
 	}
 
+	.item .title {
+		color: $u-main-color;
+	}
+
 	.item .bottom {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		color: $u-tips-color;
 	}
 </style>

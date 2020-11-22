@@ -96,7 +96,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		margin-bottom: 30rpx;
@@ -120,13 +120,17 @@
 		justify-content: space-between;
 		margin-bottom: 15rpx;
 	}
+	
+	.item .content {
+		color: $u-content-color;
+		margin-bottom: 15rpx;
+	}
 
 	.item .bottom {
 		display: flex;
 		justify-content: space-between;
+		color: $u-tips-color;
 	}
 
-	.item .content {
-		margin-bottom: 15rpx;
-	}
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="review.id > 0">
 		<view class="rating">
 			<text>内容实用：</text>
 			<u-rate :current="review.rating1" :disabled="true"></u-rate>

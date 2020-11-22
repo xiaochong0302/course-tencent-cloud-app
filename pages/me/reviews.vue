@@ -101,7 +101,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		flex-direction: column;
@@ -109,11 +109,12 @@
 	}
 
 	.item .title {
-		font-weight: 600;
+		color: $u-main-color;
 		margin-bottom: 15rpx;
 	}
 
 	.item .content {
+		color: $u-content-color;
 		margin-bottom: 15rpx;
 	}
 

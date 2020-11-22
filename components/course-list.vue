@@ -62,7 +62,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		margin-bottom: 15rpx;
@@ -84,11 +84,13 @@
 	}
 
 	.info .title {
-		margin-bottom: 10rpx;
 		width: 465rpx;
+		color: $u-main-color;
+		margin-bottom: 10rpx;
 	}
 
 	.meta {
+		color: $u-tips-color;
 		margin-bottom: 10rpx;
 	}
 

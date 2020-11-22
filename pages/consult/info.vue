@@ -1,9 +1,9 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="consult.id > 0">
 		<view class="title" v-if="consult.chapter.id > 0">章节：{{ consult.chapter.title }}</view>
 		<view class="question">提问：{{ consult.question }}</view>
 		<view class="answer">回复：{{ consult.answer }}</view>
-		<view class="time">{{ consult.create_time|timeFormat('yyyy-mm-dd hh:MM') }}</view>
+		<view class="time">时间：{{ consult.create_time|timeFormat('yyyy-mm-dd hh:MM') }}</view>
 	</view>
 </template>
 

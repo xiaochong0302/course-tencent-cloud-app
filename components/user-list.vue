@@ -5,8 +5,8 @@
 				<u-image :src="user.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
 			</view>
 			<view class="info">
-				<view class="name">{{ user.name }}</view>
-				<view class="title">{{ user.title }}</view>
+				<view class="title">{{ user.name }}</view>
+				<view class="meta">{{ user.title }}</view>
 			</view>
 		</view>
 	</view>
@@ -72,7 +72,12 @@
 		flex: 1;
 	}
 
-	.item .name {
+	.info .title {
+		color: $u-main-color;
 		margin-bottom: 15rpx;
+	}
+	
+	.info .meta {
+		color: $u-tips-color;
 	}
 </style>

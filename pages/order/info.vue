@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="order.sn">
 		<view class="section">
 			<u-section title="商品信息" :right="false"></u-section>
 			<view class="item-course" v-if="order.item_type== 1">
@@ -41,6 +41,18 @@
 			</view>
 			<view class="item-vip" v-else-if="order.item_type== 99">
 				<view class="title">支付测试</view>
+			</view>
+		</view>
+		<view class="section">
+			<u-section title="状态信息" :right="false"></u-section>
+			<view class="status">
+				<view class="meta" v-for="(item,index) in order.status_history" :key="index">
+					<view v-if="item.status == 1">创建时间：{{ item.create_time|timeFormat('yyyy-mm-dd hh:MM:ss') }}</view>
+					<view v-if="item.status == 2">支付时间：{{ item.create_time|timeFormat('yyyy-mm-dd hh:MM:ss') }}</view>
+					<view v-if="item.status == 3">完成时间：{{ item.create_time|timeFormat('yyyy-mm-dd hh:MM:ss') }}</view>
+					<view v-if="item.status == 4">关闭时间：{{ item.create_time|timeFormat('yyyy-mm-dd hh:MM:ss') }}</view>
+					<view v-if="item.status == 5">退款时间：{{ item.create_time|timeFormat('yyyy-mm-dd hh:MM:ss') }}</view>
+				</view>
 			</view>
 		</view>
 		<view class="section">
@@ -97,7 +109,7 @@
 		margin-bottom: 30rpx;
 	}
 
-	.meta text {
+	.meta uni-text {
 		margin-right: 15rpx;
 	}
 
@@ -114,6 +126,10 @@
 	}
 
 	.item-vip .title {
+		margin-bottom: 15rpx;
+	}
+	
+	.status .meta {
 		margin-bottom: 15rpx;
 	}
 

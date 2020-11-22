@@ -13,6 +13,6 @@
 </script>
 
 <style lang="scss">
-	@import "static/css/common.css";
 	@import "uview-ui/index.scss";
+	@import "static/css/common.css";
 </style>

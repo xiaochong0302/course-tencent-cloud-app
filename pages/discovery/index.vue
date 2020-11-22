@@ -96,12 +96,13 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.tab-title {
 		margin-bottom: 30rpx;
 	}
 
 	.load-more {
+		color: $u-tips-color;
 		text-align: center;
 		margin-bottom: 30rpx;
 	}

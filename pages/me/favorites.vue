@@ -10,12 +10,12 @@
 					<view class="info">
 						<view class="title u-line-1">{{ item.title }}</view>
 						<view class="meta">
-							<text class="user">学员：{{ item.user_count }}</text>
-							<text class="favorite">收藏：{{ item.favorite_count }}</text>
+							<text>学员：{{ item.user_count }}</text>
+							<text>收藏：{{ item.favorite_count }}</text>
 						</view>
 						<view class="meta">
-							<text class="favorite">课时：{{ item.lesson_count }}</text>
-							<text class="rating">评分：{{ item.rating }}</text>
+							<text>课时：{{ item.lesson_count }}</text>
+							<text>评分：{{ item.rating }}</text>
 						</view>
 					</view>
 				</view>
@@ -98,7 +98,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		padding: 10rpx 0;
@@ -113,16 +113,17 @@
 	}
 
 	.info .title {
-		font-weight: 600;
+		color: $u-main-color;
 		margin-bottom: 10rpx;
 		width: 465rpx;
 	}
 
-	.meta {
+	.info .meta {
+		color: $u-tips-color;
 		margin-bottom: 10rpx;
 	}
 
-	.meta text {
+	.meta uni-text {
 		margin-right: 15rpx;
 	}
 </style>

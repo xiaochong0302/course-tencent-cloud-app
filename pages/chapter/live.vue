@@ -245,7 +245,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.inactive {
 		padding-top: 100rpx;
 	}
@@ -290,15 +290,20 @@
 	}
 
 	.chat .name {
+		color: $u-main-color;
 		margin-left: 5rpx;
 		margin-right: 15rpx;
 	}
+	
+	.chat .content {
+		color: $u-content-color;
+	}
 
 	.chat-form {
-		padding: 15rpx;
 		position: fixed;
 		left: 0;
 		right: 0;
 		bottom: 0;
+		padding: 15rpx;
 	}
 </style>

@@ -5,8 +5,8 @@
 				<u-image :src="teacher.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
 			</view>
 			<view class="info">
-				<view class="name">{{ teacher.name }}</view>
-				<view class="title">{{ teacher.title }}</view>
+				<view class="title">{{ teacher.name }}</view>
+				<view class="meta">{{ teacher.title }}</view>
 			</view>
 		</view>
 	</view>
@@ -51,7 +51,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item-list {
 		display: flex;
 		flex-wrap: wrap;
@@ -72,7 +72,13 @@
 		flex: 1;
 	}
 
-	.item .name {
+	.item .title {
+		color: $u-main-color;
+		margin-bottom: 15rpx;
+	}
+
+	.item .meta {
+		color: $u-tips-color;
 		margin-bottom: 15rpx;
 	}
 </style>

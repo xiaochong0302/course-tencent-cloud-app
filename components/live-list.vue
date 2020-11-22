@@ -6,7 +6,7 @@
 			</view>
 			<view class="info">
 				<view class="title">{{ live.chapter.title }}</view>
-				<view class="time">{{ live.start_time|timeFormat('yyyy-mm-dd hh:MM') }}</view>
+				<view class="meta">{{ live.start_time|timeFormat('yyyy-mm-dd hh:MM') }}</view>
 			</view>
 		</view>
 	</view>
@@ -43,7 +43,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		margin-bottom: 15rpx;
@@ -63,6 +63,11 @@
 	}
 
 	.item .title {
+		color: $u-main-color;
 		margin-bottom: 15rpx;
+	}
+	
+	.item .meta {
+		color: $u-tips-color;
 	}
 </style>

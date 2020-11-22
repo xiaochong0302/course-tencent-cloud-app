@@ -1,8 +1,8 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="user.id > 0">
 		<view class="top">
 			<view class="avatar">
-				<u-image width="90" height="90" shape="circle" :src="user.avatar|thumbAvatar"></u-image>
+				<u-image :src="user.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
 			</view>
 			<view class="name">{{ user.name }}</view>
 			<view class="title">{{ user.title }}</view>

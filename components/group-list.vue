@@ -46,7 +46,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		margin-bottom: 30rpx;
@@ -60,8 +60,13 @@
 		flex: 1;
 	}
 
-	.item .name {
+	.info .name {
+		color: $u-main-color;
 		margin-bottom: 15rpx;
+	}
+	
+	.info .meta {
+		color: $u-tips-color;
 	}
 
 	.meta uni-text {

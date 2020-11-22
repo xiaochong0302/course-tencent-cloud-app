@@ -107,7 +107,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		flex-direction: column;
@@ -116,5 +116,13 @@
 
 	.item .question {
 		margin-bottom: 15rpx;
+	}
+	
+	.item .answer {
+		margin-bottom: 15rpx;
+	}
+	
+	.item .meta {
+		color: $u-tips-color;
 	}
 </style>

@@ -98,7 +98,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item {
 		display: flex;
 		margin-bottom: 30rpx;
@@ -116,6 +116,10 @@
 	.item .avatar {
 		margin-right: 15rpx;
 	}
+	
+	.item .content {
+		color: $u-content-color;
+	}
 
 	.item .question {
 		margin-bottom: 15rpx;
@@ -128,5 +132,6 @@
 	.item .bottom {
 		display: flex;
 		justify-content: space-between;
+		color: $u-tips-color;
 	}
 </style>

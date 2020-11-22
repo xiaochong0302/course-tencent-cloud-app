@@ -7,7 +7,7 @@
 			</view>
 		</u-sticky>
 		<view class="item-list" v-if="items.length > 0">
-			<view class="item" v-for="(item,index) in items" :key="item.id">
+			<view class="item" v-for="(item,index) in items" :key="item.id" @click="gotoRefund(item.sn)">
 				<view class="top">
 					<view class="sn">编号：{{ item.sn }}</view>
 					<view class="status">{{ item.status|refundStatus }}</view>
@@ -16,7 +16,9 @@
 					<view class="subject">{{ item.subject }}</view>
 				</view>
 				<view class="bottom">
-					<view class="price">金额：{{ item.amount|formatPrice }}</view>
+					<view class="meta">
+						金额：<text class="price">{{ item.amount|formatPrice }}</text>
+					</view>
 					<view class="action">
 						<u-button v-if="item.status == 3" size="mini" @click="cancelRefund(item.sn,index)">取消</u-button>
 					</view>
@@ -95,6 +97,11 @@
 					this.$u.toast(e.msg)
 				})
 			},
+			gotoRefund(sn) {
+				this.$utils.redirect('/pages/refund/info', {
+					sn: sn
+				})
+			},
 			loadRefunds() {
 				let params = {}
 				if (this.status > 0) {
@@ -138,24 +145,38 @@
 	.item {
 		display: flex;
 		flex-direction: column;
-		padding: 20rpx;
-		margin-bottom: 15rpx;
 		background-color: #FFFFFF;
+		padding: 30rpx 20rpx;
+		margin-bottom: 15rpx;
 	}
 
 	.item .top {
 		display: flex;
 		justify-content: space-between;
 		margin-bottom: 15rpx;
+		color: $u-tips-color;
 	}
 
 	.item .body {
 		margin-bottom: 15rpx;
 	}
 
+	.item .title {
+		color: $u-main-color;
+	}
+
+	.item .status {
+		color: red;
+	}
+
+	.item .price {
+		color: red;
+	}
+
 	.item .bottom {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		color: $u-tips-color;
 	}
 </style>
