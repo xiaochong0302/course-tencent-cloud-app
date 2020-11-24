@@ -1,10 +1,11 @@
 <template>
 	<view class="item-list">
 		<view class="item" v-for="(consult,index) in consults" :key="consult.id">
-			<view class="avatar">
+			<view class="avatar" @click="gotoUser(consult.owner.id)">
 				<u-image :src="consult.owner.avatar|thumbAvatar" width="60" height="60" shape="circle"></u-image>
 			</view>
 			<view class="info">
+				<view class="owner">{{ consult.owner.name }}</view>
 				<view class="content" @click="gotoConsult(consult.id)">
 					<view class="question">{{ consult.question }}</view>
 					<view class="answer">{{ consult.answer }}</view>
@@ -70,6 +71,11 @@
 			stopEvent() {
 				console.log('stop')
 			},
+			gotoUser(id) {
+				this.$utils.redirect('/pages/user/index', {
+					id: id
+				})
+			},
 			gotoConsult(id) {
 				this.$utils.redirect('/pages/consult/info', {
 					id: id
@@ -117,6 +123,11 @@
 		margin-right: 15rpx;
 	}
 	
+	.item .owner {
+		color: #366092;
+		margin-bottom: 15rpx;
+	}
+
 	.item .content {
 		color: $u-content-color;
 	}

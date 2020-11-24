@@ -16,7 +16,7 @@
 							<text>{{ course.lesson_count }}课时</text>
 						</view>
 						<view class="meta">
-							<text class="price">{{ course.market_price|formatPrice }}</text>
+							<text>{{ course.market_price|formatPrice }}</text>
 						</view>
 					</view>
 				</view>

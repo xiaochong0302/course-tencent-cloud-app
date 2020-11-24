@@ -399,7 +399,11 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 			header: header,
 			success: function(res) {
 				if (res.statusCode == 200) {
-					resolve(res.data)
+					if (res.data.code == 0) {
+						resolve(res.data)
+					} else {
+						reject(res.data)
+					}
 				} else if (res.statusCode == 401) {
 					uni.redirectTo({
 						url: '/pages/account/login'

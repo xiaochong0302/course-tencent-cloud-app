@@ -79,7 +79,9 @@
 				})
 			},
 			loadTeachers() {
-				this.$api.getTeacherList().then(res => {
+				this.$api.getTeacherList({
+					limit: 16
+				}).then(res => {
 					this.teachers = res.pager.items
 				}).catch(e => {
 					this.$u.toast('加载教师失败')

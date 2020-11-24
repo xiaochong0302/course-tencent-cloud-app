@@ -1,5 +1,5 @@
 <template>
-	<view v-if="chapter.id > 0">
+	<view class="container" v-if="chapter.id > 0">
 		<view class="active" v-if="chapter.status == 1">
 			<view class="player" id="player"></view>
 			<view class="u-p-15">
@@ -246,6 +246,10 @@
 </script>
 
 <style lang="scss" scoped>
+	.container {
+		padding: 0;
+	}
+	
 	.inactive {
 		padding-top: 100rpx;
 	}

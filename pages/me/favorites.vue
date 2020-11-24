@@ -1,11 +1,11 @@
 <template>
 	<view class="container">
-		<view class="favorite-list" v-if="items.length > 0">
+		<view class="item-list" v-if="items.length > 0">
 			<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
 			 @content-click="contentClick">
 				<view class="item">
 					<view class="cover">
-						<u-image width="240" height="133" border-radius="10" :src="item.cover|thumbCover"></u-image>
+						<u-image :src="item.cover|thumbCover" width="240" height="133" border-radius="10"></u-image>
 					</view>
 					<view class="info">
 						<view class="title u-line-1">{{ item.title }}</view>
@@ -21,7 +21,8 @@
 				</view>
 			</u-swipe-action>
 		</view>
-		<u-empty margin-top="100" :show="showEmpty"></u-empty>
+		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
+		<u-empty :show="showEmpty" margin-top="100"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -33,6 +34,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				loadMore: 'loadmore',
 				showEmpty: false,
 				scrollTop: 0,
 				swipeOptions: [{
@@ -67,7 +69,7 @@
 			},
 			unfavorite(index) {
 				let id = this.getIdByIndex(index)
-				this.$api.unfavoriteCourse(id).then(res => {
+				this.$api.favoriteCourse(id).then(res => {
 					this.items.splice(index, 1)
 					if (this.items.length == 0) {
 						this.page = 1
@@ -88,6 +90,7 @@
 				this.$api.getMyFavorites(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
 					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
@@ -125,5 +128,9 @@
 
 	.meta uni-text {
 		margin-right: 15rpx;
+	}
+
+	.u-load-more-wrap {
+		padding: 30rpx;
 	}
 </style>

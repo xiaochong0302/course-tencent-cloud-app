@@ -55,12 +55,12 @@
 	.item-list {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-around;
 	}
 
 	.item {
 		display: flex;
 		width: 320rpx;
+		margin-left: 30rpx;
 		margin-bottom: 50rpx;
 	}
 
@@ -76,7 +76,7 @@
 		color: $u-main-color;
 		margin-bottom: 15rpx;
 	}
-	
+
 	.info .meta {
 		color: $u-tips-color;
 	}

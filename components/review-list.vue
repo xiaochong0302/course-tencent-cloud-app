@@ -1,12 +1,12 @@
 <template>
 	<view class="item-list">
 		<view class="item" v-for="(review,index) in reviews" :key="review.id">
-			<view class="avatar">
+			<view class="avatar" @click="gotoUser(review.owner.id)">
 				<u-image :src="review.owner.avatar|thumbAvatar" width="60" height="60" shape="circle"></u-image>
 			</view>
 			<view class="info">
 				<view class="top">
-					<view class="name">{{ review.owner.name }}</view>
+					<view class="owner" @click="gotoUser(review.owner.id)">{{ review.owner.name }}</view>
 					<view class="rating">
 						<u-rate :current="review.rating" size="28" :disabled="true"></u-rate>
 					</view>
@@ -68,6 +68,11 @@
 					this.$u.toast(e.msg)
 				})
 			},
+			gotoUser(id) {
+				this.$utils.redirect('/pages/user/index', {
+					id: id
+				})
+			},
 			gotoReview(id) {
 				this.$utils.redirect('/pages/review/info', {
 					id: id
@@ -121,6 +126,10 @@
 		margin-bottom: 15rpx;
 	}
 	
+	.item .owner {
+		color: #366092;
+	}
+
 	.item .content {
 		color: $u-content-color;
 		margin-bottom: 15rpx;
@@ -131,6 +140,4 @@
 		justify-content: space-between;
 		color: $u-tips-color;
 	}
-
-
 </style>

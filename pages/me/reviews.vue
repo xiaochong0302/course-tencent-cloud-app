@@ -12,7 +12,8 @@
 				</view>
 			</u-swipe-action>
 		</view>
-		<u-empty margin-top="100" :show="showEmpty"></u-empty>
+		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
+		<u-empty :show="showEmpty" margin-top="100"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -24,6 +25,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				loadMore: 'loadmore',
 				showEmpty: false,
 				scrollTop: 0,
 				swipeOptions: [{
@@ -91,6 +93,7 @@
 				this.$api.getMyReviews(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
 					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
@@ -120,5 +123,9 @@
 
 	.rating uni-text {
 		margin-right: 15rpx;
+	}
+
+	.u-load-more-wrap {
+		padding: 30rpx;
 	}
 </style>

@@ -5,7 +5,7 @@
 				<u-image :src="group.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
 			</view>
 			<view class="info">
-				<view class="title u-line-2">{{ group.name }}</view>
+				<view class="title u-line-1">{{ group.name }}</view>
 				<view class="meta">
 					<text>成员：{{ group.user_count }}</text>
 					<text>讨论：{{ group.msg_count }}</text>
@@ -61,12 +61,17 @@
 	}
 
 	.info .title {
+		width: 600rpx;
 		color: $u-main-color;
 		margin-bottom: 15rpx;
 	}
 
 	.info .meta {
 		color: $u-tips-color;
+		margin-right: 15rpx;
+	}
+	
+	.meta uni-text {
 		margin-right: 15rpx;
 	}
 </style>

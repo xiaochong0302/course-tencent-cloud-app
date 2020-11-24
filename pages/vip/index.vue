@@ -10,7 +10,7 @@
 			<u-section title="会员权益" :right="false"></u-section>
 			<view class="right-list">
 				<view class="right" v-for="(value,key) in vipRights" :key="key">
-					<u-tag :text="value" type="primary" mode="dark"></u-tag>
+					<u-button type="primary" size="mini">{{ value }}</u-button>
 				</view>
 			</view>
 		</view>

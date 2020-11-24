@@ -3,6 +3,7 @@
 		<view class="course-list" v-if="items.length > 0">
 			<course-list :items="items"></course-list>
 		</view>
+		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -18,6 +19,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				loadMore: 'loadmore',
 				scrollTop: 0,
 				teacher: {},
 			}
@@ -43,6 +45,7 @@
 				this.$api.getTeacherCourses(this.teacher.id, params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载课程失败')
@@ -53,5 +56,7 @@
 </script>
 
 <style>
-
+	.u-load-more-wrap {
+		padding: 30rpx;
+	}
 </style>

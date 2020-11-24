@@ -1,6 +1,6 @@
 <template>
 	<view v-if="chapter.id > 0">
-		<u-popup v-model="showConsultForm" mode="bottom" @open="onConsultFormOpened">
+		<u-popup v-model="showConsultForm" mode="bottom" :closeable="true" @open="onConsultFormOpened">
 			<u-form class="consult-form" :model="consultForm" ref="consultForm" :error-type="['message']">
 				<u-form-item label="咨询内容" label-position="top" prop="question">
 					<u-input v-model="consultForm.question" type="textarea" maxlength="255" placeholder="请尽量详细描述问题，以便获得更专业的回复"></u-input>
@@ -18,19 +18,20 @@
 		<u-sticky :enable="enableSticky">
 			<view class="sticky">
 				<view class="player" id="player"></view>
-				<view class="action u-p-15">
+				<view class="action">
 					<u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count" @click="likeChapter(chapter.id)"></u-icon>
 					<u-icon name="account" size="36" :label="chapter.user_count"></u-icon>
 					<u-icon name="chat" size="36" :label="chapter.consult_count" @click="popupConsultForm"></u-icon>
 				</view>
-				<view class="u-p-15">
+				<view class="course">
 					<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse(chapter.course.id)"></u-section>
 				</view>
 			</view>
 		</u-sticky>
-		<view class="u-p-15">
+		<view class="consult-list" v-if="consults.length > 0">
 			<consult-list :items="consults"></consult-list>
 		</view>
+		<u-loadmore :status="loadMore" v-if="consults.length > 0"></u-loadmore>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -62,6 +63,7 @@
 				consults: [],
 				page: 1,
 				hasMore: false,
+				loadMore: 'loadmore',
 				scrollTop: 0,
 				showConsultForm: false,
 				private: {
@@ -242,6 +244,7 @@
 				this.$api.getChapterConsults(id, params).then(res => {
 					this.consults = this.consults.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载咨询失败')
@@ -252,6 +255,10 @@
 </script>
 
 <style>
+	.consult-form {
+		padding: 15rpx;
+	}
+	
 	.sticky {
 		background-color: #FFFFFF;
 	}
@@ -265,13 +272,24 @@
 	.action {
 		display: flex;
 		justify-content: flex-end;
+		margin-bottom: 30rpx;
+		padding: 0 15rpx;
 	}
 
 	.action .u-icon {
 		margin-left: 30rpx;
 	}
+	
+	.course {
+		margin-bottom: 30rpx;
+		padding: 0 15rpx 15rpx 15rpx;
+	}
 
-	.consult-form {
+	.consult-list {
+		padding: 15rpx;
+	}
+	
+	.u-load-more-wrap {
 		padding: 30rpx;
 	}
 </style>

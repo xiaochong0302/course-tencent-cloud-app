@@ -25,7 +25,8 @@
 				</view>
 			</view>
 		</view>
-		<u-empty margin-top="100" :show="showEmpty"></u-empty>
+		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
+		<u-empty :show="showEmpty" margin-top="100"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -38,6 +39,7 @@
 				page: 1,
 				status: 0,
 				hasMore: false,
+				loadMore: 'loadmore',
 				showEmpty: false,
 				enableSticky: true,
 				scrollTop: 0,
@@ -113,6 +115,7 @@
 				this.$api.getMyRefunds(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
 					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
@@ -165,10 +168,6 @@
 		color: $u-main-color;
 	}
 
-	.item .status {
-		color: red;
-	}
-
 	.item .price {
 		color: red;
 	}
@@ -178,5 +177,9 @@
 		justify-content: space-between;
 		align-items: center;
 		color: $u-tips-color;
+	}
+	
+	.u-load-more-wrap {
+		padding-bottom: 30rpx;
 	}
 </style>

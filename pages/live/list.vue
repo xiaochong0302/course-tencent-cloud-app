@@ -1,8 +1,9 @@
 <template>
 	<view class="container">
-		<view class="live-list">
+		<view class="live-list" v-if="items.length > 0">
 			<live-list :items="items"></live-list>
 		</view>
+		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -18,6 +19,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				loadMore: 'loadmore',
 				scrollTop: 0,
 			}
 		},
@@ -41,6 +43,7 @@
 				this.$api.getLiveList(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
 					this.page++
 				}).catch(e => {
 					this.$u.toast('加载列表失败')
@@ -53,5 +56,9 @@
 <style>
 	.container {
 		padding-top: 30rpx;
+	}
+
+	.u-load-more-wrap {
+		padding: 30rpx;
 	}
 </style>

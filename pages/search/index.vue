@@ -13,19 +13,22 @@
 				<view class="course-list" v-if="courseObj.items.length > 0">
 					<course-list :items="courseObj.items"></course-list>
 				</view>
-				<u-empty margin-top="100" :show="courseObj.showEmpty"></u-empty>
+				<u-loadmore :status="courseObj.loadMore" v-if="courseObj.items.length > 0"></u-loadmore>
+				<u-empty :show="courseObj.showEmpty" margin-top="100"></u-empty>
 			</view>
 			<view v-if="currentTab == 1">
 				<view class="group-list" v-if="groupObj.items.length > 0">
 					<group-list :items="groupObj.items"></group-list>
 				</view>
-				<u-empty margin-top="100" :show="groupObj.showEmpty"></u-empty>
+				<u-loadmore :status="groupObj.loadMore" v-if="groupObj.items.length > 0"></u-loadmore>
+				<u-empty :show="groupObj.showEmpty" margin-top="100"></u-empty>
 			</view>
 			<view v-if="currentTab == 2">
 				<view class="user-list" v-if="userObj.items.length > 0">
 					<user-list :items="userObj.items"></user-list>
 				</view>
-				<u-empty margin-top="100" :show="userObj.showEmpty"></u-empty>
+				<u-loadmore :status="userObj.loadMore" v-if="userObj.items.length > 0"></u-loadmore>
+				<u-empty :show="userObj.showEmpty" margin-top="100"></u-empty>
 			</view>
 		</view>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
@@ -58,12 +61,14 @@
 					items: [],
 					page: 1,
 					hasMore: false,
+					loadMore: 'loadmore',
 					showEmpty: false,
 				},
 				groupObj: {
 					items: [],
 					page: 1,
 					hasMore: false,
+					loadMore: 'loadmore',
 					showEmpty: false,
 				},
 				userObj: {
@@ -71,6 +76,7 @@
 					page: 1,
 					limit: 16,
 					hasMore: false,
+					loadMore: 'loadmore',
 					showEmpty: false,
 				},
 				query: '',
@@ -144,6 +150,7 @@
 					let items = this.handleCourses(res.pager.items)
 					this.courseObj.items = this.courseObj.items.concat(items)
 					this.courseObj.hasMore = res.pager.total_pages > this.courseObj.page
+					this.courseObj.loadMore = this.courseObj.hasMore ? 'loadmore' : 'nomore'
 					this.courseObj.showEmpty = this.courseObj.page == 1 && res.pager.total_pages == 0
 					this.courseObj.page++
 				}).catch(e => {
@@ -162,6 +169,7 @@
 					let items = this.handleGroups(res.pager.items)
 					this.groupObj.items = this.groupObj.items.concat(items)
 					this.groupObj.hasMore = res.pager.total_pages > this.groupObj.page
+					this.groupObj.loadMore = this.groupObj.hasMore ? 'loadmore' : 'nomore'
 					this.groupObj.showEmpty = this.groupObj.page == 1 && res.pager.total_pages == 0
 					this.groupObj.page++
 				}).catch(e => {
@@ -181,6 +189,7 @@
 					let items = this.handleUsers(res.pager.items)
 					this.userObj.items = this.userObj.items.concat(items)
 					this.userObj.hasMore = res.pager.total_pages > this.userObj.page
+					this.userObj.loadMore = this.userObj.hasMore ? 'loadmore' : 'nomore'
 					this.userObj.showEmpty = this.userObj.page == 1 && res.pager.total_pages == 0
 					this.userObj.page++
 				}).catch(e => {
@@ -216,5 +225,9 @@
 
 	.tab-title {
 		margin-bottom: 30rpx;
+	}
+	
+	.u-load-more-wrap {
+		padding: 30rpx;
 	}
 </style>

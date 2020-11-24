@@ -4,12 +4,19 @@
 			<u-swipe-action v-for="(item,index) in items" :key="item.id" :index="index" :options="swipeOptions" @click="swipeClick"
 			 @content-click="contentClick">
 				<view class="item u-border-bottom">
-					<view class="question">提问：{{ item.question }}</view>
-					<view class="answer">回复：{{ item.answer }}</view>
+					<view class="question">
+						<view class="label">提问：</view>
+						<view class="content">{{ item.question }}</view>
+					</view>
+					<view class="answer">
+						<view class="label">回复：</view>
+						<view class="content">{{ item.answer }}</view>
+					</view>
 				</view>
 			</u-swipe-action>
 		</view>
-		<u-empty margin-top="100" :show="showEmpty"></u-empty>
+		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
+		<u-empty :show="showEmpty" margin-top="100"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -21,6 +28,7 @@
 				items: [],
 				page: 1,
 				hasMore: false,
+				loadMore: 'loadmore',
 				showEmpty: false,
 				scrollTop: 0,
 				swipeOptions: [{
@@ -89,6 +97,7 @@
 					let items = this.items.concat(res.pager.items)
 					this.items = this.handleConsults(items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
 					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
@@ -113,16 +122,21 @@
 		flex-direction: column;
 		padding: 20rpx 0;
 	}
-
+	
 	.item .question {
+		display: flex;
 		margin-bottom: 15rpx;
 	}
-	
+
 	.item .answer {
-		margin-bottom: 15rpx;
+		display: flex;
 	}
 	
-	.item .meta {
-		color: $u-tips-color;
+	.item .content {
+		flex: 1;
+	}
+
+	.u-load-more-wrap {
+		padding: 30rpx;
 	}
 </style>

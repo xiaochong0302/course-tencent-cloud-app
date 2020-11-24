@@ -7,9 +7,14 @@
 			<u-icon name="account" size="36" :label="chapter.user_count"></u-icon>
 			<u-icon name="chat" size="36" :label="chapter.consult_count" @click="addConsult(chapter.id)"></u-icon>
 		</view>
-		<view class="consult-list">
+		<view class="course">
+			<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse(chapter.course.id)"></u-section>
+		</view>
+		<view class="consult-list" v-if="consults.length > 0">
 			<consult-list :items="consults"></consult-list>
 		</view>
+		<view style="height: 1000px;"></view>
+		<u-loadmore :status="loadMore" v-if="consults.length > 0"></u-loadmore>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
 </template>
@@ -35,6 +40,7 @@
 				consults: [],
 				page: 1,
 				hasMore: false,
+				loadMore: 'loadmore',
 				scrollTop: 0,
 			}
 		},
@@ -82,6 +88,11 @@
 					console.log(e.msg)
 				})
 			},
+			gotoCourse(id) {
+				this.$utils.redirect('/pages/course/info', {
+					id: id
+				})
+			},
 			addConsult(id) {
 				this.$utils.redirect('/pages/consult/add', {
 					chapter_id: id
@@ -125,14 +136,14 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.container {
 		padding-top: 30rpx;
 	}
 
 	.title {
+		color: $u-main-color;
 		margin-bottom: 30rpx;
-		font-weight: 600;
 	}
 
 	.content {
@@ -141,10 +152,18 @@
 
 	.action {
 		display: flex;
-		justify-content: center;
+		margin-bottom: 30rpx;
 	}
 
 	.action .u-icon {
-		margin-left: 30rpx;
+		margin-right: 30rpx;
+	}
+
+	.course {
+		margin-bottom: 30rpx;
+	}
+
+	.u-load-more-wrap {
+		padding: 30rpx;
 	}
 </style>

@@ -12,12 +12,12 @@
 		</view>
 		<view class="tab-content">
 			<view class="tab-item" v-if="currentTab == 0">
+				{{ group.about }}
+			</view>
+			<view class="tab-item" v-if="currentTab == 1">
 				<view class="user-list" v-if="users.length > 0">
 					<user-list :items="users"></user-list>
 				</view>
-			</view>
-			<view class="tab-item" v-if="currentTab == 1">
-				{{ group.about }}
 			</view>
 		</view>
 	</view>
@@ -33,9 +33,9 @@
 			return {
 				currentTab: 0,
 				tabs: [{
-					name: '成员'
-				}, {
 					name: '介绍'
+				}, {
+					name: '成员'
 				}],
 				group: {},
 				users: [],

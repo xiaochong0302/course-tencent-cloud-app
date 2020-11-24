@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="confirm.item_type > 0">
 		<view class="section">
 			<u-section title="商品信息" :right="false"></u-section>
 			<view class="item-course" v-if="confirm.item_type== 1">
@@ -96,9 +96,9 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.container {
-		padding: 30rpx;
+		padding: 30rpx 15rpx;
 	}
 
 	.u-section {
@@ -108,14 +108,21 @@
 	.section {
 		margin-bottom: 30rpx;
 	}
+	
+	.title {
+		color: $u-main-color;
+	}
+	
+	.meta {
+		color: $u-tips-color;
+	}
 
-	.meta text {
+	.meta uni-text {
 		margin-right: 15rpx;
 	}
 
 	.course {
 		margin-bottom: 20rpx;
-		border-bottom: 1px solid #e4e7ed;
 	}
 
 	.course .title {

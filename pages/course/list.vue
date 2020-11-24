@@ -1,15 +1,18 @@
 <template>
 	<view class="container">
-		<view class="filter">
-			<u-dropdown>
-				<u-dropdown-item title="排序" v-model="sort" :options="sorts" @change="switchSort"></u-dropdown-item>
-				<u-dropdown-item title="难度" v-model="level" :options="levels" @change="switchLevel"></u-dropdown-item>
-				<u-dropdown-item title="类型" v-model="model" :options="models" @change="switchModel"></u-dropdown-item>
-			</u-dropdown>
-		</view>
+		<u-sticky :enable="enableSticky">
+			<view class="filter">
+				<u-dropdown>
+					<u-dropdown-item title="排序" v-model="sort" :options="sorts" @change="switchSort"></u-dropdown-item>
+					<u-dropdown-item title="难度" v-model="level" :options="levels" @change="switchLevel"></u-dropdown-item>
+					<u-dropdown-item title="类型" v-model="model" :options="models" @change="switchModel"></u-dropdown-item>
+				</u-dropdown>
+			</view>
+		</u-sticky>
 		<view class="course-list" v-if="items.length > 0">
 			<course-list :items="items"></course-list>
 		</view>
+		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
 		<u-empty :show="showEmpty" margin-top="100"></u-empty>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>
@@ -27,6 +30,8 @@
 				page: 1,
 				hasMore: false,
 				showEmpty: false,
+				loadMore: 'loadmore',
+				enableSticky: true,
 				scrollTop: 0,
 				sc: 0,
 				level: 0,
@@ -93,6 +98,12 @@
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop
 		},
+		onShow() {
+			this.enableSticky = true
+		},
+		onHide() {
+			this.enableSticky = false
+		},
 		methods: {
 			switchLevel(level) {
 				this.level = level
@@ -132,6 +143,7 @@
 				this.$api.getCourseList(params).then(res => {
 					this.items = this.items.concat(res.pager.items)
 					this.hasMore = res.pager.total_pages > this.page
+					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
 					this.showEmpty = this.page == 1 && res.pager.total_pages == 0
 					this.page++
 				}).catch(e => {
@@ -143,5 +155,11 @@
 </script>
 
 <style>
+	.filter {
+		background-color: #FFFFFF;
+	}
 
+	.u-load-more-wrap {
+		padding: 30rpx;
+	}
 </style>

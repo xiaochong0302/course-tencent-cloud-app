@@ -160,8 +160,6 @@
 		},
 		methods: {
 			initTab() {
-				this.tabs[2].count = this.course.review_count
-				this.tabs[3].count = this.course.consult_count
 				if (this.course.package_count > 0) {
 					this.tabs.push({
 						name: '套餐',
