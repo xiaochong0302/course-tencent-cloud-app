@@ -90,7 +90,6 @@
             "maps" : {}
         },
 		"publicPath": "https://course-1255691183.file.myqcloud.com/static/h5",
-        "domain" : "https://ctc.koogua.com",
         "template" : "template.h5.html"
     }
 }
