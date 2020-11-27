@@ -15,7 +15,7 @@
 				</view>
 			</u-form>
 		</u-popup>
-		<u-sticky :enable="enableSticky">
+		<u-sticky :enable="enableSticky" h5-nav-height="0">
 			<view class="sticky">
 				<view class="player" id="player"></view>
 				<view class="action">

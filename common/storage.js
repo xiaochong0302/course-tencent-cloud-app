@@ -1,3 +1,7 @@
+export const cacheKey = {
+	token: 'kg:token'
+}
+
 export const get = (key, sync = true) => {
 	try {
 		if (sync) {

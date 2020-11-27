@@ -1,9 +1,9 @@
 <template>
 	<view v-if="course.id > 0">
 		<view class="cover-box">
-			<u-image :src="course.cover|thumbCover" width="750" height="416"></u-image>
+			<u-image :src="course.cover|thumbCover" width="100%" height="416"></u-image>
 		</view>
-		<u-sticky :enable="enableSticky">
+		<u-sticky :enable="enableSticky" h5-nav-height="0">
 			<view class="tab-title">
 				<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
 			</view>
@@ -66,8 +66,8 @@
 				<view class="review-list" v-if="reviews.length > 0">
 					<review-list :items="reviews"></review-list>
 				</view>
-				<view class="load-more" v-if="course.review_count > 12">
-					<text @click="gotoReviewList(course.id)">更多评价</text>
+				<view class="load-more" @click="gotoReviewList(course.id)" v-if="course.review_count > 12">
+					<u-divider half-width="50">加载更多</u-divider>
 				</view>
 				<u-empty margin-top="100" :show="reviews.length == 0"></u-empty>
 			</view>
@@ -75,8 +75,8 @@
 				<view class="consult-list" v-if="consults.length > 0">
 					<consult-list :items="consults"></consult-list>
 				</view>
-				<view class="load-more" v-if="course.consult_count > 12">
-					<text @click="gotoConsultList(course.id)">更多咨询</text>
+				<view class="load-more" @click="gotoConsultList(course.id)" v-if="course.consult_count > 12">
+					<u-divider half-width="50">加载更多</u-divider>
 				</view>
 				<u-empty margin-top="100" :show="consults.length == 0"></u-empty>
 			</view>
@@ -86,7 +86,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="sticky-box">
+		<view class="sticky-bottom">
 			<u-button type="primary" @click="buyCourse(course.id)" v-if="showOrderBtn">立即购买</u-button>
 			<u-button type="primary" @click="rewardCourse(course.id)" v-if="showRewardBtn">赞赏支持</u-button>
 		</view>
@@ -250,7 +250,7 @@
 </script>
 
 <style lang="scss" scoped>
-	.sticky-box {
+	.sticky-bottom {
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -260,8 +260,6 @@
 	}
 
 	.cover-box {
-		width: 750rpx;
-		height: 416rpx;
 		margin-bottom: 30rpx;
 	}
 
@@ -275,7 +273,12 @@
 
 	.tab-content {
 		padding: 15rpx;
+		/* #ifdef H5 */
+		margin-bottom: 240rpx;
+		/* #endif */
+		/* #ifndef H5 */
 		margin-bottom: 120rpx;
+		/* #endif */
 	}
 
 	.section {
@@ -296,7 +299,7 @@
 		color: $u-main-color;
 		margin-bottom: 15rpx;
 	}
-	
+
 	.basic .meta {
 		color: $u-tips-color;
 		margin-bottom: 15rpx;
@@ -305,11 +308,11 @@
 	.basic .meta uni-text {
 		margin-right: 15rpx;
 	}
-	
+
 	.price {
 		color: red;
 	}
-	
+
 	.details {
 		color: $u-content-color;
 	}

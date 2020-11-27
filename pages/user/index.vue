@@ -1,13 +1,12 @@
 <template>
 	<view class="container" v-if="user.id > 0">
-		<view class="top">
+		<view class="user">
 			<view class="avatar">
-				<u-image :src="user.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
+				<u-avatar :src="user.avatar|thumbAvatar" size="large"></u-avatar>
 			</view>
 			<view class="name">{{ user.name }}</view>
-			<view class="title">{{ user.title }}</view>
 		</view>
-		<u-sticky :enable="enableSticky">
+		<u-sticky :enable="enableSticky" h5-nav-height="0">
 			<view class="tab-title">
 				<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
 			</view>
@@ -22,19 +21,25 @@
 				<view class="course-list" v-if="courses.length > 0">
 					<user-course-list :items="courses"></user-course-list>
 				</view>
-				<view class="load-more" @click="gotoCourseList(user.id)" v-if="courses.length > 10">加载更多</view>
+				<view class="load-more" @click="gotoCourseList(user.id)" v-if="courses.length > 10">
+					<u-divider half-width="50">加载更多</u-divider>
+				</view>
 			</view>
 			<view class="tab-item" v-if="currentTab == 2">
 				<view class="friend-list" v-if="friends.length > 0">
 					<user-friend-list :items="friends"></user-friend-list>
 				</view>
-				<view class="load-more" @click="gotoFriendList(user.id)" v-if="friends.length > 10">加载更多</view>
+				<view class="load-more" @click="gotoFriendList(user.id)" v-if="friends.length > 10">
+					<u-divider half-width="50">加载更多</u-divider>
+				</view>
 			</view>
 			<view class="tab-item" v-if="currentTab == 3">
 				<view class="group-list" v-if="groups.length > 0">
 					<user-group-list :items="groups"></user-group-list>
 				</view>
-				<view class="load-more" @click="gotoGroupList(user.id)" v-if="groups.length > 10">加载更多</view>
+				<view class="load-more" @click="gotoGroupList(user.id)" v-if="groups.length > 10">
+					<u-divider half-width="50">加载更多</u-divider>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -135,7 +140,7 @@
 </script>
 
 <style>
-	.top {
+	.user {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -143,11 +148,11 @@
 		margin-bottom: 15rpx;
 	}
 
-	.top .avatar {
+	.user .avatar {
 		margin-bottom: 15rpx;
 	}
 
-	.top .name {
+	.user .name {
 		margin-bottom: 15rpx;
 	}
 

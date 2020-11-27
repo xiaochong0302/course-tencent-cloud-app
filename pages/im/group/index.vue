@@ -1,11 +1,10 @@
 <template>
 	<view class="container">
-		<view class="top">
+		<view class="group">
 			<view class="avatar">
-				<u-image width="90" height="90" shape="circle" :src="group.avatar|thumbAvatar"></u-image>
+				<u-avatar :src="group.avatar|thumbAvatar" size="large"></u-avatar>
 			</view>
 			<view class="name">{{ group.name }}</view>
-			<view class="title">{{ group.title }}</view>
 		</view>
 		<view class="tab-title">
 			<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
@@ -70,7 +69,7 @@
 </script>
 
 <style>
-	.top {
+	.group {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -78,44 +77,15 @@
 		margin-bottom: 15rpx;
 	}
 
-	.top .avatar {
+	.group .avatar {
 		margin-bottom: 15rpx;
 	}
 
-	.top .name {
+	.group .name {
 		margin-bottom: 15rpx;
 	}
 
 	.tab-title {
 		margin-bottom: 30rpx;
-	}
-
-	.course {
-		display: flex;
-		padding: 10rpx 0;
-	}
-
-	.course .cover {
-		width: 240rpx;
-		height: 134rpx;
-		margin-right: 15rpx;
-	}
-
-	.course .info {
-		flex: 1;
-	}
-
-	.course .info .title {
-		font-weight: 600;
-		margin-bottom: 10rpx;
-		width: 465rpx;
-	}
-
-	.course .meta {
-		margin-bottom: 10rpx;
-	}
-
-	.course .meta text {
-		margin-right: 15rpx;
 	}
 </style>

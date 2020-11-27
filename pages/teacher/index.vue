@@ -1,11 +1,10 @@
 <template>
 	<view class="container" v-if="teacher.id > 0">
-		<view class="top">
+		<view class="user">
 			<view class="avatar">
-				<u-image :src="teacher.avatar|thumbAvatar" width="100" height="100" shape="circle"></u-image>
+				<u-avatar :src="teacher.avatar|thumbAvatar" size="large"></u-avatar>
 			</view>
 			<view class="name">{{ teacher.name }}</view>
-			<view class="title">{{ teacher.title }}</view>
 		</view>
 		<view class="tab-title">
 			<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
@@ -20,7 +19,9 @@
 				<view class="course-list" v-if="courses.length > 0">
 					<course-list :items="courses"></course-list>
 				</view>
-				<view class="load-more" @click="gotoCourseList(user.id)" v-if="courses.length > 10">加载更多</view>
+				<view class="load-more" @click="gotoCourseList(user.id)" v-if="courses.length > 10">
+					<u-divider half-width="50">加载更多</u-divider>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -78,7 +79,7 @@
 </script>
 
 <style>
-	.top {
+	.user {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -86,11 +87,11 @@
 		margin-bottom: 15rpx;
 	}
 
-	.top .avatar {
+	.user .avatar {
 		margin-bottom: 15rpx;
 	}
 
-	.top .name {
+	.user .name {
 		margin-bottom: 15rpx;
 	}
 

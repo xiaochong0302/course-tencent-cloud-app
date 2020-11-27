@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<u-sticky :enable="enableSticky">
+		<u-sticky :enable="enableSticky" h5-nav-height="0">
 			<view class="filter u-border-bottom">
 				<u-tag v-for="item in statuses" :key="item.id" :text="item.name" :type="item.id==status?'primary':'default'" mode="dark"
 				 @click="filterByStatus(item.id)"></u-tag>

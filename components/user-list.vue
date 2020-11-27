@@ -35,7 +35,7 @@
 		},
 		methods: {
 			gotoUser(id) {
-				this.$utils.redirect('/pages/im/user/index', {
+				this.$utils.redirect('/pages/user/index', {
 					id: id
 				})
 			},
@@ -51,7 +51,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.item-list {
 		display: flex;
 		flex-wrap: wrap;

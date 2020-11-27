@@ -69,7 +69,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.container {
 		padding: 50rpx 30rpx;
 	}
@@ -85,32 +85,35 @@
 	.right-list {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-between;
-		margin: 0 50rpx;
 	}
 
 	.right-list .right {
-		min-width: 160rpx;
+		width: 160rpx;
+		margin-right: 50rpx;
 		margin-bottom: 30rpx;
 	}
 
 	.option-list {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-between;
-		margin: 0 50rpx;
 	}
 
 	.option {
-		min-width: 270rpx;
+		width: 280rpx;
+		border-radius: 10rpx;
+		margin-right: 50rpx;
 		margin-bottom: 50rpx;
-		padding: 20rpx 0;
+		padding: 30rpx 0;
 		text-align: center;
-		background-color: #F8F8F8;
+		background-color: $u-bg-color;
 	}
 
 	.option .title,
 	.option .price {
 		margin-bottom: 15rpx;
+	}
+	
+	.option .price {
+		color: red;
 	}
 </style>

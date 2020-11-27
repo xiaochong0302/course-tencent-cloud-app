@@ -1,8 +1,8 @@
 <template>
 	<view class="container">
-		<view class="me">
+		<view class="user" @click="clickUser">
 			<view class="avatar">
-				<u-avatar size="large" :src="profile.avatar|thumbAvatar" @click="gotoUser(profile.id)"></u-avatar>
+				<u-avatar :src="profile.avatar|thumbAvatar" size="large"></u-avatar>
 			</view>
 			<view class="name">{{ profile.name }}</view>
 		</view>
@@ -19,6 +19,10 @@
 				<u-cell-item title="帮助中心" index="help" :arrow="true" @click="gotoPage"></u-cell-item>
 			</u-cell-group>
 		</view>
+		<view v-if="profile.id > 0">
+			<view class="logout" @click="clickLogout">退出登录</view>
+			<u-modal v-model="showLogoutModal" :show-cancel-button="true" @confirm="confirmLogout" content="确定要退出登录吗？"></u-modal>
+		</view>
 	</view>
 </template>
 
@@ -26,15 +30,32 @@
 	export default {
 		data() {
 			return {
-				profile: {}
+				showLogoutModal: false,
+				profile: {
+					id: 0,
+					name: '注册/登录',
+					avatar: '',
+				},
 			}
 		},
-		onLoad() {
-			this.loadMyProfile()
+		onShow() {
+			this.initProfile()
 		},
 		methods: {
-			gotoUser(id) {
-				this.$utils.redirect(`/pages/user/index?id=${id}`)
+			initProfile() {
+				let token = this.$utils.getToken()
+				if (token != '') {
+					this.loadMyProfile()
+				}
+			},
+			clickUser() {
+				if (this.profile.id > 0) {
+					this.$utils.redirect('/pages/user/index', {
+						id: this.profile.id
+					})
+				} else {
+					this.$utils.redirect('/pages/account/login')
+				}
 			},
 			gotoPage(index) {
 				switch (index) {
@@ -73,13 +94,23 @@
 				}).catch(e => {
 					this.$u.toast('加载资料失败')
 				})
+			},
+			clickLogout() {
+				this.showLogoutModal = true
+			},
+			confirmLogout() {
+				this.$utils.setToken('')
+				this.showLogoutModal = false
+				uni.reLaunch({
+					url: '/pages/index/index'
+				})
 			}
 		}
 	}
 </script>
 
 <style>
-	.me {
+	.user {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -87,7 +118,16 @@
 		margin-bottom: 30rpx;
 	}
 
-	.me .avatar {
+	.user .avatar {
 		margin-bottom: 15rpx;
+	}
+
+	.cell-list {
+		margin-bottom: 30rpx;
+	}
+
+	.logout {
+		text-align: center;
+		margin-bottom: 30rpx;
 	}
 </style>

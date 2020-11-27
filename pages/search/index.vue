@@ -3,7 +3,7 @@
 		<view class="search">
 			<u-search v-model="query" :show-action="false" maxlength="30" placeholder="请输入搜索内容" @search="search"></u-search>
 		</view>
-		<u-sticky :enable="enableSticky">
+		<u-sticky :enable="enableSticky" h5-nav-height="0">
 			<view class="tab-title">
 				<u-tabs :list="tabs" :is-scroll="false" :current="currentTab" @change="changeTab"></u-tabs>
 			</view>

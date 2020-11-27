@@ -8,19 +8,25 @@
 				<view class="live-list" v-if="lives.length > 0">
 					<live-list :items="lives"></live-list>
 				</view>
-				<view class="load-more" @click="gotoLiveList" v-if="lives.length > 10">加载更多</view>
+				<view class="load-more" @click="gotoLiveList" v-if="lives.length > 10">
+					<u-divider half-width="50">加载更多</u-divider>
+				</view>
 			</view>
 			<view class="tab-teacher" v-if="currentTab == 1">
 				<view class="teacher-list" v-if="teachers.length > 0">
 					<teacher-list :items="teachers"></teacher-list>
 				</view>
-				<view class="load-more" @click="gotoTeacherList" v-if="teachers.length > 10">加载更多</view>
+				<view class="load-more" @click="gotoTeacherList" v-if="teachers.length > 10">
+					<u-divider half-width="50">加载更多</u-divider>
+				</view>
 			</view>
 			<view class="tab-group" v-if="currentTab == 2">
 				<view class="group-list" v-if="groups.length > 0">
 					<group-list :items="groups"></group-list>
 				</view>
-				<view class="load-more" @click="gotoGroupList" v-if="groups.length > 10">加载更多</view>
+				<view class="load-more" @click="gotoGroupList" v-if="groups.length > 10">
+					<u-divider half-width="50">加载更多</u-divider>
+				</view>
 			</view>
 		</view>
 	</view>

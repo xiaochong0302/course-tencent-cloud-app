@@ -1,3 +1,9 @@
+/* #ifdef H5 */
+uni-page-head {
+	display: none;
+}
+/* #endif */
+
 .container {
 	color: #606266;
 	font-size: 14px;

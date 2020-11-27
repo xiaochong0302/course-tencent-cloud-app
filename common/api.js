@@ -1,7 +1,6 @@
 import * as Config from '@/common/config.js'
 import * as Utils from '@/common/utils.js'
 import * as Storage from '@/common/storage.js'
-import md5 from '@/common/md5.js'
 
 export const search = (params) => {
 	return httpGet('/search', params)
@@ -389,7 +388,7 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 	header['X-Version'] = Config.appInfo.version
 	header['X-Platform'] = Utils.getPlatform()
 	header['X-Timestamp'] = Utils.getNowTime()
-	header['X-Token'] = Storage.get(Config.cacheKey.token)
+	header['X-Token'] = Storage.get(Storage.cacheKey.token)
 
 	return new Promise(function(resolve, reject) {
 		uni.request({
@@ -405,7 +404,7 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 						reject(res.data)
 					}
 				} else if (res.statusCode == 401) {
-					uni.redirectTo({
+					uni.navigateTo({
 						url: '/pages/account/login'
 					})
 				} else {

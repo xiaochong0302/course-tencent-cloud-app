@@ -35,7 +35,7 @@
 		},
 		methods: {
 			gotoUser(id) {
-				this.$utils.redirect('/pages/im/user/index', {
+				this.$utils.redirect('/pages/user/index', {
 					id: id
 				})
 			},
@@ -55,12 +55,12 @@
 	.item-list {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-around;
 	}
 
 	.item {
 		display: flex;
 		width: 320rpx;
+		margin-left: 30rpx;
 		margin-bottom: 50rpx;
 	}
 

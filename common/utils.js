@@ -145,29 +145,12 @@ export const getApiBaseUrl = () => {
 	return Config.apiBaseUrl
 }
 
-export const getSocketUrl = () => {
-	return Config.socketUrl
-}
-
 export const getToken = () => {
-	let key = Config.cacheKey.token
+	let key = Storage.cacheKey.token
 	return Storage.get(key)
 }
 
 export const setToken = (value) => {
-	let key = Config.cacheKey.token
+	let key = Storage.cacheKey.token
 	return Storage.set(key, value)
-}
-
-export const checkLogin = (redirect = '') => {
-	if (redirect == '') {
-		redirect = '/pages/index/index'
-	}
-	if (getToken() == '') {
-		uni.reLaunch({
-			url: '/pages/account/login?redirect=' + encodeURIComponent(redirect)
-		})
-		return false
-	}
-	return true
 }

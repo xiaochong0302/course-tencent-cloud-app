@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<u-sticky :enable="enableSticky">
+		<u-sticky :enable="enableSticky" h5-nav-height="0">
 			<view class="filter">
 				<u-dropdown>
 					<u-dropdown-item title="排序" v-model="sort" :options="sorts" @change="switchSort"></u-dropdown-item>
@@ -14,7 +14,9 @@
 		</view>
 		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
 		<u-empty :show="showEmpty" margin-top="100"></u-empty>
+		<!-- dropdown+backtop有bug,待官方解决
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
+		-->
 	</view>
 </template>
 
