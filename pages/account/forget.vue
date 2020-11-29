@@ -74,6 +74,11 @@
 		onReady() {
 			this.$refs.form.setRules(this.rules)
 		},
+		onShow() {
+			if (this.$utils.isLogin()) {
+				this.$utils.redirect('/pages/me/index')
+			}
+		},
 		methods: {
 			verifyCodeChange(text) {
 				this.verifyCodeTips = text

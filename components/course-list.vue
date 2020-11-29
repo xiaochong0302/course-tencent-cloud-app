@@ -69,18 +69,11 @@
 	}
 
 	.item .cover {
-		width: 240rpx;
-		height: 134rpx;
 		margin-right: 15rpx;
 	}
 
 	.item .info {
 		flex: 1;
-	}
-
-	.item .cover {
-		width: 240rpx;
-		height: 134rpx;
 	}
 
 	.info .title {

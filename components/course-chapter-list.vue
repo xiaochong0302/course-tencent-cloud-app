@@ -65,7 +65,13 @@
 					'3': 'read',
 				}
 				let target = mapping[chapter.model] ? mapping[chapter.model] : 'vod'
-				this.$utils.redirect(`/pages/chapter/${target}?id=${chapter.id}`)
+				let redirect = `/pages/chapter/${target}?id=${chapter.id}`
+				this.$utils.checkLogin({
+					redirect: redirect,
+					success: () => {
+						this.$utils.redirect(redirect)
+					}
+				})
 			}
 		}
 	}

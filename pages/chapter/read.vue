@@ -13,7 +13,6 @@
 		<view class="consult-list" v-if="consults.length > 0">
 			<consult-list :items="consults"></consult-list>
 		</view>
-		<view style="height: 1000px;"></view>
 		<u-loadmore :status="loadMore" v-if="consults.length > 0"></u-loadmore>
 		<u-back-top :scrollTop="scrollTop"></u-back-top>
 	</view>

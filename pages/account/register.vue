@@ -15,6 +15,12 @@
 			<view class="form-item">
 				<u-button type="primary" @click="submit">注册</u-button>
 			</view>
+			<view class="form-item">
+				<view class="link">
+					<text @click="gotoLogin">用户登录</text>
+					<text @click="gotoForget">忘记密码</text>
+				</view>
+			</view>
 		</u-form>
 	</view>
 </template>
@@ -74,7 +80,18 @@
 		onReady() {
 			this.$refs.form.setRules(this.rules)
 		},
+		onShow() {
+			if (this.$utils.isLogin()) {
+				this.$utils.redirect('/pages/me/index')
+			}
+		},
 		methods: {
+			gotoLogin() {
+				this.$utils.redirect('/pages/account/login')
+			},
+			gotoForget() {
+				this.$utils.redirect('/pages/account/forget')
+			},
 			verifyCodeChange(text) {
 				this.verifyCodeTips = text
 			},

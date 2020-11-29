@@ -1,7 +1,7 @@
 <template>
 	<view v-if="chapter.id > 0">
-		<u-popup v-model="showConsultForm" mode="bottom" :closeable="true" @open="onConsultFormOpened">
-			<u-form class="consult-form" :model="consultForm" ref="consultForm" :error-type="['message']">
+		<u-popup v-model="showConsultForm" mode="bottom" :closeable="true" @open="onConsultFormOpen">
+			<u-form class="consult-form" :model="consultForm" ref="consultForm">
 				<u-form-item label="咨询内容" label-position="top" prop="question">
 					<u-input v-model="consultForm.question" type="textarea" maxlength="255" placeholder="请尽量详细描述问题，以便获得更专业的回复"></u-input>
 				</u-form-item>
@@ -172,6 +172,9 @@
 				}
 			},
 			learningChapter() {
+				if (!this.$utils.isLogin) {
+					return false
+				}
 				this.learning.position = this.player.currentTime()
 				this.$api.learningChapter(this.chapter.id, {
 					plan_id: this.learning.plan_id,
@@ -183,22 +186,34 @@
 				})
 			},
 			likeChapter(id) {
-				this.$api.likeChapter(id).then(res => {
-					if (this.chapter.me.liked == 1) {
-						this.chapter.me.liked = 0
-						this.chapter.like_count--
-					} else {
-						this.chapter.me.liked = 1
-						this.chapter.like_count++
+				let redirect = `/pages/chapter/vod?id=${id}`
+				this.$utils.checkLogin({
+					redirect: redirect,
+					success: () => {
+						this.$api.likeChapter(id).then(res => {
+							if (this.chapter.me.liked == 1) {
+								this.chapter.me.liked = 0
+								this.chapter.like_count--
+							} else {
+								this.chapter.me.liked = 1
+								this.chapter.like_count++
+							}
+						}).catch(e => {
+							this.$u.toast('喜欢课时失败')
+						})
 					}
-				}).catch(e => {
-					this.$u.toast('喜欢课时失败')
 				})
 			},
 			popupConsultForm() {
-				this.showConsultForm = true
+				let redirect = `/pages/chapter/vod?id=${this.chapter.id}`
+				this.$utils.checkLogin({
+					redirect: redirect,
+					success: () => {
+						this.showConsultForm = true
+					}
+				})
 			},
-			onConsultFormOpened() {
+			onConsultFormOpen() {
 				this.$refs.consultForm.setRules(this.consultRules)
 			},
 			changePrivate(name) {
@@ -258,9 +273,9 @@
 	.consult-form {
 		padding: 15rpx;
 	}
-	
+
 	.sticky {
-		background-color: #FFFFFF;
+		background-color: white;
 	}
 
 	.player {
@@ -279,7 +294,7 @@
 	.action .u-icon {
 		margin-left: 30rpx;
 	}
-	
+
 	.course {
 		margin-bottom: 30rpx;
 		padding: 0 15rpx 15rpx 15rpx;
@@ -288,7 +303,7 @@
 	.consult-list {
 		padding: 15rpx;
 	}
-	
+
 	.u-load-more-wrap {
 		padding: 30rpx;
 	}

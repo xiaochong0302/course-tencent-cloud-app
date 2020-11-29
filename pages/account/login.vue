@@ -110,13 +110,18 @@
 				this.$refs.vl.setRules(this.vlRules)
 			}
 		},
+		onShow() {
+			if (this.$utils.isLogin()) {
+				this.$utils.redirect('/pages/me/index')
+			}
+		},
 		methods: {
 			verifyCodeChange(text) {
 				this.verifyCodeTips = text
 			},
 			getVerifyCode: async function() {
 				if (!this.$refs.verifyCode.canGetCode) {
-					return false	
+					return false
 				}
 				try {
 					uni.showLoading({

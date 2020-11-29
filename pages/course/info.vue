@@ -37,9 +37,9 @@
 				</view>
 				<view class="section">
 					<view class="social">
-						<u-icon name="share" size="36" label="分享"></u-icon>
-						<u-icon name="chat" size="36" label="咨询" @click="addConsult(course.id)"></u-icon>
 						<u-icon :name="starIcon.name" :color="starIcon.color" size="36" label="收藏" @click="favoriteCourse(course.id)"></u-icon>
+						<u-icon name="chat" size="36" label="咨询" @click="addConsult(course.id)"></u-icon>
+						<u-icon name="rmb-circle" size="36" label="赞赏" @click="popupRewardBox"></u-icon>
 					</view>
 				</view>
 			</view>
@@ -88,8 +88,15 @@
 		</view>
 		<view class="sticky-bottom">
 			<u-button type="primary" @click="buyCourse(course.id)" v-if="showOrderBtn">立即购买</u-button>
-			<u-button type="primary" @click="rewardCourse(course.id)" v-if="showRewardBtn">赞赏支持</u-button>
 		</view>
+		<u-popup v-model="showRewardBox" mode="bottom" :closeable="true">
+			<view class="reward-option-list">
+				<view class="reward-option" v-for="option in rewardOptions" :key="option.id">
+					<u-button type="primary" size="medium" @click="rewardCourse(option.id)">{{ option.title }}</u-button>
+				</view>
+			</view>
+		</u-popup>
+	</view>
 	</view>
 </template>
 
@@ -128,6 +135,8 @@
 				reviews: [],
 				consults: [],
 				packages: [],
+				rewardOptions: [],
+				showRewardBox: false,
 			}
 		},
 		computed: {
@@ -151,6 +160,7 @@
 			this.loadReviews(e.id)
 			this.loadConsults(e.id)
 			this.loadPackages(e.id)
+			this.loadRewardOptions(e.id)
 		},
 		onShow() {
 			this.enableSticky = true
@@ -172,31 +182,53 @@
 					this.currentTab = index
 				}
 			},
+			popupRewardBox() {
+				this.showRewardBox = true
+			},
 			favoriteCourse(id) {
-				this.$api.favoriteCourse(id).then(res => {
-					if (this.course.me.favorited == 1) {
-						this.course.me.favorited = 0
-					} else {
-						this.course.me.favorited = 1
+				let redirect = `/pages/course/info?id=${id}`
+				this.$utils.checkLogin({
+					redirect: redirect,
+					success: () => {
+						this.$api.favoriteCourse(id).then(res => {
+							if (this.course.me.favorited == 1) {
+								this.course.me.favorited = 0
+							} else {
+								this.course.me.favorited = 1
+							}
+						}).catch(e => {
+							this.$u.toast('收藏课程失败')
+						})
 					}
-				}).catch(e => {
-					this.$u.toast('收藏课程失败')
 				})
 			},
 			addConsult(id) {
-				this.$utils.redirect('/pages/consult/add', {
-					course_id: id
+				let redirect = `/pages/consult/add?course_id=${id}`
+				this.$utils.checkLogin({
+					redirect: redirect,
+					success: () => {
+						this.$utils.redirect(redirect)
+					}
 				})
 			},
 			buyCourse(id) {
-				this.$utils.redirect('/pages/order/confirm', {
-					item_id: id,
-					item_type: 1
+				let redirect = `/pages/order/confirm?item_id=${id}&item_type=1`
+				this.$utils.checkLogin({
+					redirect: redirect,
+					success: () => {
+						this.$utils.redirect(redirect)
+					}
 				})
 			},
-			rewardCourse(id) {
-				this.$utils.redirect('/pages/course/reward', {
-					id: id
+			rewardCourse(optId) {
+				let itemId = `${this.course.id}-${optId}`
+				let redirect = `/pages/order/confirm?item_id=${itemId}&item_type=3`
+				this.$utils.checkLogin({
+					redirect: redirect,
+					success: () => {
+						this.showRewardBox = false
+						this.$utils.redirect(redirect)
+					}
 				})
 			},
 			gotoReviewList(id) {
@@ -244,6 +276,13 @@
 				}).catch(e => {
 					this.$u.toast('加载套餐失败')
 				})
+			},
+			loadRewardOptions(id) {
+				this.$api.getRewardOptions().then(res => {
+					this.rewardOptions = res.options
+				}).catch(e => {
+					this.$u.toast('加载赞赏失败')
+				})
 			}
 		}
 	}
@@ -251,11 +290,12 @@
 
 <style lang="scss" scoped>
 	.sticky-bottom {
+		z-index: 999;
 		position: fixed;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background-color: #FFFFFF;
+		background-color: white;
 		padding: 15rpx;
 	}
 
@@ -272,13 +312,11 @@
 	}
 
 	.tab-content {
+		padding-bottom: 100rpx;
+	}
+
+	.tab-item {
 		padding: 15rpx;
-		/* #ifdef H5 */
-		margin-bottom: 240rpx;
-		/* #endif */
-		/* #ifndef H5 */
-		margin-bottom: 120rpx;
-		/* #endif */
 	}
 
 	.section {
@@ -293,6 +331,23 @@
 
 	.social .u-icon {
 		margin-right: 30rpx;
+	}
+
+	.reward-option-list {
+		display: flex;
+		flex-wrap: wrap;
+		padding-top: 100rpx;
+	}
+
+	.reward-option {
+		margin-left: 50rpx;
+		margin-bottom: 50rpx;
+	}
+
+	.reward-option .u-btn {
+		padding-left: 30rpx;
+		padding-right: 30rpx;
+		min-width: 180rpx;
 	}
 
 	.basic .title {
