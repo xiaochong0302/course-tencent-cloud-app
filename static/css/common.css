@@ -1,0 +1,29 @@
+/* #ifdef H5 */
+uni-page-head {
+	display: none;
+}
+/* #endif */
+
+.container {
+	color: #606266;
+	font-size: 14px;
+	padding: 20rpx;
+}
+
+.form-item {
+	min-height: 40rpx;
+	margin-top: 30rpx;
+}
+
+.form-item .link {
+	display: flex;
+	justify-content: center;
+}
+
+.form-item .link text {
+	margin: 0 15rpx;
+}
+
+.hide {
+	display: none;
+}
