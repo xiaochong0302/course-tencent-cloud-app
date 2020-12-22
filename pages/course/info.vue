@@ -11,7 +11,9 @@
 		<view class="tab-content">
 			<view class="tab-item tab-summary" v-if="currentTab == 0">
 				<view class="section">
-					<u-section title="基本信息" :right="false"></u-section>
+					<view class="head">
+						<u-section title="基本信息" :right="false"></u-section>
+					</view>
 					<view class="basic">
 						<view class="title">{{ course.title }}</view>
 						<view class="meta">
@@ -29,7 +31,9 @@
 					</view>
 				</view>
 				<view class="section" v-if="course.details">
-					<u-section title="课程介绍" :right="false"></u-section>
+					<view class="head">
+						<u-section title="课程介绍" :right="false"></u-section>
+					</view>
 					<view class="details">{{ course.details }}</view>
 				</view>
 				<view class="section" v-if="course.teachers.length > 0">
@@ -37,9 +41,15 @@
 				</view>
 				<view class="section">
 					<view class="social">
-						<u-icon :name="starIcon.name" :color="starIcon.color" size="36" label="收藏" @click="favoriteCourse(course.id)"></u-icon>
-						<u-icon name="chat" size="36" label="咨询" @click="addConsult(course.id)"></u-icon>
-						<u-icon name="rmb-circle" size="36" label="赞赏" @click="popupRewardBox"></u-icon>
+						<view class="action">
+							<u-icon :name="starIcon.name" :color="starIcon.color" size="36" label="收藏" @click="favoriteCourse(course.id)"></u-icon>
+						</view>
+						<view class="action">
+							<u-icon name="chat" size="36" label="咨询" @click="addConsult(course.id)"></u-icon>
+						</view>
+						<view class="action">
+							<u-icon name="rmb-circle" size="36" label="赞赏" @click="popupRewardBox"></u-icon>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -91,8 +101,8 @@
 		</view>
 		<u-popup v-model="showRewardBox" mode="bottom" :closeable="true">
 			<view class="reward-option-list">
-				<view class="reward-option" v-for="option in rewardOptions" :key="option.id">
-					<u-button type="primary" size="medium" @click="rewardCourse(option.id)">{{ option.title }}</u-button>
+				<view class="reward-option" v-for="option in rewardOptions" :key="option.id" @click="rewardCourse(option.id)">
+					{{ option.title }}
 				</view>
 			</view>
 		</u-popup>
@@ -303,10 +313,6 @@
 		margin-bottom: 30rpx;
 	}
 
-	.u-section {
-		margin-bottom: 30rpx;
-	}
-
 	.tab-title {
 		margin-bottom: 15rpx;
 	}
@@ -323,13 +329,17 @@
 		margin-bottom: 30rpx;
 	}
 
+	.section .head {
+		margin-bottom: 15rpx;
+	}
+
 	.social {
 		display: flex;
 		justify-content: center;
 		margin-bottom: 15rpx;
 	}
 
-	.social .u-icon {
+	.social .action {
 		margin-right: 30rpx;
 	}
 
@@ -340,14 +350,14 @@
 	}
 
 	.reward-option {
+		color: white;
+		text-align: center;
+		background-color: $u-type-primary;
+		border-radius: 10rpx;
+		padding: 15rpx 0;
 		margin-left: 50rpx;
 		margin-bottom: 50rpx;
-	}
-
-	.reward-option .u-btn {
-		padding-left: 30rpx;
-		padding-right: 30rpx;
-		min-width: 180rpx;
+		width: 180rpx;
 	}
 
 	.basic .title {
@@ -360,7 +370,7 @@
 		margin-bottom: 15rpx;
 	}
 
-	.basic .meta uni-text {
+	.basic .meta text {
 		margin-right: 15rpx;
 	}
 

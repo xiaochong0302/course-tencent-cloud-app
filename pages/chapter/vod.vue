@@ -17,7 +17,14 @@
 		</u-popup>
 		<u-sticky :enable="enableSticky" h5-nav-height="0">
 			<view class="sticky">
+				<!-- #ifdef H5 -->
 				<view class="player" id="player"></view>
+				<!-- #endif -->
+				<!-- #ifndef H5 -->
+				<view class="player">
+					<video :src="playUrl" @play="onPlay" @pause="onPause" @end="onEnd"></video>
+				</view>
+				<!-- #endif -->
 				<view class="action">
 					<u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count" @click="likeChapter(chapter.id)"></u-icon>
 					<u-icon name="account" size="36" :label="chapter.user_count"></u-icon>
@@ -37,9 +44,6 @@
 </template>
 
 <script>
-	import {
-		TcPlayer
-	} from '@/common/tcplayer.js'
 	import ConsultList from '@/components/consult-list.vue'
 	export default {
 		components: {
@@ -49,6 +53,7 @@
 			return {
 				enableSticky: true,
 				player: null,
+				playUrl: '',
 				chapter: {
 					course: {},
 					me: {},
@@ -119,45 +124,38 @@
 			this.enableSticky = false
 		},
 		methods: {
-			initPlayer(playUrls) {
-				let options = {}
+			initPlayer() {
+				// #ifdef H5
 				let sys = uni.getSystemInfoSync()
-				options.width = sys.windowWidth
-				options.height = Math.ceil(sys.windowWidth * 9 / 16)
-				if (playUrls.od) {
-					options.m3u8 = playUrls.od.url
-				}
-				if (playUrls.hd) {
-					options.m3u8_hd = playUrls.hd.url
-				}
-				if (playUrls.sd) {
-					options.m3u8_sd = playUrls.sd.url
-				}
-				options.autoplay = false
-				options.listener = (msg) => {
-					if (msg.type == 'play') {
-						this.onPlay()
-					} else if (msg.type == 'pause') {
-						this.onPause()
-					} else if (msg.type == 'ended') {
-						this.onEnded()
+				let options = {
+					width: sys.windowWidth,
+					height: Math.ceil(sys.windowWidth * 9 / 16),
+					m3u8: this.getPlayUrl(),
+					autoplay: false,
+					listener: msg => {
+						if (msg.type == 'play') {
+							this.onPlay()
+						} else if (msg.type == 'pause') {
+							this.onPause()
+						} else if (msg.type == 'ended') {
+							this.onEnd()
+						}
 					}
 				}
 				this.player = new TcPlayer('player', options)
-				/**
-				 * 过于接近结束不设置播放位置
-				 */
-				if (this.player.duration() - this.learning.position > 10) {
-					this.player.currentTime(this.learning.position)
-				}
+				// #endif
+				this.playUrl = this.getPlayUrl()
 			},
 			onPlay() {
+				console.log('@@@play@@@')
 				this.setLearningInterval()
 			},
 			onPause() {
+				console.log('@@@pause@@@')
 				this.clearLearningInterval()
 			},
-			onEnded() {
+			onEnd() {
+				console.log('@@@end@@@')
 				this.clearLearningInterval()
 				this.learningChapter()
 			},
@@ -241,12 +239,25 @@
 					id: id
 				})
 			},
+			getPlayUrl() {
+				let playUrls = this.chapter.play_urls
+				if (playUrls.sd) {
+					return playUrls.sd.url
+				}
+				if (playUrls.hd) {
+					return playUrls.hd.url
+				}
+				if (playUrls.od) {
+					return playUrls.od.url
+				}
+				return ''
+			},
 			loadChapter(id) {
 				this.$api.getChapterInfo(id).then(res => {
 					this.chapter = res.chapter
 					this.learning.plan_id = res.chapter.me.plan_id
 					this.learning.position = res.chapter.me.position
-					this.initPlayer(res.chapter.play_urls)
+					this.initPlayer()
 				}).catch(e => {
 					this.$u.toast('加载课时失败')
 				})
@@ -278,7 +289,8 @@
 		background-color: white;
 	}
 
-	.player {
+	.player,
+	video {
 		width: 750rpx;
 		height: 422rpx;
 		margin-bottom: 30rpx;

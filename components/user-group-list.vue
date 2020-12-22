@@ -71,7 +71,7 @@
 		margin-right: 15rpx;
 	}
 	
-	.meta uni-text {
+	.meta text {
 		margin-right: 15rpx;
 	}
 </style>

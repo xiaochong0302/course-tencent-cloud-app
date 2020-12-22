@@ -2,7 +2,9 @@
 	<view class="container">
 		<view class="top-list" v-if="categories.length > 0">
 			<view v-for="top in categories" :key="top.id">
-				<u-section :title="top.name" :right="false"></u-section>
+				<view class="section">
+					<u-section :title="top.name" :right="false"></u-section>
+				</view>
 				<view class="sub-list">
 					<u-tag v-for="sub in top.children" :key="sub.id" :text="sub.name" type="info" mode="plain" shape="circle" @click="gotoCourseList(sub.id)"></u-tag>
 				</view>
@@ -39,7 +41,7 @@
 </script>
 
 <style>
-	.u-section {
+	.section {
 		margin-top: 30rpx;
 		margin-bottom: 30rpx;
 	}

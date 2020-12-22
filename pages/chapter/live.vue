@@ -1,7 +1,14 @@
 <template>
 	<view class="container" v-if="chapter.id > 0">
 		<view class="active" v-if="chapter.status == 1">
+			<!-- #ifdef H5 -->
 			<view class="player" id="player"></view>
+			<!-- #endif -->
+			<!-- #ifndef H5 -->
+			<view class="player">
+				<live-player :src="playUrl" :autoplay="ture" @statechange="onStateChange"></live-player>
+			</view>
+			<!-- #endif -->
 			<view class="u-p-15">
 				<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse(chapter.course.id)"></u-section>
 			</view>
@@ -42,15 +49,13 @@
 </template>
 
 <script>
-	import {
-		TcPlayer
-	} from '@/common/tcplayer.js'
 	export default {
 		data() {
 			return {
 				countdownTime: 0,
 				socketOpen: false,
 				player: null,
+				playUrl: '',
 				chapter: {
 					course: {}
 				},
@@ -83,7 +88,7 @@
 		onReady() {
 			if (this.chapter.status == 1) {
 				this.$refs.form.setRules(this.rules)
-				this.initPlayer(this.chapter.play_urls)
+				this.initPlayer()
 				this.initSocket()
 			}
 		},
@@ -126,31 +131,24 @@
 				})
 			},
 			initPlayer(playUrls) {
-				let options = {}
+				// #ifdef H5
 				let sys = uni.getSystemInfoSync()
-				options.width = sys.windowWidth
-				options.height = Math.ceil(sys.windowWidth * 9 / 16)
-				if (playUrls.m3u8.od) {
-					options.m3u8 = playUrls.m3u8.od
-				}
-				if (playUrls.m3u8.hd) {
-					options.m3u8_hd = playUrls.m3u8.hd
-				}
-				if (playUrls.m3u8.sd) {
-					options.m3u8_sd = playUrls.m3u8.sd
-				}
-				options.live = true
-				options.autoplay = true
-				options.listener = (msg) => {
-					if (msg.type == 'play') {
-						this.onStart()
-					} else if (msg.type == 'pause') {
-						this.onStop()
-					} else if (msg.type == 'ended') {
-						this.onStop()
+				let options = {
+					width: sys.windowWidth,
+					height: Math.ceil(sys.windowWidth * 9 / 16),
+					m3u8: this.getPlayUrl(),
+					autoplay: false,
+					listener: msg => {
+						if (msg.type == 'play') {
+							this.onPlay()
+						} else if (msg.type == 'pause') {
+							this.onStop()
+						}
 					}
 				}
 				this.player = new TcPlayer('player', options)
+				// #endif
+				this.playUrl = this.getPlayUrl()
 			},
 			onStart() {
 				this.setLearningInterval()
@@ -218,6 +216,19 @@
 				this.$utils.redirect('/pages/course/info', {
 					id: id
 				})
+			},
+			getPlayUrl() {
+				let playUrls = this.chapter.play_urls
+				if (playUrls.m3u8.sd) {
+					return playUrls.m3u8.sd
+				}
+				if (playUrls.m3u8.hd) {
+					return playUrls.m3u8.hd
+				}
+				if (playUrls.m3u8.od) {
+					return playUrls.m3u8.od
+				}
+				return ''
 			},
 			loadChapter(id) {
 				this.$api.getChapterInfo(id).then(res => {

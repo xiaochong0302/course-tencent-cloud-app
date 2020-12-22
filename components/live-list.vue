@@ -72,7 +72,7 @@
 		color: $u-tips-color;
 	}
 	
-	.meta uni-text {
+	.meta text {
 		margin-right: 15rpx;
 	}
 </style>

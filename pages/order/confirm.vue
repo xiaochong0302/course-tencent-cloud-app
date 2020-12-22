@@ -1,7 +1,9 @@
 <template>
 	<view class="container" v-if="confirm.item_type > 0">
 		<view class="section">
+			<view class="head">
 			<u-section title="商品信息" :right="false"></u-section>
+			</view>
 			<view class="item-course" v-if="confirm.item_type== 1">
 				<view class="course">
 					<view class="title">课程 - {{ itemInfo.course.title }}</view>
@@ -41,7 +43,9 @@
 			</view>
 		</view>
 		<view class="section">
+			<view class="head">
 			<u-section title="支付信息" :right="false"></u-section>
+			</view>
 			<view class="stats">
 				<view class="meta">商品总价：{{ confirm.total_amount|formatPrice }}</view>
 				<view class="meta">优惠金额：{{ confirm.discount_amount|formatPrice }}</view>
@@ -98,26 +102,22 @@
 
 <style lang="scss" scoped>
 	.container {
-		padding: 30rpx 15rpx;
-	}
-
-	.u-section {
-		margin-bottom: 30rpx;
+		padding-top: 30rpx;
 	}
 
 	.section {
 		margin-bottom: 30rpx;
 	}
 	
+	.section .head {
+		margin-bottom: 30rpx;
+	}
+	
 	.title {
 		color: $u-main-color;
 	}
-	
-	.meta {
-		color: $u-tips-color;
-	}
 
-	.meta uni-text {
+	.meta text {
 		margin-right: 15rpx;
 	}
 

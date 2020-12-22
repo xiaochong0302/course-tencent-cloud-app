@@ -87,7 +87,7 @@
 		margin-bottom: 10rpx;
 	}
 
-	.meta uni-text {
+	.meta text {
 		margin-right: 10rpx;
 	}
 

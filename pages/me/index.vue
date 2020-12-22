@@ -99,7 +99,7 @@
 				this.showLogoutModal = true
 			},
 			confirmLogout() {
-				this.$utils.setToken('')
+				this.$utils.clearToken()
 				this.showLogoutModal = false
 				uni.reLaunch({
 					url: '/pages/index/index'

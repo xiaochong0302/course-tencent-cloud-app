@@ -155,6 +155,11 @@ export const setToken = (value) => {
 	return Storage.set(key, value)
 }
 
+export const clearToken = (value) => {
+	let key = Storage.cacheKey.token
+	return Storage.set(key, '')
+}
+
 export const isLogin = () => {
 	if (getToken() == '') {
 		return false

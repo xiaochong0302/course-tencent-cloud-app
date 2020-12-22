@@ -97,7 +97,7 @@
 		width: 540rpx;
 	}
 
-	.meta uni-text {
+	.meta text {
 		margin-right: 15rpx;
 	}
 

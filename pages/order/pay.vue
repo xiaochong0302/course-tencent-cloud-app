@@ -1,18 +1,38 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="order.sn">
 		<view class="section">
-			<u-section title="订单信息" :right="false"></u-section>
+			<view class="head">
+				<u-section title="订单信息" :right="false"></u-section>
+			</view>
 			<view class="order">
-				<view class="subject">{{ order.subject }}</view>
+				<view class="title">{{ order.subject }}</view>
 				<view class="sn">订单编号：{{ order.sn }}</view>
 				<view class="price">支付金额：{{ order.amount|formatPrice }}</view>
 			</view>
 		</view>
 		<view class="section">
-			<u-section title="支付方式" :right="false"></u-section>
-			<view class="channel">
-				<u-button type="primary" @click="h5Pay(1)">支付宝支付</u-button>
-				<u-button type="success" @click="h5Pay(2)">微信支付</u-button>
+			<view class="head">
+				<u-section title="支付方式" :right="false"></u-section>
+			</view>
+			<view class="channel-list">
+				<!-- #ifdef H5 -->
+				<view class="channel">
+					<u-button type="primary" @click="h5Pay(1)">支付宝支付</u-button>
+				</view>
+				<view class="channel">
+					<u-button type="success" @click="h5Pay(2)">微信支付</u-button>
+				</view>
+				<!-- #endif -->
+				<!-- #ifdef MP-WEIXIN -->
+				<view class="channel">
+					<u-button type="success" @click="mpWxpay">微信支付</u-button>
+				</view>
+				<!-- #endif -->
+				<!-- #ifdef MP-ALIPAY -->
+				<view class="channel">
+					<u-button type="success" @click="mpAlipay">微信支付</u-button>
+				</view>
+				<!-- #endif -->
 			</view>
 		</view>
 	</view>
@@ -22,7 +42,7 @@
 	export default {
 		data() {
 			return {
-				order: {}
+				order: {},
 			}
 		},
 		onLoad(e) {
@@ -39,47 +59,64 @@
 					this.$u.toast('加载订单失败')
 				})
 			},
+			// #ifdef H5
 			h5Pay(channel) {
 				this.$api.createH5Trade({
 					order_sn: this.order.sn,
 					channel: channel,
 				}).then(res => {
-					this.queryPayStatus(res.trade.sn)
-					this.$utils.redirect('/pages/trade/h5pay', {
-						sn: res.trade.sn
-					})
+					if (res.payment.redirect != '') {
+						this.showModal = true
+						this.trade = res.trade
+						location.href = res.payment.redirect
+					} else {
+						this.$u.toast('创建交易失败')
+					}
 				}).catch(e => {
 					this.$u.toast('创建交易失败')
 				})
 			},
-			queryPayStatus(sn) {
-				let interval = setInterval(sn => {
-					this.$api.getTradeInfo(sn).then(res => {
-						if (res.trade.status == 2) {
-							clearInterval(interval)
-							this.$utils.redirect('/pages/me/orders')
-						}
-					})
-				}, 5000, sn)
-			}
+			// #endif
+			// #ifdef MP-WEIXIN
+			mpWxpay() {
+				this.$api.createMpTrade({
+					order_sn: this.order.sn,
+					channel: channel,
+				}).then(res => {
+					if (res.payment.redirect != '') {
+						location.href = res.payment.redirect
+					} else {
+						this.$u.toast('生成支付链接失败')
+					}
+				}).catch(e => {
+					this.$u.toast('创建交易失败')
+				})
+			},
+			// #endif
+			// #ifdef MP-ALIPAY
+			mpAlipay() {
+
+			},
+			// #endif
 		}
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.container {
-		padding: 50rpx 30rpx;
+		padding-top: 30rpx;
 	}
 
 	.section {
-		margin-bottom: 50rpx;
-	}
-
-	.section .u-section {
 		margin-bottom: 30rpx;
 	}
 
-	.order .subject {
+	.section .head {
+		margin-bottom: 30rpx;
+	}
+
+	.order .title {
+		color: $u-main-color;
 		margin-bottom: 15rpx;
 	}
 
@@ -87,7 +124,7 @@
 		margin-bottom: 15rpx;
 	}
 
-	.channel .u-btn {
+	.channel {
 		margin-bottom: 30rpx;
 	}
 </style>

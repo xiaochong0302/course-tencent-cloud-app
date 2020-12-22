@@ -1,6 +1,8 @@
 <template>
 	<view>
-		<u-section title="授课教师" :right="false"></u-section>
+		<view class="section">
+			<u-section title="授课教师" :right="false"></u-section>
+		</view>
 		<view class="item-list">
 			<view class="item" v-for="teacher in teachers" :key="teacher.id" @click="gotoTeacher(teacher.id)">
 				<view class="avatar">
@@ -50,7 +52,7 @@
 </script>
 
 <style lang="scss" scoped>
-	.u-section {
+	.section {
 		margin-bottom: 15rpx;
 	}
 

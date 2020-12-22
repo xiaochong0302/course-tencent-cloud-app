@@ -1,3 +1,4 @@
+import * as About from '@/common/about.js'
 import * as Config from '@/common/config.js'
 import * as Utils from '@/common/utils.js'
 import * as Storage from '@/common/storage.js'
@@ -385,7 +386,7 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 
 	let url = Config.apiBaseUrl + path
 
-	header['X-Version'] = Config.appInfo.version
+	header['X-Version'] = About.appInfo.version
 	header['X-Platform'] = Utils.getPlatform()
 	header['X-Timestamp'] = Utils.getNowTime()
 	header['X-Token'] = Storage.get(Storage.cacheKey.token)
@@ -404,6 +405,7 @@ const httpRequest = (path, params = {}, method = 'GET', header = {}) => {
 						reject(res.data)
 					}
 				} else if (res.statusCode == 401) {
+					Utils.clearToken()
 					uni.navigateTo({
 						url: '/pages/account/login'
 					})

@@ -121,7 +121,7 @@
 		margin-bottom: 15rpx;
 	}
 
-	.rating uni-text {
+	.rating text {
 		margin-right: 15rpx;
 	}
 
