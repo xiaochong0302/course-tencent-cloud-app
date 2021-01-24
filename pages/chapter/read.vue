@@ -1,7 +1,9 @@
 <template>
 	<view class="container" v-if="chapter.id > 0">
 		<view class="title">{{ chapter.title }}</view>
-		<view class="content">{{ chapter.content }}</view>
+		<view class="content markdown-body">
+			<u-parse :html="chapter.content"></u-parse>
+		</view>
 		<view class="action">
 			<u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count" @click="likeChapter(chapter.id)"></u-icon>
 			<u-icon name="account" size="36" :label="chapter.user_count"></u-icon>
