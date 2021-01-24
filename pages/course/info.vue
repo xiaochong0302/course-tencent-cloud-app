@@ -34,7 +34,9 @@
 					<view class="head">
 						<u-section title="课程介绍" :right="false"></u-section>
 					</view>
-					<view class="details">{{ course.details }}</view>
+					<view class="details markdown-body">
+						<u-parse :html="course.details"></u-parse>
+					</view>
 				</view>
 				<view class="section" v-if="course.teachers.length > 0">
 					<course-teacher-list :items="course.teachers"></course-teacher-list>
