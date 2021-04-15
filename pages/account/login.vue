@@ -168,7 +168,7 @@
 							verify_code: this.vl.verify_code
 						}).then(res => {
 							this.$utils.setToken(res.token)
-							this.$utils.redirect(this.redirect)
+							this.$utils.redirect(this.redirectUrl)
 						}).catch(e => {
 							this.$u.toast(e.msg)
 						})
