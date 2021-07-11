@@ -19,7 +19,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="u-dropdown__content" :style="[contentStyle, {
+		<view class="u-dropdown__content" v-show="openFlag" :style="[contentStyle, {
 			transition: `opacity ${duration / 1000}s linear`,
 			top: $u.addUnit(height),
 			height: contentHeight + 'px'
@@ -112,6 +112,7 @@
 		},
 		data() {
 			return {
+				openFlag: false,
 				showDropdown: true, // 是否打开下来菜单,
 				menuList: [], // 显示的菜单
 				active: false, // 下拉菜单的状态

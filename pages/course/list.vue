@@ -1,22 +1,17 @@
 <template>
 	<view class="container">
-		<u-sticky :enable="enableSticky" h5-nav-height="0">
-			<view class="filter">
-				<u-dropdown>
-					<u-dropdown-item title="排序" v-model="sort" :options="sorts" @change="switchSort"></u-dropdown-item>
-					<u-dropdown-item title="难度" v-model="level" :options="levels" @change="switchLevel"></u-dropdown-item>
-					<u-dropdown-item title="类型" v-model="model" :options="models" @change="switchModel"></u-dropdown-item>
-				</u-dropdown>
-			</view>
-		</u-sticky>
+		<view class="filter">
+			<u-dropdown ref="uDropdown" @open="openFilter" @close="closeFilter" class="u-dropdown">
+				<u-dropdown-item title="排序" v-model="sort" :options="sorts" @change="switchSort"></u-dropdown-item>
+				<u-dropdown-item title="难度" v-model="level" :options="levels" @change="switchLevel"></u-dropdown-item>
+				<u-dropdown-item title="类型" v-model="model" :options="models" @change="switchModel"></u-dropdown-item>
+			</u-dropdown>
+		</view>
 		<view class="course-list" v-if="items.length > 0">
 			<course-list :items="items"></course-list>
 		</view>
 		<u-loadmore :status="loadMore" v-if="items.length > 0"></u-loadmore>
 		<u-empty :show="showEmpty" margin-top="100"></u-empty>
-		<!-- dropdown+backtop有bug,待官方解决
-		<u-back-top :scrollTop="scrollTop"></u-back-top>
-		-->
 	</view>
 </template>
 
@@ -33,8 +28,7 @@
 				hasMore: false,
 				showEmpty: false,
 				loadMore: 'loadmore',
-				enableSticky: true,
-				scrollTop: 0,
+				openFlag: false,
 				sc: 0,
 				level: 0,
 				model: 0,
@@ -97,16 +91,13 @@
 				this.loadCourses()
 			}
 		},
-		onPageScroll(e) {
-			this.scrollTop = e.scrollTop
-		},
-		onShow() {
-			this.enableSticky = true
-		},
-		onHide() {
-			this.enableSticky = false
-		},
 		methods: {
+			openFilter(index) {
+				this.$refs.uDropdown.openFlag = true;
+			},
+			closeFilter(index) {
+				this.$refs.uDropdown.openFlag = false;
+			},
 			switchLevel(level) {
 				this.level = level
 				this.doFilter()
@@ -158,7 +149,16 @@
 
 <style>
 	.filter {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		z-index: 99;
 		background-color: #FFFFFF;
+	}
+	
+	.course-list {
+		margin-top: 70rpx;
 	}
 
 	.u-load-more-wrap {
