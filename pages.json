@@ -73,16 +73,6 @@
 			"navigationBarTitleText": "课程列表"
 		}
 	}, {
-		"path": "pages/im/group/list",
-		"style": {
-			"navigationBarTitleText": "群组列表"
-		}
-	}, {
-		"path": "pages/im/group/index",
-		"style": {
-			"navigationBarTitleText": "群组主页"
-		}
-	}, {
 		"path": "pages/review/info",
 		"style": {
 			"navigationBarTitleText": "评价详情"
@@ -143,16 +133,6 @@
 			"navigationBarTitleText": "TA的课程"
 		}
 	}, {
-		"path": "pages/user/friends",
-		"style": {
-			"navigationBarTitleText": "TA的好友"
-		}
-	}, {
-		"path": "pages/user/groups",
-		"style": {
-			"navigationBarTitleText": "TA的群组"
-		}
-	}, {
 		"path": "pages/me/index",
 		"style": {
 			"navigationBarTitleText": "我的主页"
@@ -176,16 +156,6 @@
 		"path": "pages/me/reviews",
 		"style": {
 			"navigationBarTitleText": "我的评价"
-		}
-	}, {
-		"path": "pages/me/friends",
-		"style": {
-			"navigationBarTitleText": "我的好友"
-		}
-	}, {
-		"path": "pages/me/groups",
-		"style": {
-			"navigationBarTitleText": "我的群组"
 		}
 	}, {
 		"path": "pages/me/orders",

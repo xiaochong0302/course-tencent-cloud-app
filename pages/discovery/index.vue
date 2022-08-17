@@ -20,14 +20,6 @@
 					<u-divider half-width="50">加载更多</u-divider>
 				</view>
 			</view>
-			<view class="tab-group" v-if="currentTab == 2">
-				<view class="group-list" v-if="groups.length > 0">
-					<group-list :items="groups"></group-list>
-				</view>
-				<view class="load-more" @click="gotoGroupList" v-if="groups.length > 10">
-					<u-divider half-width="50">加载更多</u-divider>
-				</view>
-			</view>
 		</view>
 	</view>
 </template>
@@ -35,12 +27,10 @@
 <script>
 	import LiveList from '@/components/live-list.vue'
 	import TeacherList from '@/components/teacher-list.vue'
-	import GroupList from '@/components/group-list.vue'
 	export default {
 		components: {
 			LiveList,
 			TeacherList,
-			GroupList,
 		},
 		data() {
 			return {
@@ -49,8 +39,6 @@
 					name: '直播'
 				}, {
 					name: '教师'
-				}, {
-					name: '群组'
 				}],
 				lives: [],
 				teachers: [],
@@ -60,7 +48,6 @@
 		onLoad() {
 			this.loadLives()
 			this.loadTeachers()
-			this.loadGroups()
 		},
 		methods: {
 			changeTab(index) {
@@ -73,9 +60,6 @@
 			},
 			gotoTeacherList() {
 				this.$utils.redirect('/pages/teacher/list')
-			},
-			gotoGroupList() {
-				this.$utils.redirect('/pages/im/group/list')
 			},
 			loadLives() {
 				this.$api.getLiveList().then(res => {
@@ -91,13 +75,6 @@
 					this.teachers = res.pager.items
 				}).catch(e => {
 					this.$u.toast('加载教师失败')
-				})
-			},
-			loadGroups() {
-				this.$api.getImGroupList().then(res => {
-					this.groups = res.pager.items
-				}).catch(e => {
-					this.$u.toast('加载群组失败')
 				})
 			}
 		}

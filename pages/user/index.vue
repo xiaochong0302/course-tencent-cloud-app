@@ -25,35 +25,15 @@
 					<u-divider half-width="50">加载更多</u-divider>
 				</view>
 			</view>
-			<view class="tab-item" v-if="currentTab == 2">
-				<view class="friend-list" v-if="friends.length > 0">
-					<user-friend-list :items="friends"></user-friend-list>
-				</view>
-				<view class="load-more" @click="gotoFriendList(user.id)" v-if="friends.length > 10">
-					<u-divider half-width="50">加载更多</u-divider>
-				</view>
-			</view>
-			<view class="tab-item" v-if="currentTab == 3">
-				<view class="group-list" v-if="groups.length > 0">
-					<user-group-list :items="groups"></user-group-list>
-				</view>
-				<view class="load-more" @click="gotoGroupList(user.id)" v-if="groups.length > 10">
-					<u-divider half-width="50">加载更多</u-divider>
-				</view>
-			</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	import UserCourseList from '@/components/user-course-list.vue'
-	import UserFriendList from '@/components/user-friend-list.vue'
-	import UserGroupList from '@/components/user-group-list.vue'
 	export default {
 		components: {
 			UserCourseList,
-			UserFriendList,
-			UserGroupList,
 		},
 		data() {
 			return {
@@ -63,14 +43,8 @@
 					name: '介绍'
 				}, {
 					name: '课程'
-				}, {
-					name: '好友'
-				}, {
-					name: '群组'
 				}],
 				courses: [],
-				friends: [],
-				groups: [],
 				user: {},
 			}
 		},
@@ -83,8 +57,6 @@
 		onLoad(e) {
 			this.loadUserInfo(e.id)
 			this.loadUserCourses(e.id)
-			this.loadUserFriends(e.id)
-			this.loadUserGroups(e.id)
 		},
 		methods: {
 			changeTab(index) {
@@ -94,16 +66,6 @@
 			},
 			gotoCourseList(id) {
 				this.$utils.redirect('/pages/user/courses', {
-					id: id
-				})
-			},
-			gotoFriendList(id) {
-				this.$utils.redirect('/pages/user/friends', {
-					id: id
-				})
-			},
-			gotoGroupList(id) {
-				this.$utils.redirect('/pages/user/groups', {
 					id: id
 				})
 			},
@@ -119,20 +81,6 @@
 					this.courses = res.pager.items
 				}).catch(e => {
 					this.$u.toast('加载课程失败')
-				})
-			},
-			loadUserFriends(id) {
-				this.$api.getUserFriends(id).then(res => {
-					this.friends = res.pager.items
-				}).catch(e => {
-					this.$u.toast('加载好友失败')
-				})
-			},
-			loadUserGroups(id) {
-				this.$api.getUserGroups(id).then(res => {
-					this.groups = res.pager.items
-				}).catch(e => {
-					this.$u.toast('加载群组失败')
 				})
 			}
 		}
@@ -162,14 +110,6 @@
 
 	.course-list {
 		margin-bottom: 30rpx;
-	}
-
-	.friend-list {
-		padding-top: 15rpx;
-	}
-
-	.group-list {
-		padding-top: 15rpx;
 	}
 
 	.load-more {

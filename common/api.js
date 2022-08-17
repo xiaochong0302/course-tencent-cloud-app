@@ -230,18 +230,6 @@ export const createAppTrade = (params) => {
 	return httpPost('/trade/app/create', params)
 }
 
-export const getImGroupList = (params = {}) => {
-	return httpGet('/im/group/list', params)
-}
-
-export const getImGroupInfo = (id) => {
-	return httpGet(`/im/group/${id}/info`)
-}
-
-export const getImGroupUsers = (id, params = {}) => {
-	return httpGet(`/im/group/${id}/users`, params)
-}
-
 export const getTeacherList = (params = {}) => {
 	return httpGet('/teacher/list', params)
 }
@@ -264,14 +252,6 @@ export const getUserCourses = (id, params = {}) => {
 
 export const getUserFavorites = (id, params = {}) => {
 	return httpGet(`/user/${id}/favorites`, params)
-}
-
-export const getUserFriends = (id, params = {}) => {
-	return httpGet(`/user/${id}/friends`, params)
-}
-
-export const getUserGroups = (id, params = {}) => {
-	return httpGet(`/user/${id}/groups`, params)
 }
 
 export const getMyProfile = () => {
@@ -304,14 +284,6 @@ export const getMyReviews = (params = {}) => {
 
 export const getMyFavorites = (params = {}) => {
 	return httpGet('/uc/favorites', params)
-}
-
-export const getMyFriends = (params = {}) => {
-	return httpGet('/uc/friends', params)
-}
-
-export const getMyGroups = (params = {}) => {
-	return httpGet('/uc/groups', params)
 }
 
 export const updateMyProfile = (params = {}) => {
