@@ -11,13 +11,7 @@
 					<text>{{ course.lesson_count }}课时</text>
 				</view>
 				<view class="meta">
-					<view v-if="course.market_price > course.vip_price">
-						<text>{{ course.market_price|formatPrice }}</text>
-						<text v-if="course.vip_price > 0" class="price">会员{{ course.vip_price|formatPrice }}</text>
-						<text v-else class="free">会员免费</text>
-						<text>{{ course.user_count }}人购买</text>
-					</view>
-					<view v-else-if="course.market_price > 0">
+					<view v-if="course.market_price > 0">
 						<text class="price">{{ course.market_price|formatPrice }}</text>
 						<text class="user">{{ course.user_count }}人购买</text>
 					</view>

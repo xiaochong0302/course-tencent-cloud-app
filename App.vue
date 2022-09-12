@@ -15,5 +15,5 @@
 <style lang="scss">
 	@import "uview-ui/index.scss";
 	@import "static/css/common.css";
-    @import "static/css/markdown.css";
+	@import "static/css/content.css";
 </style>

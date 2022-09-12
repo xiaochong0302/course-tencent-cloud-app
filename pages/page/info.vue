@@ -1,7 +1,7 @@
 <template>
 	<view class="container" v-if="page.id > 0">
 		<view class="title">{{ page.title }}</view>
-		<view class="content markdown-body">
+		<view class="content ke-content">
 			<u-parse :html="page.content"></u-parse>
 		</view>
 	</view>

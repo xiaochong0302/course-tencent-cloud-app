@@ -1,11 +1,12 @@
 <template>
 	<view class="container" v-if="chapter.id > 0">
 		<view class="title">{{ chapter.title }}</view>
-		<view class="content markdown-body">
+		<view class="content ke-content">
 			<u-parse :html="chapter.content"></u-parse>
 		</view>
 		<view class="action">
-			<u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count" @click="likeChapter(chapter.id)"></u-icon>
+			<u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count"
+				@click="likeChapter(chapter.id)"></u-icon>
 			<u-icon name="account" size="36" :label="chapter.user_count"></u-icon>
 			<u-icon name="chat" size="36" :label="chapter.consult_count" @click="addConsult(chapter.id)"></u-icon>
 		</view>

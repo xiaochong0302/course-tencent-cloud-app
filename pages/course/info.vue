@@ -34,7 +34,7 @@
 					<view class="head">
 						<u-section title="课程介绍" :right="false"></u-section>
 					</view>
-					<view class="details markdown-body">
+					<view class="details ke-content">
 						<u-parse :html="course.details"></u-parse>
 					</view>
 				</view>
@@ -44,7 +44,8 @@
 				<view class="section">
 					<view class="social">
 						<view class="action">
-							<u-icon :name="starIcon.name" :color="starIcon.color" size="36" label="收藏" @click="favoriteCourse(course.id)"></u-icon>
+							<u-icon :name="starIcon.name" :color="starIcon.color" size="36" label="收藏"
+								@click="favoriteCourse(course.id)"></u-icon>
 						</view>
 						<view class="action">
 							<u-icon name="chat" size="36" label="咨询" @click="addConsult(course.id)"></u-icon>
@@ -103,7 +104,8 @@
 		</view>
 		<u-popup v-model="showRewardBox" mode="bottom" :closeable="true">
 			<view class="reward-option-list">
-				<view class="reward-option" v-for="option in rewardOptions" :key="option.id" @click="rewardCourse(option.id)">
+				<view class="reward-option" v-for="option in rewardOptions" :key="option.id"
+					@click="rewardCourse(option.id)">
 					{{ option.title }}
 				</view>
 			</view>
