@@ -1,9 +1,9 @@
 {
     "name" : "ctc-app",
     "appid" : "__UNI__CC01E6A",
-    "description" : "",
-    "versionName" : "1.0.0",
-    "versionCode" : "100",
+    "description" : "酷瓜云课堂（腾讯云版）客户端，采用uni-app框架开发，致力开源网课系统，开源网校系统，开源在线教育系统。",
+    "versionName" : "1.0.1",
+    "versionCode" : 101,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
