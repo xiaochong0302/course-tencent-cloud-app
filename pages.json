@@ -5,7 +5,7 @@
 	"pages": [{
 		"path": "pages/index/index",
 		"style": {
-			"navigationBarTitleText": "酷瓜云课堂"
+			"navigationBarTitleText": "酷瓜云课堂 - 开源版"
 		}
 	}, {
 		"path": "pages/search/index",
