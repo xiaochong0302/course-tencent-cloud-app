@@ -1,3 +1,5 @@
 /.hbuilderx
 /unpackage
+/node_modules
 /common/config.js
+/manifest.json
