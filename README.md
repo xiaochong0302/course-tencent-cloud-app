@@ -11,29 +11,31 @@
 
 为避免不必要的困扰，请先熟悉 [uni-app](https://uniapp.dcloud.io) 相关文档，以及 [HBuilderX](https://www.dcloud.io/hbuilderx.html) 开发工具
 
-#### 下载源码
+### 下载源码
 
 ```
 git clone https://gitee.com/koogua/course-tencent-cloud-app.git
 ```
 
-#### 导入项目
+### 导入项目
 
-使用HBuilderX导入项目（文件->导入->从本地目录导入）
+使用 HBuilderX 导入项目（文件 -> 导入 -> 从本地目录导入）
 
-#### 生成manifest.json文件
+(1) 生成manifest.json文件
 
 把 `manifest.sample.json` 另存为 `manifest.json`, 根据实际情况修改相关配置
 
-#### 修改配置文件
+(2) 修改配置文件
 
-把 `common/config.sample.js` 另存为 `common/config.js`, 修改 `apiBaseUrl` 为实际的地址（尾部不要加“/”）
+把 `common/config.sample.js` 另存为 `common/config.js`, 修改 `apiBaseUrl` 为实际的地址（尾部不要加 “/”）
 
 ```
 export const apiBaseUrl = '{{ your-domain }}/api'
 ```
 
-#### 运行
+### 编译运行
+
+使用 HBuilderX 编译运行（运行 -> 运行到浏览器 -> xxx浏览器）
 
 遇到跨域的问题，请修改 `course-tencent-cloud` 项目中的配置文件 `app/config/config.php` CORS 相关部分。
 
@@ -61,7 +63,9 @@ $config['cors']['allow_headers'] = '*';
 $config['cors']['allow_methods'] = ['GET', 'POST', 'OPTIONS'];
 ```
 
-### 发行
+### 编译发行
+
+使用 HBuilderX 编译发行H5（发行 -> 网站PC或手机H5）
 
 #### H5发行
 
