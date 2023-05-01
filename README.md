@@ -115,7 +115,7 @@ $config['cors']['allow_methods'] = ['GET', 'POST', 'OPTIONS'];
         "sdkConfigs" : {
             "maps" : {}
         },
-        "publicPath" : "https://course-1255691183.file.myqcloud.com/static/h5",
+        "publicPath" : "https://course-1255691183.file.myqcloud.com/h5",
         "template" : "template.h5.html",
         "domain" : "your-domain.com"
     }
