@@ -21,6 +21,10 @@ git clone https://gitee.com/koogua/course-tencent-cloud-app.git
 
 使用HBuilderX导入项目（文件->导入->从本地目录导入）
 
+#### 生成manifest.json文件
+
+把 `manifest.sample.json` 另存为 `manifest.json`, 根据实际情况修改相关配置
+
 #### 修改配置文件
 
 把 `common/config.sample.js` 另存为 `common/config.js`, 修改 `apiBaseUrl` 为实际的地址（尾部不要加“/”）
