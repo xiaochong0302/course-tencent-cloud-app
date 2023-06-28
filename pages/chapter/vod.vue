@@ -1,322 +1,322 @@
 <template>
-	<view v-if="chapter.id > 0">
-		<u-popup v-model="showConsultForm" mode="bottom" :closeable="true" @open="onConsultFormOpen">
-			<u-form class="consult-form" :model="consultForm" ref="consultForm">
-				<u-form-item label="咨询内容" label-position="top" prop="question">
-					<u-input v-model="consultForm.question" type="textarea" maxlength="255" placeholder="请尽量详细描述问题，以便获得更专业的回复"></u-input>
-				</u-form-item>
-				<u-form-item label="私密">
-					<u-radio-group v-model="private.name" @change="changePrivate">
-						<u-radio v-for="(item,index) in private.options" :key="index" :name="item.name">{{ item.name }}</u-radio>
-					</u-radio-group>
-				</u-form-item>
-				<view class="form-item">
-					<u-button type="primary" @click="submitConsult">提交</u-button>
-				</view>
-			</u-form>
-		</u-popup>
-		<u-sticky :enable="enableSticky" h5-nav-height="0">
-			<view class="sticky">
-				<!-- #ifdef H5 -->
-				<view class="player" id="player"></view>
-				<!-- #endif -->
-				<!-- #ifndef H5 -->
-				<view class="player">
-					<video :src="playUrl" @play="onPlay" @pause="onPause" @end="onEnd"></video>
-				</view>
-				<!-- #endif -->
-				<view class="action">
-					<u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count" @click="likeChapter(chapter.id)"></u-icon>
-					<u-icon name="account" size="36" :label="chapter.user_count"></u-icon>
-					<u-icon name="chat" size="36" :label="chapter.consult_count" @click="popupConsultForm"></u-icon>
-				</view>
-				<view class="course">
-					<u-section :title="chapter.course.title" sub-title="详情" @click="gotoCourse(chapter.course.id)"></u-section>
-				</view>
-			</view>
-		</u-sticky>
-		<view class="consult-list" v-if="consults.length > 0">
-			<consult-list :items="consults"></consult-list>
-		</view>
-		<u-loadmore :status="loadMore" v-if="consults.length > 0"></u-loadmore>
-		<u-back-top :scrollTop="scrollTop"></u-back-top>
-	</view>
+    <view v-if="chapter.id > 0">
+        <view class="chapter">
+            <u-sticky :enable="enableSticky" h5-nav-height="0">
+                <view class="player">
+                    <video :src="playUrl" :poster="chapter.course.cover" @play="playHandler" @pause="pauseHandler" @ended="endedHandler"
+                        @timeupdate="timeUpdateHandler" @error="errorHandler"></video>
+                </view>
+                <view class="title u-line-1">{{ chapter.title }}</view>
+            </u-sticky>
+        </view>
+        <view class="chapter-stat u-border-bottom">
+            <view class="left">{{ chapter.comment_count|humanNumber }} 评论</view>
+            <view class="right">{{ chapter.like_count|humanNumber}} 点赞</view>
+        </view>
+        <view class="comment-wrap">
+            <view class="comment-list" v-if="commentList.items.length > 0">
+                <comment-list :items="commentList.items" v-on:commentDeleted="commentDeleted"></comment-list>
+            </view>
+            <u-loadmore :status="commentList.loadMore" v-if="commentList.items.length > 0"></u-loadmore>
+            <u-empty :show="commentList.showEmpty" margin-top="100"></u-empty>
+        </view>
+        <view class="fixbar-padding"></view>
+        <view class="fixbar">
+            <view class="left">
+                <u-icon name="chat" size="36" :label="chapter.comment_count|humanNumber"></u-icon>
+                <u-icon name="account" size="36" :label="chapter.user_count|humanNumber"></u-icon>
+                <u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count|humanNumber" @click="toggleLike"></u-icon>
+            </view>
+            <view class="right">
+                <u-button size="mini" @click="openCommentBox">评论</u-button>
+            </view>
+        </view>
+        <u-popup v-model="showCommentBox" mode="bottom" :closeable="false">
+            <view class="comment-box">
+                <view class="header u-border-top u-border-bottom">
+                    <text @click="closeCommentBox">取消</text>
+                    <text @click="createComment">发送</text>
+                </view>
+                <textarea class="textarea" v-model="myComment" :auto-height="true" placeholder="请输入评论内容"></textarea>
+            </view>
+        </u-popup>
+    </view>
 </template>
 
 <script>
-	import ConsultList from '@/components/consult-list.vue'
-	export default {
-		components: {
-			ConsultList
-		},
-		data() {
-			return {
-				enableSticky: true,
-				player: null,
-				playUrl: '',
-				chapter: {
-					course: {},
-					me: {},
-				},
-				learning: {
-					interval: null,
-					interval_time: 15000,
-					request_id: this.$u.guid(16),
-					plan_id: 0,
-					position: 0,
-				},
-				consults: [],
-				page: 1,
-				hasMore: false,
-				loadMore: 'loadmore',
-				scrollTop: 0,
-				showConsultForm: false,
-				private: {
-					name: '否',
-					value: 0,
-					options: [{
-						name: '是'
-					}, {
-						name: '否'
-					}]
-				},
-				consultForm: {
-					question: '',
-				},
-				consultRules: {
-					question: [{
-						required: true,
-						message: '请填写咨询内容'
-					}, {
-						min: 10,
-						max: 255,
-						message: '咨询内容10-255个字符'
-					}]
-				}
-			}
-		},
-		computed: {
-			likeIcon: function() {
-				let liked = this.chapter.me.liked == 1
-				return {
-					name: liked ? 'thumb-up-fill' : 'thumb-up',
-					color: liked ? 'red' : '',
-				}
-			}
-		},
-		onLoad(e) {
-			this.chapter.id = e.id
-			this.loadChapter(e.id)
-			this.loadConsults(e.id)
-		},
-		onReachBottom() {
-			if (this.hasMore) {
-				this.loadConsults(this.chapter.id)
-			}
-		},
-		onPageScroll(e) {
-			this.scrollTop = e.scrollTop
-		},
-		onShow() {
-			this.enableSticky = true
-		},
-		onHide() {
-			this.enableSticky = false
-		},
-		methods: {
-			initPlayer() {
-				// #ifdef H5
-				let sys = uni.getSystemInfoSync()
-				let options = {
-					width: sys.windowWidth,
-					height: Math.ceil(sys.windowWidth * 9 / 16),
-					m3u8: this.getPlayUrl(),
-					autoplay: false,
-					listener: msg => {
-						if (msg.type == 'play') {
-							this.onPlay()
-						} else if (msg.type == 'pause') {
-							this.onPause()
-						} else if (msg.type == 'ended') {
-							this.onEnd()
-						}
-					}
-				}
-				this.player = new TcPlayer('player', options)
-				// #endif
-				this.playUrl = this.getPlayUrl()
-			},
-			onPlay() {
-				console.log('@@@play@@@')
-				this.setLearningInterval()
-			},
-			onPause() {
-				console.log('@@@pause@@@')
-				this.clearLearningInterval()
-			},
-			onEnd() {
-				console.log('@@@end@@@')
-				this.clearLearningInterval()
-				this.learningChapter()
-			},
-			setLearningInterval() {
-				this.clearLearningInterval()
-				this.learning.interval = setInterval(this.learningChapter, this.learning.interval_time)
-			},
-			clearLearningInterval() {
-				if (this.learning.interval != null) {
-					clearInterval(this.learning.interval)
-					this.learning.interval = null
-				}
-			},
-			learningChapter() {
-				if (!this.$utils.isLogin) {
-					return false
-				}
-				this.learning.position = this.player.currentTime()
-				this.$api.learningChapter(this.chapter.id, {
-					plan_id: this.learning.plan_id,
-					request_id: this.learning.request_id,
-					interval_time: this.learning.interval_time,
-					position: this.learning.position,
-				}).catch(e => {
-					console.log(e.msg)
-				})
-			},
-			likeChapter(id) {
-				let redirect = `/pages/chapter/vod?id=${id}`
-				this.$utils.checkLogin({
-					redirect: redirect,
-					success: () => {
-						this.$api.likeChapter(id).then(res => {
-							if (this.chapter.me.liked == 1) {
-								this.chapter.me.liked = 0
-								this.chapter.like_count--
-							} else {
-								this.chapter.me.liked = 1
-								this.chapter.like_count++
-							}
-						}).catch(e => {
-							this.$u.toast('喜欢课时失败')
-						})
-					}
-				})
-			},
-			popupConsultForm() {
-				let redirect = `/pages/chapter/vod?id=${this.chapter.id}`
-				this.$utils.checkLogin({
-					redirect: redirect,
-					success: () => {
-						this.showConsultForm = true
-					}
-				})
-			},
-			onConsultFormOpen() {
-				this.$refs.consultForm.setRules(this.consultRules)
-			},
-			changePrivate(name) {
-				this.private.value = (name == '是') ? 1 : 0
-			},
-			submitConsult() {
-				this.$refs.consultForm.validate(valid => {
-					if (valid) {
-						this.$api.createConsult({
-							chapter_id: this.chapter.id,
-							question: this.consultForm.question,
-							private: this.private.value,
-						}).then(res => {
-							this.consultForm.question = ''
-							this.showConsultForm = false
-							this.$u.toast('提交咨询成功')
-						}).catch(e => {
-							this.$u.toast('更新资料失败')
-						})
-					}
-				})
-			},
-			gotoCourse(id) {
-				this.$utils.redirect('/pages/course/info', {
-					id: id
-				})
-			},
-			getPlayUrl() {
-				let playUrls = this.chapter.play_urls
-				if (playUrls.sd) {
-					return playUrls.sd.url
-				}
-				if (playUrls.hd) {
-					return playUrls.hd.url
-				}
-				if (playUrls.od) {
-					return playUrls.od.url
-				}
-				return ''
-			},
-			loadChapter(id) {
-				this.$api.getChapterInfo(id).then(res => {
-					this.chapter = res.chapter
-					this.learning.plan_id = res.chapter.me.plan_id
-					this.learning.position = res.chapter.me.position
-					this.initPlayer()
-				}).catch(e => {
-					this.$u.toast('加载课时失败')
-				})
-			},
-			loadConsults(id) {
-				let params = {}
-				if (this.page > 0) {
-					params.page = this.page
-				}
-				this.$api.getChapterConsults(id, params).then(res => {
-					this.consults = this.consults.concat(res.pager.items)
-					this.hasMore = res.pager.total_pages > this.page
-					this.loadMore = this.hasMore ? 'loadmore' : 'nomore'
-					this.page++
-				}).catch(e => {
-					this.$u.toast('加载咨询失败')
-				})
-			}
-		}
-	}
+    import CommentList from '@/components/comment-list.vue'
+    export default {
+        components: {
+            CommentList
+        },
+        data() {
+            return {
+                enableSticky: true,
+                playUrl: '',
+                chapter: {
+                    course: {},
+                    me: {},
+                },
+                learning: {
+                    interval: null,
+                    interval_time: 15000,
+                    request_id: this.$u.guid(16),
+                    plan_id: 0,
+                    position: 0,
+                },
+                commentList: {
+                    items: [],
+                    page: 1,
+                    hasMore: false,
+                    loadMore: 'loadmore',
+                    showEmpty: false,
+                },
+                showCommentBox: false,
+                myComment: '',
+            }
+        },
+        computed: {
+            likeIcon: function() {
+                let liked = this.chapter.me.liked == 1
+                return {
+                    name: liked ? 'thumb-up-fill' : 'thumb-up',
+                    color: liked ? 'red' : '',
+                }
+            }
+        },
+        onLoad(e) {
+            this.loadChapter(e.id)
+            this.loadComments(e.id)
+        },
+        onReachBottom() {
+            if (this.commentList.hasMore) {
+                this.loadComments(this.chapter.id)
+            }
+        },
+        onShow() {
+            this.enableSticky = true
+        },
+        onHide() {
+            this.enableSticky = false
+        },
+        methods: {
+            playHandler() {
+                this.setLearningInterval()
+            },
+            pauseHandler() {
+                this.clearLearningInterval()
+            },
+            endedHandler() {
+                this.clearLearningInterval()
+                this.learningChapter()
+            },
+            errorHandler(e) {
+                console.log(e.target)
+            },
+            timeUpdateHandler(e) {
+                this.learning.position = e.detail.currentTime
+            },
+            setLearningInterval() {
+                this.clearLearningInterval()
+                this.learning.interval = setInterval(this.learningChapter, this.learning.interval_time)
+            },
+            clearLearningInterval() {
+                if (this.learning.interval != null) {
+                    clearInterval(this.learning.interval)
+                    this.learning.interval = null
+                }
+            },
+            getPlayUrl() {
+                let playUrls = this.chapter.play_urls
+                if (playUrls.sd) {
+                    return playUrls.sd.url
+                }
+                if (playUrls.hd) {
+                    return playUrls.hd.url
+                }
+                if (playUrls.od) {
+                    return playUrls.od.url
+                }
+                return ''
+            },
+            getCurrentUrl() {
+                return `/pages/chapter/vod?id=${this.chapter.id}`
+            },
+            openCommentBox() {
+                this.$utils.checkLogin({
+                    redirect: this.getCurrentUrl(),
+                    success: () => {
+                        this.showCommentBox = true
+                    }
+                })
+            },
+            closeCommentBox() {
+                this.showCommentBox = false
+            },
+            commentDeleted(e) {
+                this.chapter.comment_count--
+            },
+            createComment() {
+                let params = {
+                    item_type: 1,
+                    item_id: this.chapter.id,
+                    content: this.myComment,
+                }
+                if (params.content.length < 3) {
+                    return false
+                }
+                this.$api.createComment(params).then(res => {
+                    this.commentList.items.unshift(res.comment)
+                    this.chapter.comment_count++
+                    this.showCommentBox = false
+                    this.myComment = ''
+                    this.$u.toast('发送评论成功')
+                }).catch(e => {
+                    this.$u.toast(e.msg)
+                })
+            },
+            toggleLike() {
+                this.$utils.checkLogin({
+                    redirect: this.getCurrentUrl(),
+                    success: () => {
+                        this.$api.likeChapter(this.chapter.id).then(res => {
+                            if (this.chapter.me.liked == 0) {
+                                this.chapter.me.liked = 1
+                                this.chapter.like_count++
+                            } else {
+                                this.chapter.me.liked = 0
+                                this.chapter.like_count--
+                            }
+                        }).catch(e => {
+                            this.$u.toast(e.msg)
+                        })
+                    }
+                })
+            },
+            learningChapter() {
+                if (this.chapter.me.logged == 0) {
+                    return false
+                }
+                this.$api.learningChapter(this.chapter.id, {
+                    plan_id: this.learning.plan_id,
+                    request_id: this.learning.request_id,
+                    interval_time: this.learning.interval_time,
+                    position: this.learning.position,
+                }).catch(e => {
+                    console.log(e.msg)
+                })
+            },
+            loadChapter(id) {
+                this.$api.getChapterInfo(id).then(res => {
+                    if (res.chapter.me.owned == 0) {
+                        this.$u.toast('没有浏览权限')
+                        return false
+                    }
+                    this.chapter = res.chapter
+                    this.learning.plan_id = res.chapter.me.plan_id
+                    this.learning.position = res.chapter.me.position
+                    this.playUrl = this.getPlayUrl()
+                    console.log('playUrl:' + this.playUrl)
+                }).catch(e => {
+                    this.$u.toast('加载课时失败')
+                })
+            },
+            loadComments(id) {
+                let params = {}
+                if (this.commentList.page > 0) {
+                    params.page = this.commentList.page
+                }
+                this.$api.getChapterComments(id, params).then(res => {
+                    this.commentList.items = this.commentList.items.concat(res.pager.items)
+                    this.commentList.hasMore = res.pager.total_pages > this.commentList.page
+                    this.commentList.loadMore = this.commentList.hasMore ? 'loadmore' : 'nomore'
+                    this.commentList.showEmpty = this.commentList.page == 1 && res.pager.total_pages == 0
+                    this.commentList.page++
+                }).catch(e => {
+                    this.$u.toast('加载评论失败')
+                })
+            }
+        }
+    }
 </script>
 
 <style>
-	.consult-form {
-		padding: 15rpx;
-	}
+    .container {
+        padding: 0;
+    }
 
-	.sticky {
-		background-color: white;
-	}
+    .player,
+    video {
+        width: 750rpx;
+        height: 422rpx;
+    }
 
-	.player,
-	video {
-		width: 750rpx;
-		height: 422rpx;
-		margin-bottom: 30rpx;
-	}
+    .chapter {
+        background-color: white;
+    }
 
-	.action {
-		display: flex;
-		justify-content: flex-end;
-		margin-bottom: 30rpx;
-		padding: 0 15rpx;
-	}
+    .chapter .title {
+        color: $u-main-color;
+        background-color: white;
+        font-weight: 600;
+        padding: 20rpx;
+    }
 
-	.action .u-icon {
-		margin-left: 30rpx;
-	}
+    .chapter-stat {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20rpx 20rpx 20rpx;
+        margin-bottom: 30rpx;
+    }
 
-	.course {
-		margin-bottom: 30rpx;
-		padding: 0 15rpx 15rpx 15rpx;
-	}
+    .chapter-stat .left {
+        color: $u-main-color;
+    }
 
-	.consult-list {
-		padding: 15rpx;
-	}
+    .chapter-stat .right {
+        color: $u-tips-color;
+    }
 
-	.u-load-more-wrap {
-		padding: 30rpx;
-	}
+    .comment-list {
+        padding: 20rpx;
+    }
+
+    .fixbar-padding {
+        height: 120rpx;
+    }
+
+    .fixbar {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9;
+        position: fixed;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+        padding: 20rpx;
+    }
+
+    .fixbar .right .u-btn,
+    .fixbar .right u-button {
+        margin-left: 20rpx;
+    }
+
+    .fixbar .left .u-icon,
+    .fixbar .left u-icon {
+        margin-right: 30rpx;
+    }
+
+    .comment-box .header {
+        display: flex;
+        justify-content: space-between;
+        padding: 15rpx 20rpx;
+    }
+
+    .comment-box .textarea {
+        padding: 20rpx;
+        width: 710rpx;
+        min-height: 120rpx;
+    }
 </style>
