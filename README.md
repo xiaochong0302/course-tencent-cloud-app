@@ -25,7 +25,11 @@ git clone https://gitee.com/koogua/course-tencent-cloud-app.git
 
 把 `manifest.sample.json` 另存为 `manifest.json`, 根据实际情况修改相关配置
 
-(2) 修改配置文件
+(2) 生成template.h5.html文件
+
+把 `template.h5.sample.html` 另存为 `template.h5.html`, 根据实际情况修改相关配置
+
+(3) 修改配置文件
 
 把 `common/config.sample.js` 另存为 `common/config.js`, 修改 `apiBaseUrl` 为实际的地址（尾部不要加 “/”）
 
