@@ -128,11 +128,14 @@
             },
             getPlayUrl() {
                 let playUrls = this.chapter.play_urls
+                if (playUrls.hd) {
+                    return playUrls.hd.url
+                }
                 if (playUrls.sd) {
                     return playUrls.sd.url
                 }
-                if (playUrls.hd) {
-                    return playUrls.hd.url
+                if (playUrls.fd) {
+                    return playUrls.fd.url
                 }
                 if (playUrls.od) {
                     return playUrls.od.url
