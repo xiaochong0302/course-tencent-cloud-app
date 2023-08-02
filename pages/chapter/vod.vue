@@ -200,6 +200,9 @@
                 if (this.chapter.me.logged == 0) {
                     return false
                 }
+                if (this.learning.plan_id == 0) {
+                    return false
+                }
                 this.$api.learningChapter(this.chapter.id, {
                     plan_id: this.learning.plan_id,
                     request_id: this.learning.request_id,
