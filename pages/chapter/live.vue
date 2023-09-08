@@ -22,7 +22,7 @@
                     <u-icon :name="likeIcon.name" size="36" :color="likeIcon.color" :label="chapter.like_count|humanNumber" @click="toggleLike"></u-icon>
                 </view>
                 <view class="right">
-                    <u-button size="mini" @click="openChatBox">参与讨论</u-button>
+                    <u-button size="mini" @click="popupChatBox">参与讨论</u-button>
                 </view>
             </view>
             <u-popup v-model="showChatBox" mode="bottom" :closeable="false">
@@ -357,14 +357,21 @@
     }
 
     .fixbar {
-        bottom: 20%;
-        right: 20rpx;
-        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
         z-index: 9;
+        position: fixed;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+        padding: 20rpx;
     }
 
-    .fixbar .right .u-btn {
-        margin-left: 30rpx;
+    .fixbar .right .u-btn,
+    .fixbar .right u-button {
+        margin-left: 20rpx;
     }
 
     .fixbar .left .u-icon,
