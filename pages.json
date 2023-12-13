@@ -58,11 +58,6 @@
             "navigationBarTitleText": "教师主页"
         }
     }, {
-        "path": "pages/teacher/courses",
-        "style": {
-            "navigationBarTitleText": "课程列表"
-        }
-    }, {
         "path": "pages/review/info",
         "style": {
             "navigationBarTitleText": "评价详情"
@@ -116,11 +111,6 @@
         "path": "pages/user/index",
         "style": {
             "navigationBarTitleText": "用户主页"
-        }
-    }, {
-        "path": "pages/user/courses",
-        "style": {
-            "navigationBarTitleText": "TA的课程"
         }
     }, {
         "path": "pages/me/index",

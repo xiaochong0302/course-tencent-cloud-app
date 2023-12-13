@@ -38,8 +38,19 @@
                         <u-parse :html="course.details"></u-parse>
                     </view>
                 </view>
-                <view class="section" v-if="course.teachers.length > 0">
-                    <course-teacher-list :items="course.teachers"></course-teacher-list>
+                <view class="section" v-if="course.teacher.id > 0">
+                    <view class="head">
+                        <u-section title="授课教师" :right="false"></u-section>
+                    </view>
+                    <view class="teacher" @click="gotoTeacher(course.teacher.id)">
+                        <view class="avatar">
+                            <u-image width="90" height="90" shape="circle" :src="course.teacher.avatar|thumbAvatar"></u-image>
+                        </view>
+                        <view class="info">
+                            <view class="name">{{ course.teacher.name }}</view>
+                            <view class="title">{{ course.teacher.title || "小小教书匠" }}</view>
+                        </view>
+                    </view>
                 </view>
             </view>
             <view class="tab-item tab-chapter" v-if="currentTab == 1">
@@ -110,14 +121,12 @@
     import ReviewList from '@/components/review-list.vue'
     import ConsultList from '@/components/consult-list.vue'
     import CourseChapterList from '@/components/course-chapter-list.vue'
-    import CourseTeacherList from '@/components/course-teacher-list.vue'
     import CoursePackageList from '@/components/course-package-list.vue'
     export default {
         components: {
             ReviewList,
             ConsultList,
             CourseChapterList,
-            CourseTeacherList,
             CoursePackageList,
         },
         data() {
@@ -135,7 +144,7 @@
                 }],
                 currentTab: 0,
                 course: {
-                    teachers: [],
+                    teacher: {},
                     attrs: {},
                     me: {},
                 },
@@ -206,6 +215,11 @@
             },
             gotoLogin() {
                 this.$utils.redirect('/pages/account/login')
+            },
+            gotoTeacher(id) {
+                this.$utils.redirect('/pages/teacher/index', {
+                    id: id
+                })
             },
             initTab() {
                 if (this.course.package_count > 0) {
@@ -391,6 +405,26 @@
 
     .rating .label {
         margin-bottom: 10rpx;
+    }
+
+    .teacher {
+        display: flex;
+        padding: 15rpx 0;
+    }
+
+    .teacher .avatar {
+        width: 90rpx;
+        height: 90rpx;
+        margin-right: 15rpx;
+    }
+
+    .teacher .info .name {
+        color: $u-main-color;
+        margin-bottom: 10rpx;
+    }
+
+    .teacher .info .title {
+        color: $u-tips-color;
     }
 
     .consult-list,
