@@ -123,6 +123,30 @@ export const sendLiveMessage = (id, params) => {
     return httpPost(`/live/${id}/msg/send`, params)
 }
 
+export const getCommentInfo = (id) => {
+    return httpGet(`/comment/${id}/info`)
+}
+
+export const getCommentReplies = (id, params = {}) => {
+    return httpGet(`/comment/${id}/replies`, params)
+}
+
+export const createComment = (params = {}) => {
+    return httpPost('/comment/create', params)
+}
+
+export const replyComment = (id, params = {}) => {
+    return httpPost(`/comment/${id}/reply`, params)
+}
+
+export const likeComment = (id) => {
+    return httpPost(`/comment/${id}/like`)
+}
+
+export const deleteComment = (id) => {
+    return httpPost(`/comment/${id}/delete`)
+}
+
 export const createConsult = (params) => {
     return httpPost('/consult/create', params)
 }
