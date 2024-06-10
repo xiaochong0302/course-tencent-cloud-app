@@ -15,10 +15,6 @@ export const getSiteInfo = () => {
     return httpGet('/site/info')
 }
 
-export const getRewardOptions = () => {
-    return httpGet('/reward/options')
-}
-
 export const getVipOptions = () => {
     return httpGet('/vip/options')
 }
