@@ -97,16 +97,24 @@ export const redirect = (url, params = {}) => {
         '/pages/me/index',
         '/pages/im/index',
     ]
-    if (Object.keys(params).length > 0) {
-        url += '?' + httpBuildQuery(params)
-    }
-    if (tabUrls.indexOf(url) !== -1) {
+    if (tabUrls.indexOf(url) != -1) {
         uni.switchTab({
             url: url
         })
-    } else if (url.indexOf('://') !== -1) {
-        plus.runtime.openURL(url)
-    } else if (url.indexOf('/pages') == 0) {
+        return false
+    }
+    if (Object.keys(params).length > 0) {
+        if (url.indexOf('?') == -1) {
+            url += '?' + httpBuildQuery(params)
+        } else {
+            url += '&' + httpBuildQuery(params)
+        }
+    }
+    if (url.includes('://')) {
+        uni.navigateTo({
+            url: '/pages/page/web-view?url=' + encodeURIComponent(url)
+        })
+    } else if (url.startsWith('/pages')) {
         uni.navigateTo({
             url: url
         })
