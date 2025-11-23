@@ -38,7 +38,7 @@
                         <u-parse :html="course.details"></u-parse>
                     </view>
                 </view>
-                <view class="section" v-if="course.teacher.id > 0">
+                <view class="section" v-if="course.teacher && course.teacher.id > 0">
                     <view class="head">
                         <u-section title="授课教师" :right="false"></u-section>
                     </view>

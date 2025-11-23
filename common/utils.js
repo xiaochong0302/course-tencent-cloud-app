@@ -89,6 +89,16 @@ export const courseLevel = (level) => {
     return mapping[level] ? mapping[level] : '未知'
 }
 
+export const getChapterTargetUrl = (chapter) => {
+    let mapping = {
+        '1': 'vod',
+        '2': 'live',
+        '3': 'read',
+    }
+    let target = mapping[chapter.model] ? mapping[chapter.model] : 'vod'
+    return `/pages/chapter/${target}?id=${chapter.id}`
+}
+
 export const redirect = (url, params = {}) => {
     const tabUrls = [
         '/pages/index/index',
