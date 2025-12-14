@@ -147,7 +147,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.filter {
 		position: fixed;
 		top: 0;

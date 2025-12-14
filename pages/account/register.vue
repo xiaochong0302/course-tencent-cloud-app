@@ -157,7 +157,7 @@
     }
 </script>
 
-<style>
+<style lang="scss" scoped>
     .captcha-box {
         padding: 80rpx 30rpx 0 30rpx;
     }

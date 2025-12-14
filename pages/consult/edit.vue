@@ -65,7 +65,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.container {
 		padding: 30rpx;
 	}

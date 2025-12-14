@@ -79,7 +79,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.search {
 		margin-bottom: 30rpx;
 	}

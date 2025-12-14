@@ -40,7 +40,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.section {
 		margin-top: 30rpx;
 		margin-bottom: 30rpx;

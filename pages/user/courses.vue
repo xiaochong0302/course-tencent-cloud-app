@@ -58,7 +58,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.u-load-more-wrap {
 		padding: 30rpx;
 	}

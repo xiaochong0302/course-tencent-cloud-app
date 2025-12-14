@@ -123,7 +123,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.module {
 		margin-bottom: 30rpx;
 	}

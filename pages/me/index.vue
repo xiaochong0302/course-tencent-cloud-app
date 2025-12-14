@@ -109,7 +109,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 	.user {
 		display: flex;
 		flex-direction: column;
